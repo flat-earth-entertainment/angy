@@ -17,12 +17,20 @@ public class Shooter : MonoBehaviour{
     [Range(270f, 360f)]
     public float xMinAngle = 300f, xMaxAngle = 358f;
 
+    private GameObject ballStorage;
+    private LineRenderer lineRender;
+    public bool activateShootingRetinae = true;
+
     void Start(){
         rewiredPlayer = ReInput.players.GetPlayer(playerId);
 
         currentPosition = transform.position;
         currentRotation = transform.rotation;
-        predict();
+        //predict(); Doesn't work atm since i had to move the physics scene creation by one frame
+
+        lineRender = transform.parent.GetComponentInChildren<LineRenderer>();
+        ballStorage = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
+        transform.parent = ballStorage.transform;
     }
 
     public Vector3 calculateForce(){
@@ -30,48 +38,61 @@ public class Shooter : MonoBehaviour{
     }
 
     void shoot(){   // Needs to be redone, atm just creates a new ball
-        GameObject ball = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
-        ball.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
+        ballStorage.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
+
+        ballStorage.GetComponent<BallBehaviour>().inMotion = true;
     }
 
     void Update(){
-        float vertical = rewiredPlayer.GetAxis("Move Vertical") * rotationSpeed;
-        float Horizontal = rewiredPlayer.GetAxis("Move Horizontal") * rotationSpeed;
-        
-        transform.Rotate(-vertical * Time.deltaTime, Horizontal * Time.deltaTime, 0.0f);
+        if(activateShootingRetinae){  
+            lineRender.enabled = true;
 
-        rotationX = Mathf.Clamp(transform.eulerAngles.x, xMinAngle, xMaxAngle);
-        if(transform.eulerAngles.x < 10f){  // prevents the max clamp from flipping to min angle because of lag
-            rotationX = xMaxAngle;
-        }
+            float vertical = rewiredPlayer.GetAxis("Move Vertical") * rotationSpeed;
+            float Horizontal = rewiredPlayer.GetAxis("Move Horizontal") * rotationSpeed;
+            
+            transform.Rotate(-vertical * Time.deltaTime, Horizontal * Time.deltaTime, 0.0f);
 
-        transform.rotation = Quaternion.Euler(rotationX, transform.eulerAngles.y, 0);
-
-        float snapIndex = Mathf.Floor(transform.eulerAngles.y / 30);    // round down to the closest snapping point
-        if(rewiredPlayer.GetButtonDown("SnapLeft")){    // Snap to the left
-            // If you've snapped to a snap point, allows you to snap to the next one
-            if(transform.eulerAngles.y >= (snapIndex * 30) - 1 || transform.eulerAngles.y <= (snapIndex * 30) + 1){
-                snapIndex--;
+            rotationX = Mathf.Clamp(transform.eulerAngles.x, xMinAngle, xMaxAngle);
+            if(transform.eulerAngles.x < 10f){  // prevents the max clamp from flipping to min angle because of lag
+                rotationX = xMaxAngle;
             }
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, snapIndex * 30, 0);
-        }
-        if(rewiredPlayer.GetButtonDown("SnapRight")){   // Snap to the right
-            transform.rotation = Quaternion.Euler(transform.eulerAngles.x, (snapIndex + 1) * 30, 0);
-        }
 
-        if(currentRotation != transform.rotation){
-           predict();
-        }   
+            transform.rotation = Quaternion.Euler(rotationX, transform.eulerAngles.y, 0);
 
-        if(currentPosition != transform.transform.position){
-           predict();
-        }       
-    
-        currentRotation = transform.rotation;
+            float snapIndex = Mathf.Floor(transform.eulerAngles.y / 30);    // round down to the closest snapping point
+            if(rewiredPlayer.GetButtonDown("SnapLeft")){    // Snap to the left
+                // If you've snapped to a snap point, allows you to snap to the next one
+                if(transform.eulerAngles.y >= (snapIndex * 30) - 1 || transform.eulerAngles.y <= (snapIndex * 30) + 1){
+                    snapIndex--;
+                }
+                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, snapIndex * 30, 0);
+            }
+            if(rewiredPlayer.GetButtonDown("SnapRight")){   // Snap to the right
+                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, (snapIndex + 1) * 30, 0);
+            }
 
-        if(rewiredPlayer.GetButtonDown("Confirm")){
-            shoot();
+            // Draw prediction curve if player has moved curve
+            if(currentRotation != transform.rotation){
+            predict();
+            }   
+
+            if(currentPosition != transform.transform.position){
+            predict();
+            }       
+        
+            currentRotation = transform.rotation;
+            // Shoot the ball
+            if(rewiredPlayer.GetButtonDown("Confirm")){
+                shoot();
+                DisableRetinae();
+            }
+        }else{
+            lineRender.enabled = false;
         }
+    }
+    void DisableRetinae(){
+        activateShootingRetinae = false;
+
     }
 
     void predict(){
