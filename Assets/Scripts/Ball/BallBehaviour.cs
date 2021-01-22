@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BallBehaviour : MonoBehaviour
 {
+    public event Action BecameStill;
+    
     private Shooter shooter;
     private Rigidbody rb;
     public bool inMotion;
@@ -23,6 +26,7 @@ public class BallBehaviour : MonoBehaviour
         }
         if(rb.velocity.magnitude < 0.2f && inMotion && timer > 0.5f){
             print("Still");
+            BecameStill?.Invoke();
             timer = 0;
             inMotion = false;
             shooter.activateShootingRetinae = true;

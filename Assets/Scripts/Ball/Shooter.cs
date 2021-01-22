@@ -17,7 +17,7 @@ public class Shooter : MonoBehaviour{
     [Range(270f, 360f)]
     public float xMinAngle = 300f, xMaxAngle = 358f;
 
-    private GameObject ballStorage;
+    public GameObject ballStorage { get; private set; }
     private LineRenderer lineRender;
     public bool activateShootingRetinae = true;
 
@@ -28,7 +28,9 @@ public class Shooter : MonoBehaviour{
         currentRotation = transform.rotation;
         //predict(); Doesn't work atm since i had to move the physics scene creation by one frame
 
+
         lineRender = transform.parent.GetComponentInChildren<LineRenderer>();
+        Debug.Log(lineRender.gameObject.name,lineRender);
         ballStorage = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
         transform.parent = ballStorage.transform;
     }
@@ -44,8 +46,8 @@ public class Shooter : MonoBehaviour{
     }
 
     void Update(){
-        if(activateShootingRetinae){  
-            lineRender.enabled = true;
+        if(activateShootingRetinae){
+            if (lineRender != null || !lineRender.Equals(null)) lineRender.enabled = true;
 
             float vertical = rewiredPlayer.GetAxis("Move Vertical") * rotationSpeed;
             float Horizontal = rewiredPlayer.GetAxis("Move Horizontal") * rotationSpeed;
@@ -86,8 +88,9 @@ public class Shooter : MonoBehaviour{
                 shoot();
                 DisableRetinae();
             }
-        }else{
-            lineRender.enabled = false;
+        }else
+        {
+            if (lineRender !=null || !lineRender.Equals(null)) lineRender.enabled = false;
         }
     }
     void DisableRetinae(){
