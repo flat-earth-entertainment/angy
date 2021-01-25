@@ -19,8 +19,8 @@ public class Shooter : MonoBehaviour{
     public int xMinAngle = 180, xMaxAngle = 270;
 
     public GameObject ballStorage { get; private set; }
-    private LineRenderer lineRender;
-    public bool activateShootingRetinae = true;
+    public LineRenderer lineRender;
+    public bool activateShootingRetinae = true, active = true;
     private int vertSnap, horSnap;
     // how many degrees the shooting retinae should snap. MUST add up to 360
     public int vertSnapAngle = 5, horSnapAngle = 5, greatSnapAngle = 30;
@@ -35,8 +35,9 @@ public class Shooter : MonoBehaviour{
         currentRotation = transform.rotation;
         //predict(); Doesn't work atm since i had to move the physics scene creation by one frame
 
+        // Needs to be fixed : Find shared linerenderer
+        //lineRender = transform.parent.GetComponentInChildren<LineRenderer>();
 
-        lineRender = transform.parent.GetComponentInChildren<LineRenderer>();
         Debug.Log(lineRender.gameObject.name,lineRender);
         ballStorage = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
         transform.parent = ballStorage.transform;
@@ -48,13 +49,13 @@ public class Shooter : MonoBehaviour{
 
     void shoot(){   // Needs to be redone, atm just creates a new ball
         ballStorage.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
-
         ballStorage.GetComponent<BallBehaviour>().inMotion = true;
+        
+        if (lineRender !=null || !lineRender.Equals(null)) lineRender.enabled = false;
     }
 
     void Update(){
-        if(activateShootingRetinae){
-            if (lineRender != null || !lineRender.Equals(null)) lineRender.enabled = true;
+        if(activateShootingRetinae && active){
 
             // Vertical movement controls
             if(vertSnapCooldownTimer <= 0){ // delays snapping intervals
@@ -108,10 +109,8 @@ public class Shooter : MonoBehaviour{
             if(rewiredPlayer.GetButtonDown("Confirm")){
                 shoot();
                 DisableRetinae();
+                active = false;
             }
-        }else
-        {
-            if (lineRender !=null || !lineRender.Equals(null)) lineRender.enabled = false;
         }
     }
     void DisableRetinae(){
@@ -129,5 +128,14 @@ public class Shooter : MonoBehaviour{
 
     void predict(){
         PredictionManager.instance.predict(ballPrefab, firePoint.transform.position, calculateForce());
+    }
+    public void ShouldPlayerActivate(int playerToActivate){ // Use this to define what player can move.
+        if(playerToActivate == playerId){
+            if (lineRender != null || !lineRender.Equals(null)) lineRender.enabled = true;
+            active = true;
+            predict();
+        }else{
+            active = false;
+        }
     }
 }
