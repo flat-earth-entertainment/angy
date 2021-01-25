@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,11 +18,11 @@ public class PlayersManager : MonoBehaviour
     {
         for (int i = 0; i < numberOfPlayers; i++)
         {
-            SpawnNewPlayer(GameObject.FindWithTag("Spawn Point").transform.position);
+            InitializeNewPlayer();
         }
     }
 
-    private void SpawnNewPlayer(Vector3 spawnPointPosition)
+    private void InitializeNewPlayer()
     {
         var newPlayerObject = Instantiate(playerPrefab);
         var playerId = _players.Count;
