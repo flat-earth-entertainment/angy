@@ -14,12 +14,19 @@ public class Shooter : MonoBehaviour{
     Quaternion currentRotation;
     [HideInInspector]
     public float rotationX;
-    [Range(270f, 360f)]
-    public float xMinAngle = 300f, xMaxAngle = 358f;
+    [Range(180, 270)]
+    [Header("Must be a multiplicative of 5")]
+    public int xMinAngle = 180, xMaxAngle = 270;
 
     public GameObject ballStorage { get; private set; }
     private LineRenderer lineRender;
     public bool activateShootingRetinae = true;
+    private int vertSnap, horSnap;
+    // how many degrees the shooting retinae should snap. MUST add up to 360
+    public int vertSnapAngle = 5, horSnapAngle = 5, greatSnapAngle = 30;
+    private float snapCooldownTimer, vertSnapCooldownTimer, horSnapCooldownTimer;
+    public float snapCooldown = 0.2f;
+    private bool movedRet;
 
     void Start(){
         rewiredPlayer = ReInput.players.GetPlayer(playerId);
@@ -49,40 +56,54 @@ public class Shooter : MonoBehaviour{
         if(activateShootingRetinae){
             if (lineRender != null || !lineRender.Equals(null)) lineRender.enabled = true;
 
-            float vertical = rewiredPlayer.GetAxis("Move Vertical") * rotationSpeed;
-            float Horizontal = rewiredPlayer.GetAxis("Move Horizontal") * rotationSpeed;
-            
-            transform.Rotate(-vertical * Time.deltaTime, Horizontal * Time.deltaTime, 0.0f);
-
-            rotationX = Mathf.Clamp(transform.eulerAngles.x, xMinAngle, xMaxAngle);
-            if(transform.eulerAngles.x < 10f){  // prevents the max clamp from flipping to min angle because of lag
-                rotationX = xMaxAngle;
-            }
-
-            transform.rotation = Quaternion.Euler(rotationX, transform.eulerAngles.y, 0);
-
-            float snapIndex = Mathf.Floor(transform.eulerAngles.y / 30);    // round down to the closest snapping point
-            if(rewiredPlayer.GetButtonDown("SnapLeft")){    // Snap to the left
-                // If you've snapped to a snap point, allows you to snap to the next one
-                if(transform.eulerAngles.y >= (snapIndex * 30) - 1 || transform.eulerAngles.y <= (snapIndex * 30) + 1){
-                    snapIndex--;
+            // Vertical movement controls
+            if(vertSnapCooldownTimer <= 0){ // delays snapping intervals
+                float vertical = rewiredPlayer.GetAxis("Move Vertical");
+                if(Mathf.Abs(vertical) > 0){
+                    vertSnap += PositiveOrNegative(vertical);
+                    vertSnap = Mathf.Clamp(vertSnap, xMinAngle / vertSnapAngle, xMaxAngle / vertSnapAngle );
+                    vertSnapCooldownTimer = snapCooldown;
+                    movedRet = true;
                 }
-                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, snapIndex * 30, 0);
+            }else{
+                vertSnapCooldownTimer -= Time.deltaTime;
             }
-            if(rewiredPlayer.GetButtonDown("SnapRight")){   // Snap to the right
-                transform.rotation = Quaternion.Euler(transform.eulerAngles.x, (snapIndex + 1) * 30, 0);
+            // Horizontal movement controls
+            if(horSnapCooldownTimer <= 0){  // delays snapping intervals
+                float horizontal = rewiredPlayer.GetAxis("Move Horizontal");
+                if(Mathf.Abs(horizontal) > 0){
+                    horSnap += PositiveOrNegative(horizontal);
+                    horSnapCooldownTimer = snapCooldown;
+                    movedRet = true;
+                }
+                if(rewiredPlayer.GetButtonDown("SnapLeft")){    
+                    horSnap -= greatSnapAngle / horSnapAngle;
+                    horSnapCooldownTimer = snapCooldown;
+                    movedRet = true;
+                }
+                if(rewiredPlayer.GetButtonDown("SnapRight")){
+                    horSnap += greatSnapAngle / horSnapAngle;
+                    horSnapCooldownTimer = snapCooldown;
+                    movedRet = true;
+                }
+            }else{
+                horSnapCooldownTimer -= Time.deltaTime;
             }
+            if(movedRet){
+                transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0);
+                
+                // Draw prediction curve if player has moved curve
+                if(currentRotation != transform.rotation){
+                    predict();
+                    currentRotation = transform.rotation;
+                }   
 
-            // Draw prediction curve if player has moved curve
-            if(currentRotation != transform.rotation){
-            predict();
-            }   
-
-            if(currentPosition != transform.transform.position){
-            predict();
-            }       
-        
-            currentRotation = transform.rotation;
+                if(currentPosition != transform.position){
+                    predict();
+                    currentPosition = transform.position;
+                }
+                movedRet = false;
+            }
             // Shoot the ball
             if(rewiredPlayer.GetButtonDown("Confirm")){
                 shoot();
@@ -96,6 +117,14 @@ public class Shooter : MonoBehaviour{
     void DisableRetinae(){
         activateShootingRetinae = false;
 
+    }
+    int PositiveOrNegative(float num){ // Checks if the number is negative or positive, returns -1 if negative, returns 1 if positive, returns 0 if 0
+        if(num < 0){
+            return -1;
+        }else if(num > 0){
+            return 1;
+        }
+        return 0;
     }
 
     void predict(){

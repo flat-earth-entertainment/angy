@@ -10,7 +10,7 @@ public class BallBehaviour : MonoBehaviour
     private Shooter shooter;
     private Rigidbody rb;
     public bool inMotion;
-    private float timer;
+    private float timer, stopTimer;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,12 +25,18 @@ public class BallBehaviour : MonoBehaviour
             timer += Time.deltaTime;
         }
         if(rb.velocity.magnitude < 0.2f && inMotion && timer > 0.5f){
-            print("Still");
-            BecameStill?.Invoke();
-            timer = 0;
-            inMotion = false;
-            shooter.activateShootingRetinae = true;
-            rb.velocity = new Vector3(0,0,0);
+            stopTimer += Time.deltaTime;
+            if(stopTimer > 1){
+                print("Still");
+                BecameStill?.Invoke();
+                timer = 0;
+                inMotion = false;
+                shooter.activateShootingRetinae = true;
+                rb.velocity = new Vector3(0,0,0);
+                rb.angularVelocity = new Vector3(0,0,0);
+            }
+        }else{
+            stopTimer = 0;
         }
     }
 }
