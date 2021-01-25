@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Cinemachine;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class VirtualCamerasController : MonoBehaviour
@@ -12,6 +13,19 @@ public class VirtualCamerasController : MonoBehaviour
 
     private CinemachineBrain _cinemachineBrain;
     private float _defaultTransitionTime;
+
+
+    public UniTask BlendTo(CinemachineVirtualCamera virtualCamera, float? blendTime = null)
+    {
+        if (blendTime == null)
+        {
+            SetActiveCamera(virtualCamera);
+            return UniTask.Delay(TimeSpan.FromSeconds(_defaultTransitionTime));
+        }
+
+        SetActiveCamera(virtualCamera, blendTime);
+        return UniTask.Delay(TimeSpan.FromSeconds(blendTime.Value));
+    }
 
     private void Awake()
     {
