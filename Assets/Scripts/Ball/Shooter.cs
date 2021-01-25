@@ -43,6 +43,8 @@ public class Shooter : MonoBehaviour{
         ballStorage = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
         rb = ballStorage.GetComponent<Rigidbody>();
         transform.parent = ballStorage.transform;
+
+        ShouldPlayerActivate(playerId);
     }
 
     public Vector3 calculateForce(){
