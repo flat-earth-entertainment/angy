@@ -27,6 +27,7 @@ public class Shooter : MonoBehaviour{
     private float snapCooldownTimer, vertSnapCooldownTimer, horSnapCooldownTimer;
     public float snapCooldown = 0.2f;
     private bool movedRet;
+    private Rigidbody rb;
 
     void Start(){
         rewiredPlayer = ReInput.players.GetPlayer(playerId);
@@ -40,6 +41,7 @@ public class Shooter : MonoBehaviour{
 
         Debug.Log(lineRender.gameObject.name,lineRender);
         ballStorage = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
+        rb = ballStorage.GetComponent<Rigidbody>();
         transform.parent = ballStorage.transform;
     }
 
@@ -48,7 +50,8 @@ public class Shooter : MonoBehaviour{
     }
 
     void shoot(){   // Needs to be redone, atm just creates a new ball
-        ballStorage.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
+        rb.constraints = RigidbodyConstraints.None;
+        rb.AddForce(calculateForce(), ForceMode.Impulse);
         ballStorage.GetComponent<BallBehaviour>().inMotion = true;
         
         if (lineRender !=null || !lineRender.Equals(null)) lineRender.enabled = false;
@@ -133,6 +136,7 @@ public class Shooter : MonoBehaviour{
         if(playerToActivate == playerId){
             if (lineRender != null || !lineRender.Equals(null)) lineRender.enabled = true;
             active = true;
+            rb.constraints = RigidbodyConstraints.FreezeAll;
             predict();
         }else{
             active = false;
