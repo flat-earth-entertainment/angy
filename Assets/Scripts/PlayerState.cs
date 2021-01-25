@@ -1,7 +1,8 @@
 public enum PlayerState
 {
-    Hidden,
-    Inactive,
+    ShouldSpawn,
+    ShouldSpawnCantMove,
+    ShouldMakeTurn,
     ActiveAiming,
     ActiveInMotion
 }

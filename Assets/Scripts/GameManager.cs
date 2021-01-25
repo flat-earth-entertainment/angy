@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float jumpInTime = 2f;
 
-
     private PlayersManager _playersManager;
     private PlayerView _currentTurnPlayerView;
     private VirtualCamerasController _camerasController;
@@ -47,11 +46,9 @@ public class GameManager : MonoBehaviour
 
     private async void Start()
     {
-        _camerasController.SetActiveCamera(levelOverviewCamera);
-        await UniTask.Delay(TimeSpan.FromSeconds(levelOverviewTime));
+        await _camerasController.BlendTo(levelOverviewCamera, levelOverviewTime);
 
-        _camerasController.SetActiveCamera(spawnPointCamera);
-        await UniTask.Delay(TimeSpan.FromSeconds(2f));
+        await _camerasController.BlendTo(spawnPointCamera, 2f);
 
         MakeTurn();
     }
@@ -64,7 +61,7 @@ public class GameManager : MonoBehaviour
 
         switch (_currentTurnPlayerView.PlayerState)
         {
-            case PlayerState.Hidden:
+            case PlayerState.ShouldSpawn:
                 _currentTurnPlayerView.SetBallPosition(spawnPoint.position + Vector3.up * 20f);
 
                 _currentTurnPlayerView.SetShowTrajectory(false);
@@ -81,7 +78,7 @@ public class GameManager : MonoBehaviour
                 _currentTurnPlayerView.PlayerState = PlayerState.ActiveAiming;
 
                 break;
-            case PlayerState.Inactive:
+            case PlayerState.ShouldMakeTurn:
                 _currentTurnPlayerView.SetShowTrajectory(true);
 
                 _currentTurnPlayerView._shooter.ballStorage.GetComponent<BallBehaviour>().BecameStill +=
@@ -102,7 +99,7 @@ public class GameManager : MonoBehaviour
     {
         _currentTurnPlayerView._shooter.ballStorage.GetComponent<BallBehaviour>().BecameStill -=
             OnCurrentPlayerBecameStill;
-        _currentTurnPlayerView.PlayerState = PlayerState.Inactive;
+        _currentTurnPlayerView.PlayerState = PlayerState.ShouldMakeTurn;
         _currentTurnPlayerView.SetShowTrajectory(false);
         MakeTurn();
     }

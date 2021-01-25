@@ -32,7 +32,7 @@ public class PlayersManager : MonoBehaviour
         {
             player.SetId(playerId);
             // player.SetBallPosition(spawnPointPosition);
-            player.PlayerState = PlayerState.Hidden;
+            player.PlayerState = PlayerState.ShouldSpawn;
             newPlayerObject.GetComponentInChildren<PredictionManager>().obstacles = obstacles;
 
             player.Hide();
