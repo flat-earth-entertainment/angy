@@ -39,7 +39,7 @@ public class Shooter : MonoBehaviour{
         // Needs to be fixed : Find shared linerenderer
         //lineRender = transform.parent.GetComponentInChildren<LineRenderer>();
 
-        Debug.Log(lineRender.gameObject.name,lineRender);
+        // Debug.Log(lineRender.gameObject.name,lineRender);
         ballStorage = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
         rb = ballStorage.GetComponent<Rigidbody>();
         transform.parent = ballStorage.transform;
