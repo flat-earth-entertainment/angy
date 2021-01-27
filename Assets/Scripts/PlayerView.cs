@@ -20,7 +20,6 @@ public class PlayerView : MonoBehaviour
     private int _playerId;
     public Shooter _shooter { get; private set; }
 
-
     private async void Awake()
     {
         _shooter = GetComponentInChildren<Shooter>();
@@ -38,25 +37,30 @@ public class PlayerView : MonoBehaviour
 
     public void JumpIn(Vector3 endPosition, float jumpTime = 1f)
     {
-        endPosition.y += _ball.GetComponent<SphereCollider>().radius * 2;
-        _ball.DOMove(endPosition, jumpTime).OnComplete(delegate { _ball.velocity=Vector3.zero; });
+        endPosition.y += _ball.GetComponent<SphereCollider>().radius;
+
+        _ball.constraints = RigidbodyConstraints.None;
+
+        _ball.transform.DOMove(endPosition, jumpTime)
+            .OnComplete(delegate
+            {
+                _ball.velocity = Vector3.zero;
+                _ball.angularVelocity = Vector3.zero;
+            });
     }
 
     public void Show()
     {
-        // ball.gameObject.SetActive(true);
         _shooter.ballStorage.SetActive(true);
     }
 
-    public void SetShowTrajectory(bool toggle)
+    public void SetControlsActive(bool toggle)
     {
-        _shooter.activateShootingRetinae = toggle;
+        _shooter.active = toggle;
     }
 
     public async void Hide()
     {
-        // ball.gameObject.SetActive(false);
-
         if (_shooter.ballStorage == null || _shooter.Equals(null))
         {
             await UniTask.WaitUntil(() => _shooter.ballStorage != null);
@@ -67,13 +71,12 @@ public class PlayerView : MonoBehaviour
 
     public void SetId(int id)
     {
-        _playerId = id;
+        _shooter.playerId = _playerId = id;
     }
 
     public void SetBallPosition(Vector3 position)
     {
         position.y += _ball.GetComponent<SphereCollider>().radius;
         _ball.transform.position = position;
-        // _shooter.ballStorage.transform.position = position;
     }
 }
