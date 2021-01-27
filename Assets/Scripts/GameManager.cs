@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private float jumpInTime = 2f;
 
+    [SerializeField]
+    private LineRenderer lineRenderer;
+
     private PlayersManager _playersManager;
     private PlayerView _currentTurnPlayerView;
     private VirtualCamerasController _camerasController;
@@ -53,6 +56,11 @@ public class GameManager : MonoBehaviour
         MakeTurn();
     }
 
+    private void SetTrajectoryActive(bool state)
+    {
+        lineRenderer.enabled = state;
+    }
+
     private async void MakeTurn()
     {
         _currentTurnPlayerView = _playersManager.GetNextPlayer(_currentTurnPlayerView);
@@ -64,25 +72,22 @@ public class GameManager : MonoBehaviour
             case PlayerState.ShouldSpawn:
                 _currentTurnPlayerView.SetBallPosition(spawnPoint.position + Vector3.up * 20f);
 
-                _currentTurnPlayerView.SetShowTrajectory(false);
+                _currentTurnPlayerView.SetControlsActive(false);
 
                 _currentTurnPlayerView.Show();
+
                 _currentTurnPlayerView.JumpIn(spawnPoint.position, jumpInTime);
                 await UniTask.Delay(TimeSpan.FromSeconds(jumpInTime));
 
-                _currentTurnPlayerView.SetShowTrajectory(true);
-
-                _currentTurnPlayerView._shooter.ballStorage.GetComponent<BallBehaviour>().BecameStill +=
-                    OnCurrentPlayerBecameStill;
-
-                _currentTurnPlayerView.PlayerState = PlayerState.ActiveAiming;
-
-                break;
+                goto case PlayerState.ShouldMakeTurn;
             case PlayerState.ShouldMakeTurn:
-                _currentTurnPlayerView.SetShowTrajectory(true);
+                _currentTurnPlayerView.SetControlsActive(true);
+                SetTrajectoryActive(true);
 
                 _currentTurnPlayerView._shooter.ballStorage.GetComponent<BallBehaviour>().BecameStill +=
                     OnCurrentPlayerBecameStill;
+
+                _currentTurnPlayerView._shooter.Shot += OnPlayerShot;
 
                 _currentTurnPlayerView.PlayerState = PlayerState.ActiveAiming;
                 break;
@@ -95,12 +100,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void CommonTurnSequence()
+    {
+    }
+
+    private void OnPlayerShot()
+    {
+        _currentTurnPlayerView._shooter.Shot -= OnPlayerShot;
+
+        Debug.Log("Should turn off");
+        SetTrajectoryActive(false);
+    }
+
     private void OnCurrentPlayerBecameStill()
     {
         _currentTurnPlayerView._shooter.ballStorage.GetComponent<BallBehaviour>().BecameStill -=
             OnCurrentPlayerBecameStill;
         _currentTurnPlayerView.PlayerState = PlayerState.ShouldMakeTurn;
-        _currentTurnPlayerView.SetShowTrajectory(false);
+        _currentTurnPlayerView.SetControlsActive(false);
         MakeTurn();
     }
 }
