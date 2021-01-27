@@ -1,7 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Rewired;
 
 public class Shooter : MonoBehaviour{
+
+    public event Action Shot;
+    
     public int playerId = 1;
     private Player rewiredPlayer;
 
@@ -55,6 +59,8 @@ public class Shooter : MonoBehaviour{
         rb.constraints = RigidbodyConstraints.None;
         rb.AddForce(calculateForce(), ForceMode.Impulse);
         ballStorage.GetComponent<BallBehaviour>().inMotion = true;
+        
+        Shot?.Invoke();
         
         if (lineRender !=null || !lineRender.Equals(null)) lineRender.enabled = false;
     }
