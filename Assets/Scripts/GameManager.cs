@@ -104,7 +104,6 @@ public class GameManager : MonoBehaviour
     {
         _currentTurnPlayerView._shooter.Shot -= OnPlayerShot;
 
-        Debug.Log("Should turn off");
         SetTrajectoryActive(false);
     }
 
