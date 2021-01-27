@@ -100,10 +100,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void CommonTurnSequence()
-    {
-    }
-
     private void OnPlayerShot()
     {
         _currentTurnPlayerView._shooter.Shot -= OnPlayerShot;
