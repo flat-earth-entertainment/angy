@@ -1,16 +1,40 @@
 using System;
 using Cinemachine;
+using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
+using Player;
 using UnityEngine;
 
 public class PlayerView : MonoBehaviour
 {
     public event Action BecameStill;
     public event Action Shot;
+    public event Action ReachedMaxAngy;
+    public event Action<int> AngyChanged;
+
+    public int Angy
+    {
+        get => _angy;
+        private set
+        {
+            if (value > GameConfig.Instance.AngyValues.MaxAngy)
+            {
+                _angy = GameConfig.Instance.AngyValues.MaxAngy;
+                ReachedMaxAngy?.Invoke();
+            }
+            else if (value != _angy)
+            {
+                AngyChanged?.Invoke(value);
+                _angy = value;
+            }
+        }
+    }
 
     public int PlayerId { get; set; }
+
+    public Vector3 LastStillPosition { get; private set; }
 
     [field: SerializeField, ReadOnly]
     public PlayerState PlayerState { get; set; }
@@ -24,6 +48,39 @@ public class PlayerView : MonoBehaviour
     private BallBehaviour _ballBehaviour;
     private Shooter _shooter;
 
+    private int _angy;
+
+    public void AlterAngy(AngyEvent angyEvent)
+    {
+        switch (angyEvent)
+        {
+            case AngyEvent.HitBadObject:
+                Angy += GameConfig.Instance.AngyValues.HitBadObject;
+                break;
+            case AngyEvent.FellOutOfTheMap:
+                Angy += GameConfig.Instance.AngyValues.FellOutOfTheMap;
+                break;
+            case AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy:
+                Angy = GameConfig.Instance.AngyValues.AfterFellOutOfTheMapAndReachedMaxAngy;
+                break;
+            case AngyEvent.EndedTurn:
+                Angy += GameConfig.Instance.AngyValues.EndedTurn;
+                break;
+        }
+    }
+
+    public void ExplodeAndHide()
+    {
+        _ball.GetComponent<Collider>().enabled = false;
+        _ball.useGravity = false;
+        _ball.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
+        {
+            _ball.GetComponent<Collider>().enabled = true;
+            _ball.useGravity = true;
+            Hide();
+        });
+    }
+
     public void ShouldPlayerActivate(int playerId)
     {
         _shooter.ShouldPlayerActivate(playerId);
@@ -31,6 +88,7 @@ public class PlayerView : MonoBehaviour
 
     private void OnBallBecameStill()
     {
+        LastStillPosition = _ball.position;
         BecameStill?.Invoke();
     }
 
