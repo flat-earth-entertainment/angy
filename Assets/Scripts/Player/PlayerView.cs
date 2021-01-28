@@ -32,7 +32,17 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-    public int PlayerId { get; set; }
+    public int PlayerId
+    {
+        get => _playerId;
+        set
+        {
+            _playerId = value;
+            _shooter.playerId = value;
+        }
+    }
+
+    private int _playerId;
 
     public Vector3 LastStillPosition { get; private set; }
 
