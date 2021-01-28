@@ -10,7 +10,7 @@ public class PlayerView : MonoBehaviour
     public event Action BecameStill;
     public event Action Shot;
 
-    public int PlayerId => _playerId;
+    public int PlayerId { get; set; }
 
     [field: SerializeField, ReadOnly]
     public PlayerState PlayerState { get; set; }
@@ -23,8 +23,6 @@ public class PlayerView : MonoBehaviour
 
     private BallBehaviour _ballBehaviour;
     private Shooter _shooter;
-
-    private int _playerId;
 
     public void ShouldPlayerActivate(int playerId)
     {
@@ -91,11 +89,6 @@ public class PlayerView : MonoBehaviour
         _shooter.ballStorage.SetActive(true);
     }
 
-    public void SetControlsActive(bool toggle)
-    {
-        _shooter.active = toggle;
-    }
-
     public async void Hide()
     {
         if (_shooter.ballStorage == null || _shooter.Equals(null))
@@ -106,9 +99,9 @@ public class PlayerView : MonoBehaviour
         _shooter.ballStorage.SetActive(false);
     }
 
-    public void SetId(int id)
+    public void SetControlsActive(bool toggle)
     {
-        _shooter.playerId = _playerId = id;
+        _shooter.active = toggle;
     }
 
     public void SetBallPosition(Vector3 position)

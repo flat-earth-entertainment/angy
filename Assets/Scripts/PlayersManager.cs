@@ -30,7 +30,7 @@ public class PlayersManager : MonoBehaviour
 
         if (newPlayerObject.TryGetComponent(out PlayerView player))
         {
-            player.SetId(playerId);
+            player.PlayerId = playerId;
 
             player.PlayerState = PlayerState.ShouldSpawn;
 
