@@ -73,8 +73,8 @@ public class PlayerView : MonoBehaviour
             case AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy:
                 Angy = GameConfig.Instance.AngyValues.AfterFellOutOfTheMapAndReachedMaxAngy;
                 break;
-            case AngyEvent.EndedTurn:
-                Angy += GameConfig.Instance.AngyValues.EndedTurn;
+            case AngyEvent.ShotMade:
+                Angy += GameConfig.Instance.AngyValues.ShotMade;
                 break;
         }
     }

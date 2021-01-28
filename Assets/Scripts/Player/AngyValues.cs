@@ -22,6 +22,6 @@ namespace Player
         public int AfterFellOutOfTheMapAndReachedMaxAngy { get; private set; }
 
         [field: SerializeField]
-        public int EndedTurn { get; private set; }
+        public int ShotMade { get; private set; }
     }
 }
