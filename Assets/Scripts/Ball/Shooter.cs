@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using Rewired;
 
@@ -25,13 +26,14 @@ public class Shooter : MonoBehaviour{
     public GameObject ballStorage { get; private set; }
     public LineRenderer lineRender;
     public bool activateShootingRetinae = true, active = true;
-    private int vertSnap, horSnap;
+    private int vertSnap = 36, horSnap = 35;
     // how many degrees the shooting retinae should snap. MUST add up to 360
     public int vertSnapAngle = 5, horSnapAngle = 5, greatSnapAngle = 30;
     private float snapCooldownTimer, vertSnapCooldownTimer, horSnapCooldownTimer;
     public float snapCooldown = 0.2f;
     private bool movedRet;
     private Rigidbody rb;
+    private float forcePercent;
 
     void Start(){
         rewiredPlayer = ReInput.players.GetPlayer(playerId);
@@ -123,6 +125,11 @@ public class Shooter : MonoBehaviour{
             }
         }
     }
+    //private IEnumerator 
+    private IEnumerator CalculateShootForce(float force){
+
+        yield return force;
+    }
     void DisableRetinae(){
         activateShootingRetinae = false;
 
@@ -144,6 +151,7 @@ public class Shooter : MonoBehaviour{
             if (lineRender != null || !lineRender.Equals(null)) lineRender.enabled = true;
             active = true;
             rb.constraints = RigidbodyConstraints.FreezeAll;    // Freeze player
+            transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0); // Set aiming retinae to actual shooting direction
             predict();
         }else{
             active = false;
