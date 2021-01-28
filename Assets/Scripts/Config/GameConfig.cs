@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Player;
 using UnityEngine;
 
 namespace Config
@@ -7,8 +8,18 @@ namespace Config
     {
         [field: SerializeField]
         public float JumpInTime { get; private set; }
-        
-        
+
+        [field: SerializeField]
+        public float LevelOverviewTime { get; private set; }
+
+        [field: SerializeField]
+        public GameObject PlayerPrefab { get; private set; }
+
+        [field: SerializeField]
+        public float FlyToNextPlayerTime { get; private set; }
+
+        [field: SerializeField]
+        public AngyValues AngyValues { get; private set; }
 
 
         private const string ConfigPath = "Game Config";
