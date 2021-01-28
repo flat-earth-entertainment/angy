@@ -67,7 +67,6 @@ public class Shooter : MonoBehaviour{
 
     void Update(){
         if(activateShootingRetinae && active){
-
             // Vertical movement controls
             if(vertSnapCooldownTimer <= 0){ // delays snapping intervals
                 float vertical = rewiredPlayer.GetAxis("Move Vertical");
@@ -144,7 +143,7 @@ public class Shooter : MonoBehaviour{
         if(playerToActivate == playerId){
             if (lineRender != null || !lineRender.Equals(null)) lineRender.enabled = true;
             active = true;
-            rb.constraints = RigidbodyConstraints.FreezeAll;
+            rb.constraints = RigidbodyConstraints.FreezeAll;    // Freeze player
             predict();
         }else{
             active = false;

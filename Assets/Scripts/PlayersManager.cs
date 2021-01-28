@@ -48,6 +48,11 @@ public class PlayersManager : MonoBehaviour
 
     public PlayerView GetNextPlayer(PlayerView currentPlayerView)
     {
+        
+        foreach (PlayerView player in _players)
+        {
+            player._shooter.ShouldPlayerActivate((_players.IndexOf(currentPlayerView) + 1) % _players.Count); 
+        }
         if (currentPlayerView == null)
         {
             return _players[0];
