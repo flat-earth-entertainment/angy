@@ -7,7 +7,7 @@ public class Shooter : MonoBehaviour{
     public event Action Shot;
     
     public int playerId = 1;
-    private Player rewiredPlayer;
+    private Rewired.Player rewiredPlayer;
 
     public GameObject firePoint;
     public GameObject ballPrefab;

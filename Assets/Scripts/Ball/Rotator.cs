@@ -6,7 +6,7 @@ using Rewired;
 public class Rotator : MonoBehaviour
 {
     private int playerId = 1;
-    private Player rewiredPlayer;
+    private Rewired.Player rewiredPlayer;
     private float rotationSpeed;
     // Start is called before the first frame update
     void Start()
