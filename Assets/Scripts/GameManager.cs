@@ -1,13 +1,14 @@
 using System;
+using System.Threading.Tasks;
 using Cinemachine;
+using Config;
 using Cysharp.Threading.Tasks;
+using Player;
+using UI;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private float levelOverviewTime = 2f;
-
     [SerializeField]
     private CinemachineVirtualCamera levelOverviewCamera;
 
@@ -18,13 +19,13 @@ public class GameManager : MonoBehaviour
     private Transform spawnPoint;
 
     [SerializeField]
-    private float jumpInTime = 2f;
-
-    [SerializeField]
     private LineRenderer lineRenderer;
 
+    [SerializeField]
+    private UiController uiController;
+
     private PlayersManager _playersManager;
-    private PlayerView _currentTurnPlayerView;
+    private PlayerView _currentTurnPlayer;
     private VirtualCamerasController _camerasController;
 
     private void Awake()
@@ -45,11 +46,14 @@ public class GameManager : MonoBehaviour
         if (!_camerasController)
             Debug.LogError(
                 "Can't find Virtual Cameras Controller! Make sure it is in scene or is not spawned after frame 1!");
+
+
+        uiController.HideAllUi();
     }
 
     private async void Start()
     {
-        await _camerasController.BlendTo(levelOverviewCamera, levelOverviewTime);
+        await _camerasController.BlendTo(levelOverviewCamera, GameConfig.Instance.LevelOverviewTime);
 
         await _camerasController.BlendTo(spawnPointCamera, 2f);
 
@@ -63,56 +67,107 @@ public class GameManager : MonoBehaviour
 
     private async void MakeTurn()
     {
-        _currentTurnPlayerView = _playersManager.GetNextPlayer(_currentTurnPlayerView);
+        _currentTurnPlayer = _playersManager.GetNextPlayer(_currentTurnPlayer);
+        _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
 
-        _camerasController.SetActiveCamera(_currentTurnPlayerView.BallCamera, .5f);
+        CinemachineVirtualCamera nextCamera = null;
 
-        switch (_currentTurnPlayerView.PlayerState)
+        //Decide where to move camera to
+        switch (_currentTurnPlayer.PlayerState)
         {
             case PlayerState.ShouldSpawn:
-                _currentTurnPlayerView.SetBallPosition(spawnPoint.position + Vector3.up * 20f);
+                nextCamera = spawnPointCamera;
+                break;
+            //TODO: Decide where should spawn in this case
+            case PlayerState.ShouldSpawnCantMove:
+            case PlayerState.ShouldMakeTurn:
+                nextCamera = _currentTurnPlayer.BallCamera;
+                break;
+        }
 
-                _currentTurnPlayerView.SetControlsActive(false);
+        await _camerasController.BlendTo(nextCamera, GameConfig.Instance.FlyToNextPlayerTime);
 
-                _currentTurnPlayerView.Show();
+        switch (_currentTurnPlayer.PlayerState)
+        {
+            case PlayerState.ShouldSpawnCantMove:
+                await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
 
-                _currentTurnPlayerView.JumpIn(spawnPoint.position, jumpInTime);
-                await UniTask.Delay(TimeSpan.FromSeconds(jumpInTime));
+                _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
+
+                MakeTurn();
+                break;
+
+            case PlayerState.ShouldSpawn:
+                await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, spawnPoint.position);
 
                 goto case PlayerState.ShouldMakeTurn;
+
             case PlayerState.ShouldMakeTurn:
-                _currentTurnPlayerView.SetControlsActive(true);
+                uiController.EnableAngyMeterFor(_currentTurnPlayer);
+
+                _currentTurnPlayer.SetControlsActive(true);
                 SetTrajectoryActive(true);
 
-                _currentTurnPlayerView._shooter.ballStorage.GetComponent<BallBehaviour>().BecameStill +=
-                    OnCurrentPlayerBecameStill;
+                _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
+                _currentTurnPlayer.Shot += OnPlayerShot;
 
-                _currentTurnPlayerView._shooter.Shot += OnPlayerShot;
-
-                _currentTurnPlayerView.PlayerState = PlayerState.ActiveAiming;
+                _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
                 break;
-            case PlayerState.ActiveAiming:
-                break;
-            case PlayerState.ActiveInMotion:
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
         }
+    }
+
+    private async UniTask SpawnShowJumpInAndSetCamera(PlayerView player, Vector3 spawnPosition)
+    {
+        //TODO: Change to animation
+        player.SetBallPosition(spawnPosition + Vector3.up * 20f);
+
+        player.Show();
+
+        //TODO: Change to animation
+        player.JumpIn(spawnPosition, GameConfig.Instance.JumpInTime);
+        await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.JumpInTime));
+
+        _camerasController.SetActiveCamera(player.BallCamera, 1f);
     }
 
     private void OnPlayerShot()
     {
-        _currentTurnPlayerView._shooter.Shot -= OnPlayerShot;
+        _currentTurnPlayer.Shot -= OnPlayerShot;
+
 
         SetTrajectoryActive(false);
     }
 
     private void OnCurrentPlayerBecameStill()
     {
-        _currentTurnPlayerView._shooter.ballStorage.GetComponent<BallBehaviour>().BecameStill -=
-            OnCurrentPlayerBecameStill;
-        _currentTurnPlayerView.PlayerState = PlayerState.ShouldMakeTurn;
-        _currentTurnPlayerView.SetControlsActive(false);
+        _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
+
+        _currentTurnPlayer.SetControlsActive(false);
+        uiController.DisableAngyMeter();
+
+        //If angy became full
+        if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+        {
+            _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnCantMove;
+
+            //TODO: Play explosion animation
+            _currentTurnPlayer.ExplodeAndHide();
+        }
+        else
+        {
+            _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
+        }
+
         MakeTurn();
+    }
+
+    private void Update()
+    {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            _currentTurnPlayer.AlterAngy(AngyEvent.HitBadObject);
+        }
+#endif
     }
 }
