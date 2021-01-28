@@ -1,3 +1,4 @@
+using System;
 using Cinemachine;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -6,6 +7,9 @@ using UnityEngine;
 
 public class PlayerView : MonoBehaviour
 {
+    public event Action BecameStill;
+    public event Action Shot;
+
     public int PlayerId => _playerId;
 
     [field: SerializeField, ReadOnly]
@@ -17,8 +21,39 @@ public class PlayerView : MonoBehaviour
     // [SerializeField]
     private Rigidbody _ball => _shooter.ballStorage.GetComponent<Rigidbody>();
 
+    private BallBehaviour _ballBehaviour;
+    private Shooter _shooter;
+
     private int _playerId;
-    public Shooter _shooter { get; private set; }
+
+    public void ShouldPlayerActivate(int playerId)
+    {
+        _shooter.ShouldPlayerActivate(playerId);
+    }
+
+    private void OnBallBecameStill()
+    {
+        BecameStill?.Invoke();
+    }
+
+    private void OnBallShot()
+    {
+        Shot?.Invoke();
+    }
+
+    private async void OnEnable()
+    {
+        await UniTask.WaitUntil(() => _ballBehaviour != null);
+
+        _ballBehaviour.BecameStill += OnBallBecameStill;
+        _shooter.Shot += OnBallShot;
+    }
+
+    private void OnDisable()
+    {
+        _ballBehaviour.BecameStill -= OnBallBecameStill;
+        _shooter.Shot -= OnBallShot;
+    }
 
     private async void Awake()
     {
@@ -33,6 +68,8 @@ public class PlayerView : MonoBehaviour
             await UniTask.WaitUntil(() => _shooter.ballStorage != null);
             BallCamera.Follow = _shooter.ballStorage.transform;
         }
+
+        _ballBehaviour = _shooter.ballStorage.GetComponent<BallBehaviour>();
     }
 
     public void JumpIn(Vector3 endPosition, float jumpTime = 1f)
