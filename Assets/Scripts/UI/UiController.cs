@@ -28,6 +28,9 @@ namespace UI
         [SerializeField]
         private Slider angySlider2;
 
+        [SerializeField]
+        private PlayersManager playersManager;
+
         // private PlayerView _activePlayer;
 
         private void Awake()
@@ -37,24 +40,27 @@ namespace UI
 
             restartButton.onClick.AddListener(OnRestartButtonClicked);
 
-            FindObjectOfType<PlayersManager>().InitializedAllPlayers += OnPlayersInitialized;
+            Debug.Log("Started listening to player initialization");
+            playersManager.InitializedAllPlayers += OnPlayersInitialized;
         }
 
         private void OnPlayersInitialized(PlayerView[] obj)
         {
-            FindObjectOfType<PlayersManager>().InitializedAllPlayers -= OnPlayersInitialized;
+            Debug.Log("UI should subscribe to angy change");
+            playersManager.InitializedAllPlayers -= OnPlayersInitialized;
 
             obj[0].AngyChanged += OnPlayer1AngyChanged;
             obj[1].AngyChanged += OnPlayer2AngyChanged;
 
             angySlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[0].PlayerColor;
             angySlider2.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[1].PlayerColor;
+            Debug.Log("UI subscribed to angy change");
         }
 
         private void OnDisable()
         {
-            FindObjectOfType<PlayersManager>().Players[0].AngyChanged -= OnPlayer1AngyChanged;
-            FindObjectOfType<PlayersManager>().Players[1].AngyChanged -= OnPlayer2AngyChanged;
+            playersManager.Players[0].AngyChanged -= OnPlayer1AngyChanged;
+            playersManager.Players[1].AngyChanged -= OnPlayer2AngyChanged;
         }
 
 
@@ -103,11 +109,13 @@ namespace UI
 
         private void OnPlayer1AngyChanged(int newAngyValue)
         {
+            Debug.Log($"New angy for Player 1 {newAngyValue}");
             angySlider.value = newAngyValue;
         }
 
         private void OnPlayer2AngyChanged(int newAngyValue)
         {
+            Debug.Log($"New angy for Player 2 {newAngyValue}");
             angySlider2.value = newAngyValue;
         }
     }
