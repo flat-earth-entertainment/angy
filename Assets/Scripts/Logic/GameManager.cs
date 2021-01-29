@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Ball;
 using Ball.Objectives;
@@ -124,7 +126,28 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
         //TODO: Add points for a player entered
         //TODO: Find and show a winner
-        uiController.ShowWinScreen(null);
+        var pointController = FindObjectOfType<PointController>();
+        pointController.pointIds[player.PlayerId] += 2;
+
+        var winnerPoints = pointController.pointIds.Max();
+
+        var winnerId = pointController.pointIds.IndexOf(winnerPoints);
+
+        var winner = _playersManager.Players.First(p => p.PlayerId == winnerId);
+
+        var others = new List<(PlayerView, int)>();
+
+        for (int i = 0; i < _playersManager.Players.Count(); i++)
+        {
+            if (i == winnerId)
+                continue;
+
+            Debug.Log(pointController.pointIds.Count);
+            Debug.Log(i);
+            others.Add((_playersManager.Players.First(p => p.PlayerId == i), pointController.pointIds[i]));
+        }
+
+        uiController.ShowWinScreen((winner, winnerPoints), others.ToArray());
     }
 
     private async void Start()
@@ -252,6 +275,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
             _currentTurnPlayer.AlterAngy(AngyEvent.HitBadObject);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            OnPlayerEnteredHole(_currentTurnPlayer);
         }
 #endif
     }

@@ -38,9 +38,16 @@ namespace UI
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
-        public void ShowWinScreen(PlayerView winner)
+        public void ShowWinScreen((PlayerView, int) winner, params (PlayerView, int)[] others)
         {
-            winText.text = winner.Nickname + " won!";
+            winText.text = winner.Item1.Nickname + " won!\n";
+            winText.text += winner.Item1.Nickname + " : " + winner.Item2 + "\n";
+
+            foreach (var playerAndScore in others)
+            {
+                winText.text += playerAndScore.Item1.Nickname + " : " + playerAndScore.Item2 + "\n";
+            }
+
             HideAllUi();
             winScreen.SetActive(true);
         }
