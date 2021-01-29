@@ -1,5 +1,6 @@
 using System;
 using Config;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -33,8 +34,10 @@ namespace UI
             restartButton.onClick.AddListener(OnRestartButtonClicked);
         }
 
-        private void OnRestartButtonClicked()
+        private async void OnRestartButtonClicked()
         {
+            await SceneManager.UnloadSceneAsync("Prediction");
+            
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
