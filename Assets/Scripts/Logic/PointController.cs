@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PointController : MonoBehaviour
 {
     public List<GoodNeutralMushroom> pointHolders;
     public List<int> pointIds;
     private int enemiesRemaining;
-    public List<Text> pointText;
+    public List<TextMeshProUGUI> pointText;
     // Start is called before the first frame update
     void Start()
     {
