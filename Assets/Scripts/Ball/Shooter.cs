@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using Rewired;
 
 public class Shooter : MonoBehaviour{
@@ -31,9 +32,11 @@ public class Shooter : MonoBehaviour{
     public int vertSnapAngle = 5, horSnapAngle = 5, greatSnapAngle = 30;
     private float snapCooldownTimer, vertSnapCooldownTimer, horSnapCooldownTimer;
     public float snapCooldown = 0.2f;
-    private bool movedRet;
+    private bool movedRet, forcePercentBool;
     private Rigidbody rb;
-    private float forcePercent;
+    public float forcePercent = 1;
+    [HideInInspector]
+    public Slider powerSlider;
 
     void Start(){
         rewiredPlayer = ReInput.players.GetPlayer(playerId);
@@ -51,21 +54,12 @@ public class Shooter : MonoBehaviour{
         transform.parent = ballStorage.transform;
 
         ShouldPlayerActivate(playerId);
+
+        // MUST BE IMPROVED
+        powerSlider = GameObject.FindGameObjectWithTag("TEMPFINDSLIDER").transform.GetChild(0).GetChild(0).GetComponent<Slider>();
     }
 
-    public Vector3 calculateForce(){
-        return transform.forward * power;
-    }
 
-    void shoot(){   // Needs to be redone, atm just creates a new ball
-        rb.constraints = RigidbodyConstraints.None;
-        rb.AddForce(calculateForce(), ForceMode.Impulse);
-        ballStorage.GetComponent<BallBehaviour>().inMotion = true;
-        
-        Shot?.Invoke();
-        
-        if (lineRender !=null || !lineRender.Equals(null)) lineRender.enabled = false;
-    }
 
     void Update(){
         if(activateShootingRetinae && active){
@@ -119,16 +113,64 @@ public class Shooter : MonoBehaviour{
             }
             // Shoot the ball
             if(rewiredPlayer.GetButtonDown("Confirm")){
-                shoot();
-                DisableRetinae();
-                active = false;
+                StartCoroutine("PreShot");
             }
         }
     }
-    //private IEnumerator 
-    private IEnumerator CalculateShootForce(float force){
+    void shoot(){
+        rb.constraints = RigidbodyConstraints.None;
+        rb.AddForce(calculateForce(), ForceMode.Impulse);
+        ballStorage.GetComponent<BallBehaviour>().inMotion = true;
+        
+        Shot?.Invoke();
+        
+        if (lineRender !=null || !lineRender.Equals(null)) lineRender.enabled = false;
+    }
+    public Vector3 calculateForce(){
+        return transform.forward * power * forcePercent;
+    }
+    private IEnumerator PreShot(){
+        activateShootingRetinae = false;
 
-        yield return force;
+        // change spin and tilt goes here //
+
+
+        // Power Goes Here //
+        powerSlider.transform.parent.gameObject.SetActive(true);
+        yield return StartCoroutine("CalculateShootForce");
+        powerSlider.transform.parent.gameObject.SetActive(false);
+        // Power Ends Here //
+        
+        // Shoot the ball
+        shoot();
+        DisableRetinae();
+        active = false;
+        
+        yield return true;
+        
+        forcePercent = 1;
+        activateShootingRetinae = true;
+    }
+    private IEnumerator CalculateShootForce(){
+        forcePercent = 0;
+        yield return null;
+        while (!rewiredPlayer.GetButtonDown("Confirm") && forcePercent >= 0){
+            powerSlider.value = forcePercent;
+            if(!forcePercentBool){
+                forcePercent += Time.deltaTime / 4;
+                if(forcePercent >= 1){
+                    forcePercentBool = true;
+                }
+            }else{
+                forcePercent -= Time.deltaTime / 4;
+            }
+            yield return null;
+        }
+        if(forcePercent < 0){
+            forcePercent = 0;
+        }
+        forcePercentBool = false;
+        StopCoroutine("CalculateShootForce");
     }
     void DisableRetinae(){
         activateShootingRetinae = false;
