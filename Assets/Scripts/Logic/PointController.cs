@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PointController : MonoBehaviour
 {
-    private List<GoodNeutralMushroom> pointHolders;
+    public List<GoodNeutralMushroom> pointHolders;
     public List<int> pointIds;
     private int enemiesRemaining;
     public List<Text> pointText;

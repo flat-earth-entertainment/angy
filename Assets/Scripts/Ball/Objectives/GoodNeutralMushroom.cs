@@ -14,6 +14,12 @@ public class GoodNeutralMushroom : MonoBehaviour
         pointController = GameObject.FindObjectOfType<PointController>();
     }
     private void OnTriggerEnter(Collider other) {
+        Trigger(other);
+    }
+    private void OnTriggerExit(Collider other) {
+        Trigger(other);
+    }
+    void Trigger(Collider other){
         if(other.tag == "Lemming"){
             int hitId = other.transform.GetChild(0).GetComponent<Shooter>().playerId;
             ownerId = hitId;
@@ -26,6 +32,7 @@ public class GoodNeutralMushroom : MonoBehaviour
             point = Instantiate(fruit[hitId], transform.position + new Vector3(0,1f,0), Quaternion.identity);
             pointController.UpdateScore();
         }
+
     }
     public void SpawnGoal(){
         pointValue++;
