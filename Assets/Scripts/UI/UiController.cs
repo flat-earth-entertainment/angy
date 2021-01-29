@@ -28,7 +28,7 @@ namespace UI
         [SerializeField]
         private Slider angySlider2;
 
-        private PlayerView _activePlayer;
+        // private PlayerView _activePlayer;
 
         private void Awake()
         {
@@ -49,6 +49,12 @@ namespace UI
 
             angySlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[0].PlayerColor;
             angySlider2.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[1].PlayerColor;
+        }
+
+        private void OnDisable()
+        {
+            FindObjectOfType<PlayersManager>().Players[0].AngyChanged -= OnPlayer1AngyChanged;
+            FindObjectOfType<PlayersManager>().Players[1].AngyChanged -= OnPlayer2AngyChanged;
         }
 
 
@@ -81,8 +87,8 @@ namespace UI
 
         public void EnableAngyMeterFor(PlayerView player)
         {
-            _activePlayer = player;
-            angySlider.value = player.Angy;
+            // _activePlayer = player;
+            // angySlider.value = player.Angy;
             // player.AngyChanged += OnActivePlayerAngyChanged;
 
             angyMeter.SetActive(true);
@@ -92,7 +98,7 @@ namespace UI
         {
             angyMeter.SetActive(false);
             // _activePlayer.AngyChanged -= OnActivePlayerAngyChanged;
-            _activePlayer = null;
+            // _activePlayer = null;
         }
 
         private void OnPlayer1AngyChanged(int newAngyValue)
