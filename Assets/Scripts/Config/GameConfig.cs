@@ -24,6 +24,9 @@ namespace Config
         [field: SerializeField]
         public float OutOfBoundsReactionTime { get; private set; }
 
+        [field: SerializeField]
+        public float ExplosionForceOnPlayerHit { get; private set; }
+
 
         private const string ConfigPath = "Game Config";
 
