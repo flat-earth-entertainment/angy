@@ -237,8 +237,6 @@ public class GameManager : MonoBehaviour
         _currentTurnPlayer.SetControlsActive(false);
 
         _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
-        Debug.Log($"Subscribed {_currentTurnPlayer.Nickname} to BecameStill");
-
 
         _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
@@ -247,7 +245,6 @@ public class GameManager : MonoBehaviour
 
     private void OnCurrentPlayerBecameStill()
     {
-        Debug.Log($"Unsubscribed {_currentTurnPlayer.Nickname} to BecameStill");
         _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
 
         uiController.DisableAngyMeter();
