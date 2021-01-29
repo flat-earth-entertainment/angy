@@ -1,11 +1,23 @@
+using System;
 using Config;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
 {
     public class UiController : MonoBehaviour
     {
+        [SerializeField]
+        private Button restartButton;
+
+        [SerializeField]
+        private GameObject winScreen;
+
+        [SerializeField]
+        private TextMeshProUGUI winText;
+
         [SerializeField]
         private GameObject angyMeter;
 
@@ -17,11 +29,26 @@ namespace UI
             _angySlider = angyMeter.GetComponentInChildren<Slider>();
             _angySlider.minValue = GameConfig.Instance.AngyValues.MinAngy;
             _angySlider.maxValue = GameConfig.Instance.AngyValues.MaxAngy;
+
+            restartButton.onClick.AddListener(OnRestartButtonClicked);
+        }
+
+        private void OnRestartButtonClicked()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        public void ShowWinScreen(PlayerView winner)
+        {
+            winText.text = winner.Nickname + " won!";
+            HideAllUi();
+            winScreen.SetActive(true);
         }
 
         public void HideAllUi()
         {
             angyMeter.SetActive(false);
+            winScreen.SetActive(false);
         }
 
         public void EnableAngyMeterFor(PlayerView player)
