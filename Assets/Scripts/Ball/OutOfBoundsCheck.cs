@@ -10,6 +10,16 @@ namespace Ball
 
         private float _timer;
 
+        private void OnEnable()
+        {
+            _timer = 0f;
+        }
+
+        private void OnDisable()
+        {
+            _timer = 0f;
+        }
+
         private void FixedUpdate()
         {
             if (!Physics.Raycast(transform.position, Vector3.down, LayerMask.NameToLayer("Ground")))

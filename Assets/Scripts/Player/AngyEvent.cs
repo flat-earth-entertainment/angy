@@ -5,6 +5,8 @@ namespace Player
         HitBadObject,
         FellOutOfTheMap,
         AfterFellOutOfTheMapAndReachedMaxAngy,
-        ShotMade
+        ShotMade,
+        HitSomeone,
+        GotHit
     }
 }

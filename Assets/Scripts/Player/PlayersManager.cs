@@ -1,14 +1,19 @@
+using System;
 using System.Collections.Generic;
 using Config;
 using UnityEngine;
 
 public class PlayersManager : MonoBehaviour
 {
+    public event Action<PlayerView[]> InitializedAllPlayers;
+
     [SerializeField]
     private int numberOfPlayers = 2;
 
     [SerializeField]
     private GameObject obstacles;
+
+    public IEnumerable<PlayerView> Players => _players.AsReadOnly();
 
     private readonly List<PlayerView> _players = new List<PlayerView>();
 
@@ -18,6 +23,8 @@ public class PlayersManager : MonoBehaviour
         {
             InitializeNewPlayer();
         }
+
+        InitializedAllPlayers?.Invoke(_players.ToArray());
 
         PredictionManager.instance.obstacles = obstacles;
     }
