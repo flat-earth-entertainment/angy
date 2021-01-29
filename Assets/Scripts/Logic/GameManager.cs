@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
 
         var others = new List<(PlayerView, int)>();
 
-        for (int i = 0; i < _playersManager.Players.Count(); i++)
+        for (int i = 0; i < _playersManager.Players.Count; i++)
         {
             if (i == winnerId)
                 continue;
