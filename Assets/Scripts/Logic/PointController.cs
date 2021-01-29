@@ -13,7 +13,11 @@ public class PointController : MonoBehaviour
     void Start()
     {
         enemiesRemaining = pointHolders.Count;
-        
+        pointIds = new List<int>();
+        for (int i = 0; i < GetComponent<PlayersManager>().Players.Count; i++)
+        {
+            pointIds.Add(0);
+        }
     }
 
     // Update is called once per frame
