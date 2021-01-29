@@ -16,7 +16,8 @@ public class PlayerView : MonoBehaviour
     public event Action ReachedMaxAngy;
     public event Action<int> AngyChanged;
 
-    public string Nickname => name;
+    public string Nickname { get; set; }
+    public Color PlayerColor { get; set; }
 
     public int Angy
     {
@@ -169,6 +170,12 @@ public class PlayerView : MonoBehaviour
 
         _ballBehaviour = _shooter.ballStorage.GetComponent<BallBehaviour>();
         _outOfBoundsCheck = _shooter.ballStorage.GetComponent<OutOfBoundsCheck>();
+
+
+        var newColorMaterial =
+            new Material(_shooter.ballStorage.GetComponent<MeshRenderer>().material) {color = PlayerColor};
+        
+        _shooter.ballStorage.GetComponent<MeshRenderer>().material = newColorMaterial;
     }
 
     public void JumpIn(Vector3 endPosition, float jumpTime = 1f)

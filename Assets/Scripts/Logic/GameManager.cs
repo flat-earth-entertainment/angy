@@ -124,10 +124,7 @@ public class GameManager : MonoBehaviour
     private void OnPlayerEnteredHole(PlayerView player)
     {
         Time.timeScale = 0;
-        //TODO: Add points for a player entered
-        //TODO: Find and show a winner
         var pointController = FindObjectOfType<PointController>();
-        pointController.pointIds[player.PlayerId] += 2;
 
         var winnerPoints = pointController.pointIds.Max();
 

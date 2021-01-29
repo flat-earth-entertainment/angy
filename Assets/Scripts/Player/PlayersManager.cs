@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Config;
+using Player;
 using UnityEngine;
 
 public class PlayersManager : MonoBehaviour
@@ -21,7 +22,7 @@ public class PlayersManager : MonoBehaviour
     {
         for (int i = 0; i < numberOfPlayers; i++)
         {
-            InitializeNewPlayer();
+            InitializeNewPlayer(GameConfig.Instance.PlayerPresets[i]);
         }
 
         InitializedAllPlayers?.Invoke(_players.ToArray());
@@ -29,7 +30,7 @@ public class PlayersManager : MonoBehaviour
         PredictionManager.instance.obstacles = obstacles;
     }
 
-    private void InitializeNewPlayer()
+    private void InitializeNewPlayer(PlayerPreset playerPreset)
     {
         var newPlayerObject = Instantiate(GameConfig.Instance.PlayerPrefab);
         var playerId = _players.Count;
@@ -38,6 +39,8 @@ public class PlayersManager : MonoBehaviour
         if (newPlayerObject.TryGetComponent(out PlayerView player))
         {
             player.PlayerId = playerId;
+            player.Nickname = playerPreset.PlayerName;
+            player.PlayerColor = playerPreset.PlayerColor;
 
             player.PlayerState = PlayerState.ShouldSpawn;
 

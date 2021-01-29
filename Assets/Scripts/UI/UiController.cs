@@ -22,22 +22,40 @@ namespace UI
         [SerializeField]
         private GameObject angyMeter;
 
+        [SerializeField]
+        private Slider angySlider;
+
+        [SerializeField]
+        private Slider angySlider2;
+
         private PlayerView _activePlayer;
-        private Slider _angySlider;
 
         private void Awake()
         {
-            _angySlider = angyMeter.GetComponentInChildren<Slider>();
-            _angySlider.minValue = GameConfig.Instance.AngyValues.MinAngy;
-            _angySlider.maxValue = GameConfig.Instance.AngyValues.MaxAngy;
+            angySlider.minValue = angySlider2.minValue = GameConfig.Instance.AngyValues.MinAngy;
+            angySlider.maxValue = angySlider2.maxValue = GameConfig.Instance.AngyValues.MaxAngy;
 
             restartButton.onClick.AddListener(OnRestartButtonClicked);
+
+            FindObjectOfType<PlayersManager>().InitializedAllPlayers += OnPlayersInitialized;
         }
+
+        private void OnPlayersInitialized(PlayerView[] obj)
+        {
+            FindObjectOfType<PlayersManager>().InitializedAllPlayers -= OnPlayersInitialized;
+
+            obj[0].AngyChanged += OnPlayer1AngyChanged;
+            obj[1].AngyChanged += OnPlayer2AngyChanged;
+
+            angySlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[0].PlayerColor;
+            angySlider2.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[1].PlayerColor;
+        }
+
 
         private async void OnRestartButtonClicked()
         {
             await SceneManager.UnloadSceneAsync("Prediction");
-            
+
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
@@ -64,8 +82,8 @@ namespace UI
         public void EnableAngyMeterFor(PlayerView player)
         {
             _activePlayer = player;
-            _angySlider.value = player.Angy;
-            player.AngyChanged += OnActivePlayerAngyChanged;
+            angySlider.value = player.Angy;
+            // player.AngyChanged += OnActivePlayerAngyChanged;
 
             angyMeter.SetActive(true);
         }
@@ -73,13 +91,18 @@ namespace UI
         public void DisableAngyMeter()
         {
             angyMeter.SetActive(false);
-            _activePlayer.AngyChanged -= OnActivePlayerAngyChanged;
+            // _activePlayer.AngyChanged -= OnActivePlayerAngyChanged;
             _activePlayer = null;
         }
 
-        private void OnActivePlayerAngyChanged(int newAngyValue)
+        private void OnPlayer1AngyChanged(int newAngyValue)
         {
-            _angySlider.value = newAngyValue;
+            angySlider.value = newAngyValue;
+        }
+
+        private void OnPlayer2AngyChanged(int newAngyValue)
+        {
+            angySlider2.value = newAngyValue;
         }
     }
 }
