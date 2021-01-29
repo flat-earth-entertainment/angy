@@ -157,17 +157,20 @@ public class Shooter : MonoBehaviour{
         while (!rewiredPlayer.GetButtonDown("Confirm") && forcePercent >= 0){
             powerSlider.value = forcePercent;
             if(!forcePercentBool){
-                forcePercent += Time.deltaTime / 4;
-                if(forcePercent >= 1){
+                forcePercent += Time.deltaTime / 3;
+                if(forcePercent >= 1.033f){
                     forcePercentBool = true;
                 }
             }else{
-                forcePercent -= Time.deltaTime / 4;
+                forcePercent -= Time.deltaTime / 3;
             }
             yield return null;
         }
         if(forcePercent < 0){
             forcePercent = 0;
+        }
+        if(forcePercent > 1){
+            forcePercent = 1;
         }
         forcePercentBool = false;
         StopCoroutine("CalculateShootForce");
