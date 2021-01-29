@@ -170,7 +170,7 @@ public class PlayerView : MonoBehaviour
 
     public void SetControlsActive(bool toggle)
     {
-        _shooter.active = toggle;
+        //_shooter.active = toggle;
     }
 
     public void SetBallPosition(Vector3 position)
