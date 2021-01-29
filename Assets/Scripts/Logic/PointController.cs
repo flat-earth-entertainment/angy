@@ -5,19 +5,21 @@ using UnityEngine.UI;
 
 public class PointController : MonoBehaviour
 {
-    public List<GameObject> pointHolders;
+    private List<GoodNeutralMushroom> pointHolders;
     public List<int> pointIds;
     private int enemiesRemaining;
     public List<Text> pointText;
     // Start is called before the first frame update
     void Start()
     {
+        pointHolders.AddRange(FindObjectsOfType<GoodNeutralMushroom>());
         enemiesRemaining = pointHolders.Count;
         pointIds = new List<int>();
         for (int i = 0; i < GetComponent<PlayersManager>().Players.Count; i++)
         {
             pointIds.Add(0);
         }
+        
     }
 
     // Update is called once per frame
@@ -28,8 +30,8 @@ public class PointController : MonoBehaviour
     public void EnemyHit(int playerId){
         enemiesRemaining--;
         if(enemiesRemaining == 1){
-            foreach (GameObject item in pointHolders){
-                GoodNeutralMushroom enemy = item.GetComponent<GoodNeutralMushroom>();
+            foreach (GoodNeutralMushroom item in pointHolders){
+                GoodNeutralMushroom enemy = item;
                 if(enemy.ownerId == 99){
                     enemy.SpawnGoal();
 
@@ -45,9 +47,9 @@ public class PointController : MonoBehaviour
             if(pointText[0] != null)
                 pointText[i].text = pointIds[i].ToString();
         }
-        foreach (GameObject item in pointHolders)
+        foreach (GoodNeutralMushroom item in pointHolders)
         {
-            GoodNeutralMushroom enemy = item.GetComponent<GoodNeutralMushroom>();
+            GoodNeutralMushroom enemy = item;
             if(enemy.ownerId < 98){
                 pointIds[enemy.ownerId] += enemy.pointValue;
                 if(pointText[0] != null)
