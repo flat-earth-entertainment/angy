@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Ball.Objectives;
 using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
@@ -30,6 +31,11 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Time.timeScale < 1)
+        {
+            Time.timeScale = 1;
+        }
+
         if (spawnPoint == null || spawnPoint.Equals(null))
         {
             spawnPoint = GameObject.FindWithTag("Spawn Point").transform;
@@ -49,6 +55,24 @@ public class GameManager : MonoBehaviour
 
 
         uiController.HideAllUi();
+    }
+
+    private void OnEnable()
+    {
+        Hole.PlayerEnteredHole += OnPlayerEnteredHole;
+    }
+
+    private void OnDisable()
+    {
+        Hole.PlayerEnteredHole -= OnPlayerEnteredHole;
+    }
+
+    private void OnPlayerEnteredHole(PlayerView player)
+    {
+        Time.timeScale = 0;
+        //TODO: Add points for a player entered
+        //TODO: Find and show a winner
+        uiController.ShowWinScreen(null);
     }
 
     private async void Start()
