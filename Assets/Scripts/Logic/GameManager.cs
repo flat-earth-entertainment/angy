@@ -67,15 +67,6 @@ public class GameManager : MonoBehaviour
         HitOtherPlayerTrigger.PlayerHit += OnPlayerGotHit;
     }
 
-    private void OnAllPlayersInitialized(PlayerView[] players)
-    {
-        foreach (var player in players)
-        {
-            Debug.Log("Subscribed " + player.Nickname);
-            player.WentOutOfBounds += OnPlayerWentOutOfBounds;
-        }
-    }
-
     private void OnDisable()
     {
         Hole.PlayerEnteredHole -= OnPlayerEnteredHole;
@@ -86,6 +77,15 @@ public class GameManager : MonoBehaviour
         }
 
         HitOtherPlayerTrigger.PlayerHit -= OnPlayerGotHit;
+    }
+
+    private void OnAllPlayersInitialized(PlayerView[] players)
+    {
+        foreach (var player in players)
+        {
+            Debug.Log("Subscribed " + player.Nickname);
+            player.WentOutOfBounds += OnPlayerWentOutOfBounds;
+        }
     }
 
     private void OnPlayerGotHit(PlayerView arg1, PlayerView arg2)
