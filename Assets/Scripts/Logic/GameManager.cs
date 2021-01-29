@@ -85,7 +85,6 @@ public class GameManager : MonoBehaviour
     {
         foreach (var player in players)
         {
-            Debug.Log("Subscribed " + player.Nickname);
             player.WentOutOfBounds += OnPlayerWentOutOfBounds;
         }
     }
@@ -101,11 +100,7 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayerWentOutOfBounds(PlayerView player)
     {
-        //Unsubscribe as the current player should fall only as a result of shooting
-        if (player == _currentTurnPlayer)
-        {
-            _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
-        }
+        Debug.Log($"{player.Nickname} went out of bounds");
 
         player.Hide();
 
@@ -118,7 +113,12 @@ public class GameManager : MonoBehaviour
 
         player.PlayerState = PlayerState.ShouldSpawn;
 
-        MakeTurn();
+        //Unsubscribe as the current player should fall only as a result of shooting
+        if (player == _currentTurnPlayer)
+        {
+            _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
+            MakeTurn();
+        }
     }
 
     private void OnPlayerEnteredHole(PlayerView player)
@@ -183,9 +183,10 @@ public class GameManager : MonoBehaviour
 
         if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
         {
-            _currentTurnPlayer.ExplodeAndHide();
+            _currentTurnPlayer.ExplodeAndHide(); //Angy=0
             _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawn;
             MakeTurn();
+            return;
         }
 
         switch (_currentTurnPlayer.PlayerState)
@@ -196,7 +197,7 @@ public class GameManager : MonoBehaviour
                 _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
 
                 MakeTurn();
-                break;
+                return;
 
             case PlayerState.ShouldSpawn:
                 await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, spawnPoint.position);
@@ -233,8 +234,11 @@ public class GameManager : MonoBehaviour
     private void OnPlayerShot()
     {
         _currentTurnPlayer.Shot -= OnPlayerShot;
+        _currentTurnPlayer.SetControlsActive(false);
 
         _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
+        Debug.Log($"Subscribed {_currentTurnPlayer.Nickname} to BecameStill");
+
 
         _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
@@ -243,9 +247,9 @@ public class GameManager : MonoBehaviour
 
     private void OnCurrentPlayerBecameStill()
     {
+        Debug.Log($"Unsubscribed {_currentTurnPlayer.Nickname} to BecameStill");
         _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
 
-        _currentTurnPlayer.SetControlsActive(false);
         uiController.DisableAngyMeter();
 
         //If angy became full
