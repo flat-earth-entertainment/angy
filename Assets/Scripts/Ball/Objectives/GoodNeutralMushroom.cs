@@ -38,6 +38,6 @@ public class GoodNeutralMushroom : MonoBehaviour
             Destroy(hitObject);
         }
         GetComponent<Renderer>().enabled = false;
-        point = Instantiate(fruit[0], transform.position + new Vector3(0,1,0), Quaternion.identity);
+        point = Instantiate(fruit[2], transform.position + new Vector3(0,1,0), Quaternion.identity);
     }
 }
