@@ -3744,6 +3744,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3670220596072794171, guid: 11a8896eab3f37a488bc698b2f2a5f0a, type: 3}
+      propertyPath: playersManager
+      value: 
+      objectReference: {fileID: 634854376}
     - target: {fileID: 4266580344006163622, guid: 11a8896eab3f37a488bc698b2f2a5f0a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -9683,8 +9687,8 @@ MonoBehaviour:
   pointHolders: []
   pointIds: 00000000000000000000000000000000
   pointText:
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 497777091}
+  - {fileID: 854321129}
 --- !u!1 &635363759 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8641261531361634797, guid: 5674c40747dd91b41bccc4d9c43827d2, type: 3}
