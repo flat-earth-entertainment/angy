@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8268208102981932798}
   - component: {fileID: 6150338465309286964}
   - component: {fileID: 4808745122200658163}
+  - component: {fileID: 5910985939030892117}
+  - component: {fileID: 1928406318731531132}
   m_Layer: 0
   m_Name: Proto_Goal
   m_TagString: Untagged
@@ -98,3 +100,28 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -2952346471003560650, guid: b1aab89589c357043b8edd41c8b82d4c, type: 3}
+--- !u!65 &5910985939030892117
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5645992550742475745}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: -1.5, z: 0}
+--- !u!114 &1928406318731531132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5645992550742475745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 353103e9188146cba6eb54812781b2be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

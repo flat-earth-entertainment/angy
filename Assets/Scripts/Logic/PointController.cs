@@ -13,6 +13,7 @@ public class PointController : MonoBehaviour
     void Start()
     {
         enemiesRemaining = pointHolders.Count;
+        
     }
 
     // Update is called once per frame
@@ -37,14 +38,21 @@ public class PointController : MonoBehaviour
         for (int i = 0; i < pointIds.Count; i++)
         {
             pointIds[i] = 0;
+            if(pointText[0] != null)
+                pointText[i].text = pointIds[i].ToString();
         }
         foreach (GameObject item in pointHolders)
         {
             GoodNeutralMushroom enemy = item.GetComponent<GoodNeutralMushroom>();
             if(enemy.ownerId < 98){
                 pointIds[enemy.ownerId] += enemy.pointValue;
-                pointText[enemy.ownerId].text = pointIds[enemy.ownerId].ToString();
+                if(pointText[0] != null)
+                    pointText[enemy.ownerId].text = pointIds[enemy.ownerId].ToString();
             }
         }
+    }
+    public List<int> GetPoints(){
+        UpdateScore();
+        return pointIds;
     }
 }
