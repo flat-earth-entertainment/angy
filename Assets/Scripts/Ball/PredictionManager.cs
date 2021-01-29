@@ -26,6 +26,7 @@ public class PredictionManager : Singleton<PredictionManager>{
 
         CreateSceneParameters parameters = new CreateSceneParameters(LocalPhysicsMode.Physics3D);
         predictionScene = SceneManager.CreateScene("Prediction", parameters);
+        Debug.Log(predictionScene.name);
         predictionPhysicsScene = predictionScene.GetPhysicsScene();
 
         lineRenderer = GetComponent<LineRenderer>();
