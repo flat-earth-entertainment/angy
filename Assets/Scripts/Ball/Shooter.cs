@@ -7,6 +7,8 @@ public class Shooter : MonoBehaviour{
 
     public event Action Shot;
     
+    public PlayerView PlayerView { get; private set; }
+    
     public int playerId = 1;
     private Rewired.Player rewiredPlayer;
 
@@ -35,6 +37,11 @@ public class Shooter : MonoBehaviour{
     private Rigidbody rb;
     private float forcePercent;
 
+    public void SetPlayer(PlayerView playerView)
+    {
+        PlayerView = playerView;
+    }
+    
     void Start(){
         rewiredPlayer = ReInput.players.GetPlayer(playerId);
 
