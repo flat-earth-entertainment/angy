@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 6734545923583936603}
   - component: {fileID: 6734545923583936602}
   - component: {fileID: 8365493346235312384}
+  - component: {fileID: -5632628007550634790}
+  - component: {fileID: 8217169897652553532}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Lemming
@@ -126,3 +128,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inMotion: 0
+--- !u!114 &-5632628007550634790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6734545923583936600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f800343a5247d6a30c8e47d69351d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8217169897652553532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6734545923583936600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aeebd5c84554d1eb3cba0e6d016c839, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
