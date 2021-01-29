@@ -14,6 +14,8 @@ public class PlayerView : MonoBehaviour
     public event Action ReachedMaxAngy;
     public event Action<int> AngyChanged;
 
+    public string Nickname => name;
+
     public int Angy
     {
         get => _angy;
@@ -42,7 +44,6 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-    private int _playerId;
 
     public Vector3 LastStillPosition { get; private set; }
 
@@ -57,7 +58,7 @@ public class PlayerView : MonoBehaviour
 
     private BallBehaviour _ballBehaviour;
     private Shooter _shooter;
-
+    private int _playerId;
     private int _angy;
 
     public void AlterAngy(AngyEvent angyEvent)
