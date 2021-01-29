@@ -13,7 +13,7 @@ public class PlayersManager : MonoBehaviour
     [SerializeField]
     private GameObject obstacles;
 
-    public IEnumerable<PlayerView> Players => _players.AsReadOnly();
+    public IReadOnlyList<PlayerView> Players => _players.AsReadOnly();
 
     private readonly List<PlayerView> _players = new List<PlayerView>();
 
