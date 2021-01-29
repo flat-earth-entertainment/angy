@@ -133,7 +133,7 @@ public class GameManager : MonoBehaviour
     private void OnPlayerShot()
     {
         _currentTurnPlayer.Shot -= OnPlayerShot;
-
+        _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
         SetTrajectoryActive(false);
     }
