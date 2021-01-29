@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using UnityEngine;
 
 namespace Ball.Objectives
@@ -10,11 +9,12 @@ namespace Ball.Objectives
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out Shooter shooter))
+            if (other.transform.childCount >= 1)
             {
-                var player = FindObjectsOfType<PlayerView>().FirstOrDefault(p => p.PlayerId == shooter.playerId);
-
-                if (player != null) PlayerEnteredHole?.Invoke(player);
+                if (other.transform.GetChild(0).TryGetComponent(out Shooter shooter))
+                {
+                    PlayerEnteredHole?.Invoke(shooter.PlayerView);
+                }
             }
         }
     }
