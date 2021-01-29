@@ -142,8 +142,6 @@ public class GameManager : MonoBehaviour
             if (i == winnerId)
                 continue;
 
-            Debug.Log(pointController.pointIds.Count);
-            Debug.Log(i);
             others.Add((_playersManager.Players.First(p => p.PlayerId == i), pointController.pointIds[i]));
         }
 
