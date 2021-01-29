@@ -1,4 +1,5 @@
 using System;
+using Ball;
 using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
@@ -11,6 +12,7 @@ public class PlayerView : MonoBehaviour
 {
     public event Action BecameStill;
     public event Action Shot;
+    public event Action<PlayerView> WentOutOfBounds;
     public event Action ReachedMaxAngy;
     public event Action<int> AngyChanged;
 
@@ -47,8 +49,16 @@ public class PlayerView : MonoBehaviour
 
     public Vector3 LastStillPosition { get; private set; }
 
-    [field: SerializeField, ReadOnly]
-    public PlayerState PlayerState { get; set; }
+
+    public PlayerState PlayerState
+    {
+        get => playerState;
+        set
+        {
+            Debug.Log(Nickname + "'s state was " + playerState + " and became " + value);
+            playerState = value;
+        }
+    }
 
     [field: SerializeField]
     public CinemachineVirtualCamera BallCamera { get; private set; }
@@ -57,9 +67,13 @@ public class PlayerView : MonoBehaviour
     private Rigidbody _ball => _shooter.ballStorage.GetComponent<Rigidbody>();
 
     private BallBehaviour _ballBehaviour;
+    private OutOfBoundsCheck _outOfBoundsCheck;
     private Shooter _shooter;
     private int _playerId;
     private int _angy;
+
+    [SerializeField, ReadOnly]
+    private PlayerState playerState;
 
     public void AlterAngy(AngyEvent angyEvent)
     {
@@ -77,11 +91,19 @@ public class PlayerView : MonoBehaviour
             case AngyEvent.ShotMade:
                 Angy += GameConfig.Instance.AngyValues.ShotMade;
                 break;
+            case AngyEvent.HitSomeone:
+                Angy += GameConfig.Instance.AngyValues.PlayerHitSomeone;
+                break;
+            case AngyEvent.GotHit:
+                Angy += GameConfig.Instance.AngyValues.PlayerGotHit;
+                break;
         }
     }
 
     public void ExplodeAndHide()
     {
+        Angy = GameConfig.Instance.AngyValues.MinAngy;
+
         _ball.GetComponent<Collider>().enabled = false;
         _ball.useGravity = false;
         _ball.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
@@ -114,12 +136,19 @@ public class PlayerView : MonoBehaviour
 
         _ballBehaviour.BecameStill += OnBallBecameStill;
         _shooter.Shot += OnBallShot;
+        _outOfBoundsCheck.WentOutOfBounds += OnWentOutOfBounds;
+    }
+
+    private void OnWentOutOfBounds()
+    {
+        WentOutOfBounds?.Invoke(this);
     }
 
     private void OnDisable()
     {
         _ballBehaviour.BecameStill -= OnBallBecameStill;
         _shooter.Shot -= OnBallShot;
+        _outOfBoundsCheck.WentOutOfBounds -= OnWentOutOfBounds;
     }
 
     private async void Awake()
@@ -130,6 +159,8 @@ public class PlayerView : MonoBehaviour
             Debug.LogError("Can't find Shooter in children!");
         }
 
+        _shooter.SetPlayer(this);
+
         if (_shooter.ballStorage == null || _shooter.Equals(null))
         {
             await UniTask.WaitUntil(() => _shooter.ballStorage != null);
@@ -137,6 +168,7 @@ public class PlayerView : MonoBehaviour
         }
 
         _ballBehaviour = _shooter.ballStorage.GetComponent<BallBehaviour>();
+        _outOfBoundsCheck = _shooter.ballStorage.GetComponent<OutOfBoundsCheck>();
     }
 
     public void JumpIn(Vector3 endPosition, float jumpTime = 1f)

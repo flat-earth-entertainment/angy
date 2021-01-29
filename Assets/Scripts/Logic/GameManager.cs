@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Ball;
 using Ball.Objectives;
 using Cinemachine;
 using Config;
@@ -60,11 +61,62 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         Hole.PlayerEnteredHole += OnPlayerEnteredHole;
+
+        _playersManager.InitializedAllPlayers += OnAllPlayersInitialized;
+
+        HitOtherPlayerTrigger.PlayerHit += OnPlayerGotHit;
+    }
+
+    private void OnAllPlayersInitialized(PlayerView[] players)
+    {
+        foreach (var player in players)
+        {
+            Debug.Log("Subscribed " + player.Nickname);
+            player.WentOutOfBounds += OnPlayerWentOutOfBounds;
+        }
     }
 
     private void OnDisable()
     {
         Hole.PlayerEnteredHole -= OnPlayerEnteredHole;
+
+        foreach (var player in _playersManager.Players)
+        {
+            player.WentOutOfBounds -= OnPlayerWentOutOfBounds;
+        }
+
+        HitOtherPlayerTrigger.PlayerHit -= OnPlayerGotHit;
+    }
+
+    private void OnPlayerGotHit(PlayerView arg1, PlayerView arg2)
+    {
+        if (arg1 == _currentTurnPlayer)
+        {
+            arg1.AlterAngy(AngyEvent.HitSomeone);
+            arg2.AlterAngy(AngyEvent.GotHit);
+        }
+    }
+
+    private void OnPlayerWentOutOfBounds(PlayerView player)
+    {
+        //Unsubscribe as the current player should fall only as a result of shooting
+        if (player == _currentTurnPlayer)
+        {
+            _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
+        }
+
+        player.Hide();
+
+        player.AlterAngy(AngyEvent.FellOutOfTheMap);
+
+        if (player.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+        {
+            player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
+        }
+
+        player.PlayerState = PlayerState.ShouldSpawn;
+
+        MakeTurn();
     }
 
     private void OnPlayerEnteredHole(PlayerView player)
@@ -111,6 +163,13 @@ public class GameManager : MonoBehaviour
 
         await _camerasController.BlendTo(nextCamera, GameConfig.Instance.FlyToNextPlayerTime);
 
+        if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+        {
+            _currentTurnPlayer.ExplodeAndHide();
+            _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawn;
+            MakeTurn();
+        }
+
         switch (_currentTurnPlayer.PlayerState)
         {
             case PlayerState.ShouldSpawnCantMove:
@@ -132,7 +191,6 @@ public class GameManager : MonoBehaviour
                 _currentTurnPlayer.SetControlsActive(true);
                 SetTrajectoryActive(true);
 
-                _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
                 _currentTurnPlayer.Shot += OnPlayerShot;
 
                 _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
@@ -157,6 +215,9 @@ public class GameManager : MonoBehaviour
     private void OnPlayerShot()
     {
         _currentTurnPlayer.Shot -= OnPlayerShot;
+
+        _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
+
         _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
         SetTrajectoryActive(false);
