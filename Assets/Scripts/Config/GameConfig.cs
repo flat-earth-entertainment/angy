@@ -21,6 +21,9 @@ namespace Config
         [field: SerializeField]
         public AngyValues AngyValues { get; private set; }
 
+        [field: SerializeField]
+        public float OutOfBoundsReactionTime { get; private set; }
+
 
         private const string ConfigPath = "Game Config";
 
