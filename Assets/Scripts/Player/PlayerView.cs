@@ -47,9 +47,7 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-
     public Vector3 LastStillPosition { get; private set; }
-
 
     public PlayerState PlayerState
     {
@@ -64,17 +62,17 @@ public class PlayerView : MonoBehaviour
     [field: SerializeField]
     public CinemachineVirtualCamera BallCamera { get; private set; }
 
-    // [SerializeField]
-    private Rigidbody _ball => _shooter.ballStorage.GetComponent<Rigidbody>();
+    [SerializeField]
+    private Rigidbody ball;
+
+    [SerializeField, ReadOnly]
+    private PlayerState playerState;
 
     private BallBehaviour _ballBehaviour;
     private OutOfBoundsCheck _outOfBoundsCheck;
     private Shooter _shooter;
     private int _playerId;
     private int _angy;
-
-    [SerializeField, ReadOnly]
-    private PlayerState playerState;
 
     public void AlterAngy(AngyEvent angyEvent)
     {
@@ -101,16 +99,17 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-    public void ExplodeAndHide()
+    public void ExplodeHideAndResetAngy()
     {
         Angy = GameConfig.Instance.AngyValues.MinAngy;
 
-        _ball.GetComponent<Collider>().enabled = false;
-        _ball.useGravity = false;
-        _ball.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
+        //TODO: Convert to proper animation
+        ball.GetComponent<Collider>().enabled = false;
+        ball.useGravity = false;
+        ball.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
         {
-            _ball.GetComponent<Collider>().enabled = true;
-            _ball.useGravity = true;
+            ball.GetComponent<Collider>().enabled = true;
+            ball.useGravity = true;
             Hide();
         });
     }
@@ -118,38 +117,6 @@ public class PlayerView : MonoBehaviour
     public void ShouldPlayerActivate(int playerId)
     {
         _shooter.ShouldPlayerActivate(playerId);
-    }
-
-    private void OnBallBecameStill()
-    {
-        LastStillPosition = _ball.position;
-        BecameStill?.Invoke();
-    }
-
-    private void OnBallShot()
-    {
-        Shot?.Invoke();
-    }
-
-    private async void OnEnable()
-    {
-        await UniTask.WaitUntil(() => _ballBehaviour != null);
-
-        _ballBehaviour.BecameStill += OnBallBecameStill;
-        _shooter.Shot += OnBallShot;
-        _outOfBoundsCheck.WentOutOfBounds += OnWentOutOfBounds;
-    }
-
-    private void OnWentOutOfBounds()
-    {
-        WentOutOfBounds?.Invoke(this);
-    }
-
-    private void OnDisable()
-    {
-        _ballBehaviour.BecameStill -= OnBallBecameStill;
-        _shooter.Shot -= OnBallShot;
-        _outOfBoundsCheck.WentOutOfBounds -= OnWentOutOfBounds;
     }
 
     private async void Awake()
@@ -162,47 +129,72 @@ public class PlayerView : MonoBehaviour
 
         _shooter.SetPlayer(this);
 
-        if (_shooter.ballStorage == null || _shooter.Equals(null))
+        if (_shooter.BallStorage == null || _shooter.Equals(null))
         {
-            await UniTask.WaitUntil(() => _shooter.ballStorage != null);
-            BallCamera.Follow = _shooter.ballStorage.transform;
+            await UniTask.WaitUntil(() => _shooter.BallStorage != null);
+            BallCamera.Follow = _shooter.BallStorage.transform;
         }
 
-        _ballBehaviour = _shooter.ballStorage.GetComponent<BallBehaviour>();
-        _outOfBoundsCheck = _shooter.ballStorage.GetComponent<OutOfBoundsCheck>();
+        _ballBehaviour = _shooter.BallStorage.GetComponent<BallBehaviour>();
+        _outOfBoundsCheck = _shooter.BallStorage.GetComponent<OutOfBoundsCheck>();
 
 
         var newColorMaterial =
-            new Material(_shooter.ballStorage.GetComponent<MeshRenderer>().material) {color = PlayerColor};
+            new Material(_shooter.BallStorage.GetComponent<MeshRenderer>().material) {color = PlayerColor};
 
-        _shooter.ballStorage.GetComponent<MeshRenderer>().material = newColorMaterial;
+        _shooter.BallStorage.GetComponent<MeshRenderer>().material = newColorMaterial;
+    }
+
+    private void OnEnable()
+    {
+        _ballBehaviour.BecameStill += OnBallBecameStill;
+        _shooter.Shot += OnBallShot;
+        _outOfBoundsCheck.WentOutOfBounds += OnWentOutOfBounds;
+    }
+
+    private void OnDisable()
+    {
+        _ballBehaviour.BecameStill -= OnBallBecameStill;
+        _shooter.Shot -= OnBallShot;
+        _outOfBoundsCheck.WentOutOfBounds -= OnWentOutOfBounds;
+    }
+
+    private void OnBallBecameStill()
+    {
+        LastStillPosition = ball.position;
+        BecameStill?.Invoke();
+    }
+
+    private void OnWentOutOfBounds()
+    {
+        WentOutOfBounds?.Invoke(this);
+    }
+
+    private void OnBallShot()
+    {
+        Shot?.Invoke();
     }
 
     public void JumpIn(Vector3 endPosition, float jumpTime = 1f)
     {
-        endPosition.y += _ball.GetComponent<SphereCollider>().radius;
+        endPosition.y += ball.GetComponent<SphereCollider>().radius;
 
-        _ball.transform.DOMove(endPosition, jumpTime)
+        ball.transform.DOMove(endPosition, jumpTime)
             .OnComplete(delegate
             {
-                _ball.velocity = Vector3.zero;
-                _ball.angularVelocity = Vector3.zero;
+                ball.velocity = Vector3.zero;
+                ball.angularVelocity = Vector3.zero;
             });
     }
 
     public void Show()
     {
-        _shooter.ballStorage.SetActive(true);
+        _shooter.BallStorage.SetActive(true);
     }
 
-    public async void Hide()
+    public void Hide()
     {
-        if (_shooter.ballStorage == null || _shooter.Equals(null))
-        {
-            await UniTask.WaitUntil(() => _shooter.ballStorage != null);
-        }
-
-        _shooter.ballStorage.SetActive(false);
+        _shooter.BallStorage.SetActive(false);
     }
 
     public void SetControlsActive(bool toggle)
@@ -212,7 +204,7 @@ public class PlayerView : MonoBehaviour
 
     public void SetBallPosition(Vector3 position)
     {
-        position.y += _ball.GetComponent<SphereCollider>().radius;
-        _ball.transform.position = position;
+        position.y += ball.GetComponent<SphereCollider>().radius;
+        ball.transform.position = position;
     }
 }

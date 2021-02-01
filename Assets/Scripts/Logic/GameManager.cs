@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
 
         if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
         {
-            _currentTurnPlayer.ExplodeAndHide(); //Angy=0
+            _currentTurnPlayer.ExplodeHideAndResetAngy(); //Angy=0
             _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawn;
             MakeTurn();
             return;
@@ -255,7 +255,7 @@ public class GameManager : MonoBehaviour
             _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnCantMove;
 
             //TODO: Play explosion animation
-            _currentTurnPlayer.ExplodeAndHide();
+            _currentTurnPlayer.ExplodeHideAndResetAngy();
         }
         else
         {

@@ -9,7 +9,9 @@ public class Shooter : MonoBehaviour{
     public event Action Shot;
     
     public PlayerView PlayerView { get; private set; }
-    
+
+    public GameObject BallStorage => ballStorage;
+
     public int playerId = 1;
     private Rewired.Player rewiredPlayer;
 
@@ -26,7 +28,9 @@ public class Shooter : MonoBehaviour{
     [Header("Must be a multiplicative of 5")]
     public int xMinAngle = 180, xMaxAngle = 270;
 
-    public GameObject ballStorage { get; private set; }
+    [SerializeField]
+    private GameObject ballStorage;
+    
     public bool activateShootingRetinae = true, active = true;
     private int vertSnap = 36, horSnap = 35;
     // how many degrees the shooting retinae should snap. MUST add up to 360
@@ -52,6 +56,7 @@ public class Shooter : MonoBehaviour{
         //predict(); Doesn't work atm since i had to move the physics scene creation by one frame
 
         ballStorage = transform.parent.gameObject;
+        rb = ballStorage.GetComponent<Rigidbody>();
 
         ShouldPlayerActivate(playerId);
 
