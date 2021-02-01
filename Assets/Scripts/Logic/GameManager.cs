@@ -8,6 +8,7 @@ using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
 using Player;
+using Rewired;
 using UI;
 using UnityEngine;
 
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
     private PlayersManager _playersManager;
     private PlayerView _currentTurnPlayer;
     private VirtualCamerasController _camerasController;
+    private PanController _panController;
+    private bool _isInMapOverview;
 
     private void Awake()
     {
@@ -55,6 +58,11 @@ public class GameManager : MonoBehaviour
         if (!_camerasController)
             Debug.LogError(
                 "Can't find Virtual Cameras Controller! Make sure it is in scene or is not spawned after frame 1!");
+
+        _panController = FindObjectOfType<PanController>();
+        if (!_panController)
+            Debug.LogError(
+                "Can't find Pan Controller! Make sure it is in scene or is not spawned after frame 1!");
 
 
         uiController.HideAllUi();
@@ -189,6 +197,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        //Actual loop
         switch (_currentTurnPlayer.PlayerState)
         {
             case PlayerState.ShouldSpawnCantMove:
@@ -206,6 +215,7 @@ public class GameManager : MonoBehaviour
 
             case PlayerState.ShouldMakeTurn:
                 uiController.EnableAngyMeterFor(_currentTurnPlayer);
+
                 _currentTurnPlayer.Predict();
 
                 _currentTurnPlayer.SetControlsActive(true);
@@ -266,18 +276,28 @@ public class GameManager : MonoBehaviour
         MakeTurn();
     }
 
-    private void Update()
+    private async void Update()
     {
-#if UNITY_EDITOR
-        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        if (_currentTurnPlayer != null
+            && _currentTurnPlayer.PlayerState == PlayerState.ActiveAiming &&
+            ReInput.players.GetPlayer(_currentTurnPlayer.PlayerId).GetButtonDown("CameraMode"))
         {
-            _currentTurnPlayer.AlterAngy(AngyEvent.HitBadObject);
-        }
+            _isInMapOverview = !_isInMapOverview;
 
-        if (Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            OnPlayerEnteredHole(_currentTurnPlayer);
+            _currentTurnPlayer.SetControlsActive(!_isInMapOverview);
+
+            if (_isInMapOverview)
+            {
+                await _camerasController.BlendTo(_panController.PanningCamera, 0f);
+                _panController.EnableControls(_currentTurnPlayer);
+                uiController.SetCameraModeActive(true);
+            }
+            else
+            {
+                _panController.DisableControls();
+                uiController.SetCameraModeActive(false);
+                await _camerasController.BlendTo(_currentTurnPlayer.BallCamera, 0f);
+            }
         }
-#endif
     }
 }
