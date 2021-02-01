@@ -206,6 +206,7 @@ public class GameManager : MonoBehaviour
 
             case PlayerState.ShouldMakeTurn:
                 uiController.EnableAngyMeterFor(_currentTurnPlayer);
+                _currentTurnPlayer.Predict();
 
                 _currentTurnPlayer.SetControlsActive(true);
                 SetTrajectoryActive(true);
