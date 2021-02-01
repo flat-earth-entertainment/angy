@@ -51,9 +51,7 @@ public class Shooter : MonoBehaviour{
         currentRotation = transform.rotation;
         //predict(); Doesn't work atm since i had to move the physics scene creation by one frame
 
-        ballStorage = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
-        rb = ballStorage.GetComponent<Rigidbody>();
-        transform.parent = ballStorage.transform;
+        ballStorage = transform.parent.gameObject;
 
         ShouldPlayerActivate(playerId);
 
