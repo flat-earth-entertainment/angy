@@ -200,7 +200,6 @@ public class Shooter : MonoBehaviour{
             active = true;
             rb.constraints = RigidbodyConstraints.FreezeAll;    // Freeze player
             transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0); // Set aiming retinae to actual shooting direction
-            predict();
         }else{
             active = false;
         }
