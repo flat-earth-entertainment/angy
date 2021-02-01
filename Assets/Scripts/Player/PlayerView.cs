@@ -87,6 +87,11 @@ public class PlayerView : MonoBehaviour
     private int _angy;
     private Color _playerColor;
 
+    public void Predict()
+    {
+        _shooter.predict();
+    }
+    
     public void AlterAngy(AngyEvent angyEvent)
     {
         switch (angyEvent)
