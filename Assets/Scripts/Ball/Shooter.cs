@@ -56,9 +56,7 @@ public class Shooter : MonoBehaviour{
         //lineRender = transform.parent.GetComponentInChildren<LineRenderer>();
 
         // Debug.Log(lineRender.gameObject.name,lineRender);
-        ballStorage = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
-        rb = ballStorage.GetComponent<Rigidbody>();
-        transform.parent = ballStorage.transform;
+        ballStorage = transform.parent.gameObject;
 
         ShouldPlayerActivate(playerId);
 
