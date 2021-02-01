@@ -40,13 +40,11 @@ namespace UI
 
             restartButton.onClick.AddListener(OnRestartButtonClicked);
 
-            Debug.Log("Started listening to player initialization");
             playersManager.InitializedAllPlayers += OnPlayersInitialized;
         }
 
         private void OnPlayersInitialized(PlayerView[] obj)
         {
-            Debug.Log("UI should subscribe to angy change");
             playersManager.InitializedAllPlayers -= OnPlayersInitialized;
 
             obj[0].AngyChanged += OnPlayer1AngyChanged;
@@ -54,7 +52,6 @@ namespace UI
 
             angySlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[0].PlayerColor;
             angySlider2.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[1].PlayerColor;
-            Debug.Log("UI subscribed to angy change");
         }
 
         private void OnDisable()
@@ -109,13 +106,11 @@ namespace UI
 
         private void OnPlayer1AngyChanged(int newAngyValue)
         {
-            Debug.Log($"New angy for Player 1 {newAngyValue}");
             angySlider.value = newAngyValue;
         }
 
         private void OnPlayer2AngyChanged(int newAngyValue)
         {
-            Debug.Log($"New angy for Player 2 {newAngyValue}");
             angySlider2.value = newAngyValue;
         }
     }
