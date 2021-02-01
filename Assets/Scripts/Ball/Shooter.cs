@@ -38,6 +38,7 @@ public class Shooter : MonoBehaviour{
     private float snapCooldownTimer, vertSnapCooldownTimer, horSnapCooldownTimer;
     public float snapCooldown = 0.2f;
     private bool movedRet, forcePercentBool;
+    [SerializeField]
     private Rigidbody rb;
     public float forcePercent = 1;
     [HideInInspector]
