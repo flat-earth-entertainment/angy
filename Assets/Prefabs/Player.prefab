@@ -224,6 +224,18 @@ PrefabInstance:
       propertyPath: ballStorage
       value: 
       objectReference: {fileID: 4629074905832054383}
+    - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
+      propertyPath: horSnapAngle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
+      propertyPath: snapCooldown
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
+      propertyPath: vertSnapAngle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1314000643423763626, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
       propertyPath: m_Name
       value: Shooter
