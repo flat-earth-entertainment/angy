@@ -27,7 +27,6 @@ public class Shooter : MonoBehaviour{
     public int xMinAngle = 180, xMaxAngle = 270;
 
     public GameObject ballStorage { get; private set; }
-    // public LineRenderer lineRender;
     public bool activateShootingRetinae = true, active = true;
     private int vertSnap = 36, horSnap = 35;
     // how many degrees the shooting retinae should snap. MUST add up to 360
@@ -52,10 +51,6 @@ public class Shooter : MonoBehaviour{
         currentRotation = transform.rotation;
         //predict(); Doesn't work atm since i had to move the physics scene creation by one frame
 
-        // Needs to be fixed : Find shared linerenderer
-        //lineRender = transform.parent.GetComponentInChildren<LineRenderer>();
-
-        // Debug.Log(lineRender.gameObject.name,lineRender);
         ballStorage = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
         rb = ballStorage.GetComponent<Rigidbody>();
         transform.parent = ballStorage.transform;
@@ -130,8 +125,6 @@ public class Shooter : MonoBehaviour{
         ballStorage.GetComponent<BallBehaviour>().inMotion = true;
         
         Shot?.Invoke();
-        
-        // if (lineRender !=null || !lineRender.Equals(null)) lineRender.enabled = false;
     }
     public Vector3 calculateForce(){
         return transform.forward * power * forcePercent;
@@ -200,7 +193,6 @@ public class Shooter : MonoBehaviour{
     }
     public void ShouldPlayerActivate(int playerToActivate){ // Use this to define what player can move.
         if(playerToActivate == playerId){
-            // if (lineRender != null || !lineRender.Equals(null)) lineRender.enabled = true;
             active = true;
             rb.constraints = RigidbodyConstraints.FreezeAll;    // Freeze player
             transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0); // Set aiming retinae to actual shooting direction
