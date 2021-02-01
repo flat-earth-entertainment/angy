@@ -17,7 +17,19 @@ public class PlayerView : MonoBehaviour
     public event Action<int> AngyChanged;
 
     public string Nickname { get; set; }
-    public Color PlayerColor { get; set; }
+
+    public Color PlayerColor
+    {
+        get => _playerColor;
+        set
+        {
+            _playerColor = value;
+            var newColorMaterial =
+                new Material(_shooter.BallStorage.GetComponent<MeshRenderer>().material) {color = PlayerColor};
+
+            _shooter.BallStorage.GetComponent<MeshRenderer>().material = newColorMaterial;
+        }
+    }
 
     public int Angy
     {
@@ -73,6 +85,7 @@ public class PlayerView : MonoBehaviour
     private Shooter _shooter;
     private int _playerId;
     private int _angy;
+    private Color _playerColor;
 
     public void AlterAngy(AngyEvent angyEvent)
     {
@@ -119,7 +132,7 @@ public class PlayerView : MonoBehaviour
         _shooter.ShouldPlayerActivate(playerId);
     }
 
-    private async void Awake()
+    private void Awake()
     {
         _shooter = GetComponentInChildren<Shooter>();
         if (!_shooter)
@@ -129,20 +142,8 @@ public class PlayerView : MonoBehaviour
 
         _shooter.SetPlayer(this);
 
-        if (_shooter.BallStorage == null || _shooter.Equals(null))
-        {
-            await UniTask.WaitUntil(() => _shooter.BallStorage != null);
-            BallCamera.Follow = _shooter.BallStorage.transform;
-        }
-
         _ballBehaviour = _shooter.BallStorage.GetComponent<BallBehaviour>();
         _outOfBoundsCheck = _shooter.BallStorage.GetComponent<OutOfBoundsCheck>();
-
-
-        var newColorMaterial =
-            new Material(_shooter.BallStorage.GetComponent<MeshRenderer>().material) {color = PlayerColor};
-
-        _shooter.BallStorage.GetComponent<MeshRenderer>().material = newColorMaterial;
     }
 
     private void OnEnable()
