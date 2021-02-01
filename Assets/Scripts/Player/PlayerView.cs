@@ -174,15 +174,13 @@ public class PlayerView : MonoBehaviour
 
         var newColorMaterial =
             new Material(_shooter.ballStorage.GetComponent<MeshRenderer>().material) {color = PlayerColor};
-        
+
         _shooter.ballStorage.GetComponent<MeshRenderer>().material = newColorMaterial;
     }
 
     public void JumpIn(Vector3 endPosition, float jumpTime = 1f)
     {
         endPosition.y += _ball.GetComponent<SphereCollider>().radius;
-
-        _ball.constraints = RigidbodyConstraints.None;
 
         _ball.transform.DOMove(endPosition, jumpTime)
             .OnComplete(delegate
