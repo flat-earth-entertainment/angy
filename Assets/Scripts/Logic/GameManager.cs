@@ -245,13 +245,15 @@ public class GameManager : MonoBehaviour
     private void OnPlayerShot()
     {
         _currentTurnPlayer.Shot -= OnPlayerShot;
-        _currentTurnPlayer.SetControlsActive(false);
 
         _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
 
+        _currentTurnPlayer.SetControlsActive(false);
+        SetTrajectoryActive(false);
+
         _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
-        SetTrajectoryActive(false);
+        _currentTurnPlayer.PlayerState = PlayerState.ActiveInMotion;
     }
 
     private void OnCurrentPlayerBecameStill()

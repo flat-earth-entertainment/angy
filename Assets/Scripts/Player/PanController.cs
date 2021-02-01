@@ -11,10 +11,10 @@ namespace Player
         public CinemachineVirtualCamera PanningCamera { get; private set; }
 
         [SerializeField]
-        private Vector2 bottomLeftBound;
+        private Vector3 bottomLeftBound;
 
         [SerializeField]
-        private Vector2 topRightBound;
+        private Vector3 topRightBound;
 
 
         private Transform _cameraTransform;
@@ -39,25 +39,27 @@ namespace Player
 
         private void Update()
         {
-            var currentPosition = _cameraTransform.position;
+            var currentPosition = transform.localPosition;
 
-            var vertical = -_player.GetAxis("Move Vertical") * Time.deltaTime
-                                                             * GameConfig.Instance.CameraPanningSpeed;
+            var vertical = _player.GetAxis("Move Vertical") * Time.deltaTime
+                                                            * GameConfig.Instance.CameraPanningSpeed;
             Debug.Log("vertical = " + vertical);
 
-            if (vertical + currentPosition.z > bottomLeftBound.y || vertical + currentPosition.z < topRightBound.y)
+            if (vertical + currentPosition.z <= bottomLeftBound.z ||
+                vertical + currentPosition.z >= topRightBound.z)
             {
                 vertical = 0f;
             }
 
-            var horizontal = -_player.GetAxis("Move Horizontal") * Time.deltaTime *
+            var horizontal = _player.GetAxis("Move Horizontal") * Time.deltaTime *
                              GameConfig.Instance.CameraPanningSpeed;
-            if (horizontal + currentPosition.x < bottomLeftBound.x || horizontal + currentPosition.x > topRightBound.x)
+            if (horizontal + currentPosition.x <= bottomLeftBound.x ||
+                horizontal + currentPosition.x >= topRightBound.x)
             {
                 horizontal = 0f;
             }
 
-            _cameraTransform.position += new Vector3(horizontal, 0f, vertical);
+            transform.position += transform.forward * vertical + transform.right * horizontal;
         }
     }
 }
