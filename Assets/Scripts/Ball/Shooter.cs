@@ -195,7 +195,7 @@ public class Shooter : MonoBehaviour{
         return 0;
     }
 
-    void predict(){
+    public void predict(){
         PredictionManager.instance.predict(ballPrefab, firePoint.transform.position, calculateForce());
     }
     public void ShouldPlayerActivate(int playerToActivate){ // Use this to define what player can move.
