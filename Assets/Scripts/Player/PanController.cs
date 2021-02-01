@@ -1,5 +1,5 @@
 ﻿using Cinemachine;
-using Cinemachine.Utility;
+using Config;
 using Rewired;
 using UnityEngine;
 
@@ -11,13 +11,10 @@ namespace Player
         public CinemachineVirtualCamera PanningCamera { get; private set; }
 
         [SerializeField]
-        private float speed;
+        private Vector2 bottomLeftBound;
 
         [SerializeField]
-        private Vector3 bottomLeftBound;
-
-        [SerializeField]
-        private Vector3 topRightBound;
+        private Vector2 topRightBound;
 
 
         private Transform _cameraTransform;
@@ -42,37 +39,25 @@ namespace Player
 
         private void Update()
         {
-            var currentPosition = _cameraTransform.localPosition;
+            var currentPosition = _cameraTransform.position;
 
-            var vertical = _player.GetAxis("Move Vertical") * Time.deltaTime * speed;
-            if (vertical + currentPosition.y < bottomLeftBound.y || vertical + currentPosition.y > topRightBound.y)
+            var vertical = -_player.GetAxis("Move Vertical") * Time.deltaTime
+                                                             * GameConfig.Instance.CameraPanningSpeed;
+            Debug.Log("vertical = " + vertical);
+
+            if (vertical + currentPosition.z > bottomLeftBound.y || vertical + currentPosition.z < topRightBound.y)
             {
                 vertical = 0f;
             }
 
-            var horizontal = _player.GetAxis("Move Horizontal") * Time.deltaTime * speed;
+            var horizontal = -_player.GetAxis("Move Horizontal") * Time.deltaTime *
+                             GameConfig.Instance.CameraPanningSpeed;
             if (horizontal + currentPosition.x < bottomLeftBound.x || horizontal + currentPosition.x > topRightBound.x)
             {
                 horizontal = 0f;
             }
 
-
-            _cameraTransform.position += _cameraTransform.up * vertical + _cameraTransform.right * horizontal;
-
-            var newPosition = _cameraTransform.localPosition;
-            newPosition.z = Mathf.LerpUnclamped(bottomLeftBound.z, topRightBound.z,
-                ClosestPointOnSegment(newPosition, bottomLeftBound, topRightBound));
-
-            _cameraTransform.localPosition = newPosition;
-        }
-
-        public static float ClosestPointOnSegment(Vector3 p, Vector3 s0, Vector3 s1)
-        {
-            Vector3 s = s1 - s0;
-            float len2 = Vector3.SqrMagnitude(s);
-            if (len2 < Mathf.Epsilon)
-                return 0; // degenrate segment
-            return Vector3.Dot(p - s0, s) / len2;
+            _cameraTransform.position += new Vector3(horizontal, 0f, vertical);
         }
     }
 }

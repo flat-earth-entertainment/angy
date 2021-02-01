@@ -33,6 +33,9 @@ namespace Config
         [field: SerializeField]
         public LayerMask GroundMask { get; private set; }
 
+        [field: SerializeField]
+        public float CameraPanningSpeed { get; private set; }
+
 
         private const string ConfigPath = "Game Config";
 
