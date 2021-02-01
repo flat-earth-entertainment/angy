@@ -19,6 +19,9 @@ namespace UI
         private TextMeshProUGUI winText;
 
         [SerializeField]
+        private GameObject cameraModeWarning;
+
+        [SerializeField]
         private GameObject angyMeter;
 
         [SerializeField]
@@ -67,6 +70,11 @@ namespace UI
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
+        public void SetCameraModeActive(bool state)
+        {
+            cameraModeWarning.SetActive(state);
+        }
+
         public void ShowWinScreen((PlayerView, int) winner, params (PlayerView, int)[] others)
         {
             winText.text = winner.Item1.Nickname + " won!\n";
@@ -85,6 +93,7 @@ namespace UI
         {
             angyMeter.SetActive(false);
             winScreen.SetActive(false);
+            cameraModeWarning.SetActive(false);
         }
 
         public void EnableAngyMeterFor(PlayerView player)

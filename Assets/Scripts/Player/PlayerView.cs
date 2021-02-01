@@ -91,7 +91,7 @@ public class PlayerView : MonoBehaviour
     {
         _shooter.predict();
     }
-    
+
     public void AlterAngy(AngyEvent angyEvent)
     {
         switch (angyEvent)
@@ -205,7 +205,7 @@ public class PlayerView : MonoBehaviour
 
     public void SetControlsActive(bool toggle)
     {
-        //_shooter.active = toggle;
+        _shooter.enabled = toggle;
     }
 
     public void SetBallPosition(Vector3 position)
