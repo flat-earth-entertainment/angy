@@ -74,7 +74,7 @@ public class PredictionManager : Singleton<PredictionManager>{
 
 
             for (int i = 0; i < _LineLength; i++){
-                predictionPhysicsScene.Simulate(Time.fixedDeltaTime);
+                predictionPhysicsScene.Simulate(Time.fixedDeltaTime * 2);
                 lineRenderer.SetPosition(i, dummy.transform.position);
             }
 
