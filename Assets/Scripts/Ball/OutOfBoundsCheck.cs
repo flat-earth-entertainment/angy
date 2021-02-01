@@ -22,7 +22,7 @@ namespace Ball
 
         private void FixedUpdate()
         {
-            if (!Physics.Raycast(transform.position, Vector3.down, LayerMask.NameToLayer("Ground")))
+            if (!Physics.Raycast(transform.position, Vector3.down, GameConfig.Instance.GroundMask))
             {
                 _timer += Time.fixedDeltaTime;
 

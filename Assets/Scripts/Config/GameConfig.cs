@@ -30,6 +30,9 @@ namespace Config
         [field: SerializeField]
         public PlayerPreset[] PlayerPresets { get; private set; }
 
+        [field: SerializeField]
+        public LayerMask GroundMask { get; private set; }
+
 
         private const string ConfigPath = "Game Config";
 

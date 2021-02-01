@@ -1,9 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Config;
 using UnityEngine;
 
 public class GoodNeutralMushroom : MonoBehaviour
 {
+    public static event Action<GameObject> BecameHole;
+    
     public List<GameObject> fruit;
     private GameObject point;
     public GameObject goal;
@@ -36,12 +40,12 @@ public class GoodNeutralMushroom : MonoBehaviour
     }
     public void SpawnGoal(){
         pointValue++;
-        int layermask = 1 << 3; // Which layer to collide with.
         RaycastHit hit;
-        if(Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 10f, layermask)){
+        if(Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 10f, GameConfig.Instance.GroundMask)){
             print("HIT");
             GameObject hitObject = hit.collider.gameObject;
             Instantiate(goal, hitObject.transform.position, Quaternion.identity);
+            BecameHole?.Invoke(hitObject);
             Destroy(hitObject);
         }
         GetComponent<Renderer>().enabled = false;
