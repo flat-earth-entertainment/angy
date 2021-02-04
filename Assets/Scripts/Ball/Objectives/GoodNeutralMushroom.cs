@@ -12,6 +12,7 @@ public class GoodNeutralMushroom : MonoBehaviour
     private GameObject point;
     public GameObject goal;
     private PointController pointController;
+    public ParticleSystem splatter;
     // Owner Id 99 refers to no ownership, shouldn't be a problem unless we want 100 players.
     public int ownerId = 99, pointValue = 1;
     private void Start() {
@@ -32,6 +33,7 @@ public class GoodNeutralMushroom : MonoBehaviour
             }else{
                 pointController.EnemyHit(hitId);
                 GetComponent<Renderer>().enabled = false;
+                splatter.Play(true);
             }
             point = Instantiate(fruit[hitId], transform.position + new Vector3(0,1f,0), Quaternion.identity);
             pointController.UpdateScore();
