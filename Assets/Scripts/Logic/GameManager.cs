@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Ball;
 using Ball.Objectives;
 using Cinemachine;
@@ -11,294 +10,292 @@ using Player;
 using Rewired;
 using UI;
 using UnityEngine;
+using Utils;
 
-public class GameManager : MonoBehaviour
+namespace Logic
 {
-    [SerializeField]
-    private CinemachineVirtualCamera levelOverviewCamera;
-
-    [SerializeField]
-    private CinemachineVirtualCamera spawnPointCamera;
-
-    [SerializeField]
-    private Transform spawnPoint;
-
-    [SerializeField]
-    private LineRenderer lineRenderer;
-
-    [SerializeField]
-    private UiController uiController;
-
-    private PlayersManager _playersManager;
-    private PlayerView _currentTurnPlayer;
-    private VirtualCamerasController _camerasController;
-    private PanController _panController;
-    private bool _isInMapOverview;
-
-    private void Awake()
+    public class GameManager : MonoBehaviour
     {
-        if (Time.timeScale < 1)
+        [SerializeField]
+        private LineRenderer lineRenderer;
+
+        [SerializeField]
+        private UiController uiController;
+
+        private CinemachineVirtualCamera _levelOverviewCamera;
+        private CinemachineVirtualCamera _spawnPointCamera;
+        private Transform _spawnPoint;
+        private PlayersManager _playersManager;
+        private PlayerView _currentTurnPlayer;
+        private VirtualCamerasController _camerasController;
+        private PanController _panController;
+        private bool _isInMapOverview;
+
+        private void Awake()
         {
-            Time.timeScale = 1;
+            if (Time.timeScale < 1)
+            {
+                Time.timeScale = 1;
+            }
+
+            _spawnPoint = GameConfig.Instance.Tags.SpawnPointTag.SafeFindWithThisTag().transform;
+
+            _spawnPointCamera = GameConfig.Instance.Tags.SpawnPointVCamTag.SafeFindWithThisTag()
+                .GetComponent<CinemachineVirtualCamera>();
+
+            _levelOverviewCamera = GameConfig.Instance.Tags.LevelOverviewVCamTag.SafeFindWithThisTag()
+                .GetComponent<CinemachineVirtualCamera>();
+
+            _playersManager = FindObjectOfType<PlayersManager>();
+            if (!_playersManager)
+                Debug.LogError("Can't find Players Manager! Make sure it is in scene or is not spawned after frame 1!");
+
+            _camerasController = FindObjectOfType<VirtualCamerasController>();
+            if (!_camerasController)
+                Debug.LogError(
+                    "Can't find Virtual Cameras Controller! Make sure it is in scene or is not spawned after frame 1!");
+
+            _panController = FindObjectOfType<PanController>();
+            if (!_panController)
+                Debug.LogError(
+                    "Can't find Pan Controller! Make sure it is in scene or is not spawned after frame 1!");
+
+
+            uiController.HideAllUi();
         }
 
-        if (spawnPoint == null || spawnPoint.Equals(null))
+        private void OnEnable()
         {
-            spawnPoint = GameObject.FindWithTag("Spawn Point").transform;
+            Hole.PlayerEnteredHole += OnPlayerEnteredHole;
 
-            if (!spawnPoint)
-                Debug.LogError("Can't find spawn point! Make sure it has the tag \"Spawn Point\"!");
+            _playersManager.InitializedAllPlayers += OnAllPlayersInitialized;
+
+            HitOtherPlayerTrigger.PlayerHit += OnPlayerGotHit;
         }
 
-        _playersManager = FindObjectOfType<PlayersManager>();
-        if (!_playersManager)
-            Debug.LogError("Can't find Players Manager! Make sure it is in scene or is not spawned after frame 1!");
-
-        _camerasController = FindObjectOfType<VirtualCamerasController>();
-        if (!_camerasController)
-            Debug.LogError(
-                "Can't find Virtual Cameras Controller! Make sure it is in scene or is not spawned after frame 1!");
-
-        _panController = FindObjectOfType<PanController>();
-        if (!_panController)
-            Debug.LogError(
-                "Can't find Pan Controller! Make sure it is in scene or is not spawned after frame 1!");
-
-
-        uiController.HideAllUi();
-    }
-
-    private void OnEnable()
-    {
-        Hole.PlayerEnteredHole += OnPlayerEnteredHole;
-
-        _playersManager.InitializedAllPlayers += OnAllPlayersInitialized;
-
-        HitOtherPlayerTrigger.PlayerHit += OnPlayerGotHit;
-    }
-
-    private void OnDisable()
-    {
-        Hole.PlayerEnteredHole -= OnPlayerEnteredHole;
-
-        foreach (var player in _playersManager.Players)
+        private void OnDisable()
         {
-            player.WentOutOfBounds -= OnPlayerWentOutOfBounds;
+            Hole.PlayerEnteredHole -= OnPlayerEnteredHole;
+
+            foreach (var player in _playersManager.Players)
+            {
+                player.WentOutOfBounds -= OnPlayerWentOutOfBounds;
+            }
+
+            HitOtherPlayerTrigger.PlayerHit -= OnPlayerGotHit;
         }
 
-        HitOtherPlayerTrigger.PlayerHit -= OnPlayerGotHit;
-    }
-
-    private void OnAllPlayersInitialized(PlayerView[] players)
-    {
-        foreach (var player in players)
+        private void OnAllPlayersInitialized(PlayerView[] players)
         {
-            player.WentOutOfBounds += OnPlayerWentOutOfBounds;
-        }
-    }
-
-    private void OnPlayerGotHit(PlayerView arg1, PlayerView arg2)
-    {
-        if (arg1 == _currentTurnPlayer)
-        {
-            arg1.AlterAngy(AngyEvent.HitSomeone);
-            arg2.AlterAngy(AngyEvent.GotHit);
-        }
-    }
-
-    private void OnPlayerWentOutOfBounds(PlayerView player)
-    {
-        Debug.Log($"{player.Nickname} went out of bounds");
-
-        player.Hide();
-
-        player.AlterAngy(AngyEvent.FellOutOfTheMap);
-
-        if (player.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
-        {
-            player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
+            foreach (var player in players)
+            {
+                player.WentOutOfBounds += OnPlayerWentOutOfBounds;
+            }
         }
 
-        player.PlayerState = PlayerState.ShouldSpawn;
-
-        //Unsubscribe as the current player should fall only as a result of shooting
-        if (player == _currentTurnPlayer)
+        private void OnPlayerGotHit(PlayerView arg1, PlayerView arg2)
         {
-            _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
+            if (arg1 == _currentTurnPlayer)
+            {
+                arg1.AlterAngy(AngyEvent.HitSomeone);
+                arg2.AlterAngy(AngyEvent.GotHit);
+            }
+        }
+
+        private void OnPlayerWentOutOfBounds(PlayerView player)
+        {
+            Debug.Log($"{player.Nickname} went out of bounds");
+
+            player.Hide();
+
+            player.AlterAngy(AngyEvent.FellOutOfTheMap);
+
+            if (player.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+            {
+                player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
+            }
+
+            player.PlayerState = PlayerState.ShouldSpawn;
+
+            //Unsubscribe as the current player should fall only as a result of shooting
+            if (player == _currentTurnPlayer)
+            {
+                _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
+                MakeTurn();
+            }
+        }
+
+        private void OnPlayerEnteredHole(PlayerView player)
+        {
+            Time.timeScale = 0;
+            var pointController = FindObjectOfType<PointController>();
+
+            var winnerPoints = pointController.pointIds.Max();
+
+            var winnerId = pointController.pointIds.IndexOf(winnerPoints);
+
+            var winner = _playersManager.Players.First(p => p.PlayerId == winnerId);
+
+            var others = new List<(PlayerView, int)>();
+
+            for (int i = 0; i < _playersManager.Players.Count; i++)
+            {
+                if (i == winnerId)
+                    continue;
+
+                others.Add((_playersManager.Players.First(p => p.PlayerId == i), pointController.pointIds[i]));
+            }
+
+            uiController.ShowWinScreen((winner, winnerPoints), others.ToArray());
+        }
+
+        private async void Start()
+        {
+            await _camerasController.BlendTo(_levelOverviewCamera, GameConfig.Instance.LevelOverviewTime);
+
+            await _camerasController.BlendTo(_spawnPointCamera, 2f);
+
             MakeTurn();
         }
-    }
 
-    private void OnPlayerEnteredHole(PlayerView player)
-    {
-        Time.timeScale = 0;
-        var pointController = FindObjectOfType<PointController>();
-
-        var winnerPoints = pointController.pointIds.Max();
-
-        var winnerId = pointController.pointIds.IndexOf(winnerPoints);
-
-        var winner = _playersManager.Players.First(p => p.PlayerId == winnerId);
-
-        var others = new List<(PlayerView, int)>();
-
-        for (int i = 0; i < _playersManager.Players.Count; i++)
+        private void SetTrajectoryActive(bool state)
         {
-            if (i == winnerId)
-                continue;
-
-            others.Add((_playersManager.Players.First(p => p.PlayerId == i), pointController.pointIds[i]));
+            lineRenderer.enabled = state;
         }
 
-        uiController.ShowWinScreen((winner, winnerPoints), others.ToArray());
-    }
-
-    private async void Start()
-    {
-        await _camerasController.BlendTo(levelOverviewCamera, GameConfig.Instance.LevelOverviewTime);
-
-        await _camerasController.BlendTo(spawnPointCamera, 2f);
-
-        MakeTurn();
-    }
-
-    private void SetTrajectoryActive(bool state)
-    {
-        lineRenderer.enabled = state;
-    }
-
-    private async void MakeTurn()
-    {
-        _currentTurnPlayer = _playersManager.GetNextPlayer(_currentTurnPlayer);
-        _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
-
-        CinemachineVirtualCamera nextCamera = null;
-
-        //Decide where to move camera to
-        switch (_currentTurnPlayer.PlayerState)
+        private async void MakeTurn()
         {
-            case PlayerState.ShouldSpawn:
-                nextCamera = spawnPointCamera;
-                break;
-            //TODO: Decide where should spawn in this case
-            case PlayerState.ShouldSpawnCantMove:
-            case PlayerState.ShouldMakeTurn:
-                nextCamera = _currentTurnPlayer.BallCamera;
-                break;
-        }
+            _currentTurnPlayer = _playersManager.GetNextPlayer(_currentTurnPlayer);
+            _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
 
-        await _camerasController.BlendTo(nextCamera, GameConfig.Instance.FlyToNextPlayerTime);
+            CinemachineVirtualCamera nextCamera = null;
 
-        if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
-        {
-            _currentTurnPlayer.ExplodeHideAndResetAngy(); //Angy=0
-            _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawn;
-            MakeTurn();
-            return;
-        }
+            //Decide where to move camera to
+            switch (_currentTurnPlayer.PlayerState)
+            {
+                case PlayerState.ShouldSpawn:
+                    nextCamera = _spawnPointCamera;
+                    break;
+                //TODO: Decide where should spawn in this case
+                case PlayerState.ShouldSpawnCantMove:
+                case PlayerState.ShouldMakeTurn:
+                    nextCamera = _currentTurnPlayer.BallCamera;
+                    break;
+            }
 
-        //Actual loop
-        switch (_currentTurnPlayer.PlayerState)
-        {
-            case PlayerState.ShouldSpawnCantMove:
-                await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
+            await _camerasController.BlendTo(nextCamera, GameConfig.Instance.FlyToNextPlayerTime);
 
-                _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
-
+            if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+            {
+                _currentTurnPlayer.ExplodeHideAndResetAngy(); //Angy=0
+                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawn;
                 MakeTurn();
                 return;
+            }
 
-            case PlayerState.ShouldSpawn:
-                await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, spawnPoint.position);
-
-                goto case PlayerState.ShouldMakeTurn;
-
-            case PlayerState.ShouldMakeTurn:
-                uiController.EnableAngyMeterFor(_currentTurnPlayer);
-
-                _currentTurnPlayer.Predict();
-
-                _currentTurnPlayer.SetControlsActive(true);
-                SetTrajectoryActive(true);
-
-                _currentTurnPlayer.Shot += OnPlayerShot;
-
-                _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
-                break;
-        }
-    }
-
-    private async UniTask SpawnShowJumpInAndSetCamera(PlayerView player, Vector3 spawnPosition)
-    {
-        //TODO: Change to animation
-        player.SetBallPosition(spawnPosition + Vector3.up * 20f);
-
-        player.Show();
-
-        //TODO: Change to animation
-        player.JumpIn(spawnPosition, GameConfig.Instance.JumpInTime);
-        await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.JumpInTime));
-
-        _camerasController.SetActiveCamera(player.BallCamera, 1f);
-    }
-
-    private void OnPlayerShot()
-    {
-        _currentTurnPlayer.Shot -= OnPlayerShot;
-
-        _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
-
-        _currentTurnPlayer.SetControlsActive(false);
-        SetTrajectoryActive(false);
-
-        _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
-
-        _currentTurnPlayer.PlayerState = PlayerState.ActiveInMotion;
-    }
-
-    private void OnCurrentPlayerBecameStill()
-    {
-        _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
-
-        uiController.DisableAngyMeter();
-
-        //If angy became full
-        if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
-        {
-            _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnCantMove;
-
-            //TODO: Play explosion animation
-            _currentTurnPlayer.ExplodeHideAndResetAngy();
-        }
-        else
-        {
-            _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
-        }
-
-        MakeTurn();
-    }
-
-    private async void Update()
-    {
-        if (_currentTurnPlayer != null
-            && _currentTurnPlayer.PlayerState == PlayerState.ActiveAiming &&
-            ReInput.players.GetPlayer(_currentTurnPlayer.PlayerId).GetButtonDown("CameraMode"))
-        {
-            _isInMapOverview = !_isInMapOverview;
-
-            _currentTurnPlayer.SetControlsActive(!_isInMapOverview);
-
-            if (_isInMapOverview)
+            //Actual loop
+            switch (_currentTurnPlayer.PlayerState)
             {
-                await _camerasController.BlendTo(_panController.PanningCamera, 0f);
-                _panController.EnableControls(_currentTurnPlayer);
-                uiController.SetCameraModeActive(true);
+                case PlayerState.ShouldSpawnCantMove:
+                    await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
+
+                    _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
+
+                    MakeTurn();
+                    return;
+
+                case PlayerState.ShouldSpawn:
+                    await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _spawnPoint.position);
+
+                    goto case PlayerState.ShouldMakeTurn;
+
+                case PlayerState.ShouldMakeTurn:
+                    uiController.EnableAngyMeterFor(_currentTurnPlayer);
+
+                    _currentTurnPlayer.Predict();
+
+                    _currentTurnPlayer.SetControlsActive(true);
+                    SetTrajectoryActive(true);
+
+                    _currentTurnPlayer.Shot += OnPlayerShot;
+
+                    _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
+                    break;
+            }
+        }
+
+        private async UniTask SpawnShowJumpInAndSetCamera(PlayerView player, Vector3 spawnPosition)
+        {
+            //TODO: Change to animation
+            player.SetBallPosition(spawnPosition + Vector3.up * 20f);
+
+            player.Show();
+
+            //TODO: Change to animation
+            player.JumpIn(spawnPosition, GameConfig.Instance.JumpInTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.JumpInTime));
+
+            _camerasController.SetActiveCamera(player.BallCamera, 1f);
+        }
+
+        private void OnPlayerShot()
+        {
+            _currentTurnPlayer.Shot -= OnPlayerShot;
+
+            _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
+
+            _currentTurnPlayer.SetControlsActive(false);
+            SetTrajectoryActive(false);
+
+            _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
+
+            _currentTurnPlayer.PlayerState = PlayerState.ActiveInMotion;
+        }
+
+        private void OnCurrentPlayerBecameStill()
+        {
+            _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
+
+            uiController.DisableAngyMeter();
+
+            //If angy became full
+            if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+            {
+                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnCantMove;
+
+                //TODO: Play explosion animation
+                _currentTurnPlayer.ExplodeHideAndResetAngy();
             }
             else
             {
-                _panController.DisableControls();
-                uiController.SetCameraModeActive(false);
-                await _camerasController.BlendTo(_currentTurnPlayer.BallCamera, 0f);
+                _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
+            }
+
+            MakeTurn();
+        }
+
+        private async void Update()
+        {
+            if (_currentTurnPlayer != null
+                && _currentTurnPlayer.PlayerState == PlayerState.ActiveAiming &&
+                ReInput.players.GetPlayer(_currentTurnPlayer.PlayerId).GetButtonDown("CameraMode"))
+            {
+                _isInMapOverview = !_isInMapOverview;
+
+                _currentTurnPlayer.SetControlsActive(!_isInMapOverview);
+
+                if (_isInMapOverview)
+                {
+                    await _camerasController.BlendTo(_panController.PanningCamera, 0f);
+                    _panController.EnableControls(_currentTurnPlayer);
+                    uiController.SetCameraModeActive(true);
+                }
+                else
+                {
+                    _panController.DisableControls();
+                    uiController.SetCameraModeActive(false);
+                    await _camerasController.BlendTo(_currentTurnPlayer.BallCamera, 0f);
+                }
             }
         }
     }
