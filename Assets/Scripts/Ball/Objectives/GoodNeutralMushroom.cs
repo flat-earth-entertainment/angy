@@ -43,9 +43,9 @@ public class GoodNeutralMushroom : MonoBehaviour
     public void SpawnGoal(){
         pointValue++;
         RaycastHit hit;
-        if(Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 10f, ~LayerMask.NameToLayer("IgnoredMap"))){
-            print("HIT");
+        if(Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 10f, LayerMask.GetMask("IgnoredMap"))){
             GameObject hitObject = hit.collider.gameObject;
+            print($"HIT {hitObject.name} {LayerMask.LayerToName(hitObject.layer)}");
             Instantiate(goal, hitObject.transform.position, Quaternion.identity);
             BecameHole?.Invoke(hitObject);
             Destroy(hitObject);
