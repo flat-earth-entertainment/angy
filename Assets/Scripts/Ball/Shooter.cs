@@ -43,6 +43,13 @@ public class Shooter : MonoBehaviour{
     public float forcePercent = 1;
     [HideInInspector]
     public Slider powerSlider;
+    // Rotation cooldown modifier
+    private float vertRotTimeMultiplier = 1, horRotTimeMultiplier = 1;
+    private int vertSnapMultiplier = 1, horSnapMultiplier = 1;
+    // Rotation cooldown modifier end
+    // Ball Spin
+    private Vector3 spinDirection = new Vector3(0,0,0);
+
 
     public void SetPlayer(PlayerView playerView)
     {
@@ -70,10 +77,10 @@ public class Shooter : MonoBehaviour{
     void Update(){
         if(activateShootingRetinae && active){
             // Vertical movement controls
+            float vertical = rewiredPlayer.GetAxis("Move Vertical");
             if(vertSnapCooldownTimer <= 0){ // delays snapping intervals
-                float vertical = rewiredPlayer.GetAxis("Move Vertical");
                 if(Mathf.Abs(vertical) > 0){
-                    vertSnap += PositiveOrNegative(vertical);
+                    vertSnap += PositiveOrNegative(vertical) * vertSnapMultiplier;
                     vertSnap = Mathf.Clamp(vertSnap, xMinAngle / vertSnapAngle, xMaxAngle / vertSnapAngle );
                     vertSnapCooldownTimer = snapCooldown;
                     movedRet = true;
@@ -81,11 +88,24 @@ public class Shooter : MonoBehaviour{
             }else{
                 vertSnapCooldownTimer -= Time.deltaTime;
             }
+            if(Mathf.Abs(vertical) > 0){
+                if(vertRotTimeMultiplier < 0.67f){
+                    vertSnapMultiplier = 2;
+                }
+                if(vertRotTimeMultiplier < 0.33f){
+                    vertSnapMultiplier = 3;
+                }
+                vertRotTimeMultiplier -= Time.deltaTime / 4;
+            }else{
+                vertRotTimeMultiplier = 1;
+                vertSnapMultiplier = 1;
+            }
+
             // Horizontal movement controls
+            float horizontal = rewiredPlayer.GetAxis("Move Horizontal");
             if(horSnapCooldownTimer <= 0){  // delays snapping intervals
-                float horizontal = rewiredPlayer.GetAxis("Move Horizontal");
                 if(Mathf.Abs(horizontal) > 0){
-                    horSnap += PositiveOrNegative(horizontal);
+                    horSnap += PositiveOrNegative(horizontal) * horSnapMultiplier;
                     horSnapCooldownTimer = snapCooldown;
                     movedRet = true;
                 }
@@ -101,6 +121,18 @@ public class Shooter : MonoBehaviour{
                 }
             }else{
                 horSnapCooldownTimer -= Time.deltaTime;
+            }
+            if(Mathf.Abs(horizontal) > 0){
+                if(horRotTimeMultiplier < 0.67f){
+                    horSnapMultiplier = 2;
+                }
+                if(horRotTimeMultiplier < 0.33f){
+                    horSnapMultiplier = 3;
+                }
+                horRotTimeMultiplier -= Time.deltaTime / 4;
+            }else{
+                horRotTimeMultiplier = 1;
+                horSnapMultiplier = 1;
             }
             if(movedRet){
                 transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0);
@@ -129,6 +161,9 @@ public class Shooter : MonoBehaviour{
         ballStorage.GetComponent<BallBehaviour>().inMotion = true;
         
         Shot?.Invoke();
+        if(spinDirection.magnitude > 0){
+            StartCoroutine(ballStorage.GetComponent<BallBehaviour>().BallSpin(spinDirection));
+        }
     }
     public Vector3 calculateForce(){
         return transform.forward * power * forcePercent;

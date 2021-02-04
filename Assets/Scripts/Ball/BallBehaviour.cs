@@ -6,11 +6,11 @@ using UnityEngine;
 public class BallBehaviour : MonoBehaviour
 {
     public event Action BecameStill;
-    
     private Shooter shooter;
     private Rigidbody rb;
     public bool inMotion;
     private float timer, stopTimer;
+    private Vector3 spinDirection, currentVelocity;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,7 +26,6 @@ public class BallBehaviour : MonoBehaviour
             if(rb.velocity.magnitude < 0.2f && timer > 0.5f){
                 stopTimer += Time.deltaTime;
                 if(stopTimer > 1){
-                    print("Still");
                     BecameStill?.Invoke();
                     timer = 0;
                     inMotion = false;
@@ -37,6 +36,16 @@ public class BallBehaviour : MonoBehaviour
             }else{
                 stopTimer = 0;
             }
+            currentVelocity = rb.velocity.normalized;
+        }
+    }
+    public IEnumerator BallSpin(Vector3 spinDir){
+        spinDirection = spinDir;
+        yield return null;
+        while (inMotion)
+        {
+            rb.AddTorque(transform.rotation * spinDirection, ForceMode.Force);
+            yield return null;
         }
     }
 }
