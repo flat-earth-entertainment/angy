@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using NaughtyAttributes;
 using Player;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace Config
         [field: SerializeField]
         public float LevelOverviewTime { get; private set; }
 
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("Technical")]
         public GameObject PlayerPrefab { get; private set; }
 
         [field: SerializeField]
@@ -30,13 +31,13 @@ namespace Config
         [field: SerializeField]
         public PlayerPreset[] PlayerPresets { get; private set; }
 
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("Technical")]
         public LayerMask GroundMask { get; private set; }
 
         [field: SerializeField]
         public float CameraPanningSpeed { get; private set; }
 
-        [field: SerializeField]
+        [field: SerializeField, BoxGroup("Technical")]
         public Tags Tags { get; private set; }
 
 
