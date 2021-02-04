@@ -11,8 +11,6 @@ public class PlayersManager : MonoBehaviour
     [SerializeField]
     private int numberOfPlayers = 2;
 
-    [SerializeField]
-    private GameObject obstacles;
 
     public IReadOnlyList<PlayerView> Players => _players.AsReadOnly();
 
@@ -26,8 +24,6 @@ public class PlayersManager : MonoBehaviour
         }
 
         InitializedAllPlayers?.Invoke(_players.ToArray());
-
-        PredictionManager.instance.obstacles = obstacles;
     }
 
     private void InitializeNewPlayer(PlayerPreset playerPreset)

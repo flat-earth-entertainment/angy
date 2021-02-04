@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Cysharp.Threading.Tasks;
+﻿using System.Collections.Generic;
+using Config;
 using UnityEngine;
+using Utils;
 
 namespace MeshPhysics
 {
@@ -10,23 +9,23 @@ namespace MeshPhysics
     {
         public bool Baked { get; private set; }
 
-        [SerializeField]
-        private GameObject obstacleParent;
-
         private readonly List<Transform> _meshObjects = new List<Transform>();
         private readonly List<CombineInstance> _combineInstances = new List<CombineInstance>();
 
+        private Transform _obstacleParent;
         private MeshCollider _meshCollider;
         private MeshFilter _meshFilter;
 
         private void Awake()
         {
+            _obstacleParent = GameConfig.Instance.Tags.MapPhysicalLayoutTag.SafeFindWithThisTag().transform;
+
             _meshFilter = transform.GetComponent<MeshFilter>();
             _meshCollider = transform.GetComponent<MeshCollider>();
 
-            foreach (Transform child in obstacleParent.transform)
+            foreach (Transform child in _obstacleParent)
             {
-                if (child.TryGetComponent(out MeshFilter meshFilter))
+                if (child.GetComponent<Collider>())
                 {
                     _meshObjects.Add(child);
                     child.gameObject.layer = LayerMask.NameToLayer("IgnoredMap");

@@ -16,14 +16,7 @@ namespace Player
         [SerializeField]
         private Vector3 topRightBound;
 
-
-        private Transform _cameraTransform;
         private Rewired.Player _player;
-
-        private void Awake()
-        {
-            _cameraTransform = PanningCamera.transform;
-        }
 
         public void EnableControls(PlayerView player)
         {
