@@ -36,6 +36,9 @@ namespace Config
         [field: SerializeField]
         public float CameraPanningSpeed { get; private set; }
 
+        [field: SerializeField]
+        public Tags Tags { get; private set; }
+
 
         private const string ConfigPath = "Game Config";
 
