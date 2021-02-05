@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Map_Selection;
 using NaughtyAttributes;
 using Player;
 using UnityEngine;
@@ -39,6 +40,9 @@ namespace Config
 
         [field: SerializeField, BoxGroup("Technical")]
         public Tags Tags { get; private set; }
+
+        [field: SerializeField]
+        public MapPreview[] MapPreviews { get; private set; }
 
 
         private const string ConfigPath = "Game Config";
