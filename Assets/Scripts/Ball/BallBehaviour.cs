@@ -40,6 +40,7 @@ public class BallBehaviour : MonoBehaviour
                     rb.velocity = new Vector3(0,0,0);
                     rb.angularVelocity = new Vector3(0,0,0);
                     shooter.lemmingAnim.SetBool("isBall", false);
+                    shooter.lemmingAnim.SetBool("isKnockback", false);
                     transform.rotation = Quaternion.Euler(180,0,0);
                     shooter.lemming.transform.rotation = Quaternion.Euler(0, 0, 0);
                 }

@@ -58,7 +58,7 @@ public class Shooter : MonoBehaviour{
 
     public void SetBallFormActive(bool state)
     {
-        lemmingAnim.SetBool("isBall", state);
+        lemmingAnim.SetBool("isKnockback", state);
     }
     
     public void SetPlayer(PlayerView playerView)
@@ -193,7 +193,7 @@ public class Shooter : MonoBehaviour{
     private IEnumerator PreShot(){
         activateShootingRetinae = false;
         lemmingAnim.SetBool("isBall", true);
-        
+
         // change spin and tilt goes here //
 
 

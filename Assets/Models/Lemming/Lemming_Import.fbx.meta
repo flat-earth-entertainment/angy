@@ -50,7 +50,7 @@ ModelImporter:
     second: Lemming_Armature|Rotate_Wiggle
   - first:
       74: -8634830573736492854
-    second: Lemming_Armature|Rotate_Wiggle2
+    second: Rotate_Wiggle2
   - first:
       74: 2384793145409812324
     second: Lemming_Armature|Sphere.003Action
@@ -71,10 +71,13 @@ ModelImporter:
     second: Lemming_Armature|StarAction.001
   - first:
       74: -6153528297074499799
-    second: Lemming_Armature|ToBallTransition
+    second: ToBallTransition
   - first:
       74: 2481807632199277450
     second: Lemming_Armature|ToBallTransition.001
+  - first:
+      74: 1436858461457161272
+    second: ToBallTransition_Knockback
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -259,7 +262,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Lemming_Armature|Rotate_Wiggle2
+      name: Rotate_Wiggle2
       takeName: Lemming_Armature|Rotate_Wiggle2
       internalID: 0
       firstFrame: 0
@@ -317,10 +320,39 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Lemming_Armature|ToBallTransition
+      name: ToBallTransition
       takeName: Lemming_Armature|ToBallTransition
       internalID: 0
       firstFrame: 0
+      lastFrame: 9
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: ToBallTransition_Knockback
+      takeName: Lemming_Armature|ToBallTransition
+      internalID: 0
+      firstFrame: 8
       lastFrame: 9
       wrapMode: 0
       orientationOffsetY: 0
