@@ -13,6 +13,7 @@ public class BallBehaviour : MonoBehaviour
     private Vector3 spinDirection, currentVelocity;
     private Transform velocityDirection, offsetPointer, offsetHolder;
     public Vector3 displayVector;
+    private float windDown = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +23,7 @@ public class BallBehaviour : MonoBehaviour
         velocityDirection = new GameObject("Velocity direction of player " + shooter.playerId).GetComponent<Transform>();
         velocityDirection.parent = transform;
 
-        // All of these would be unnecessary if i for the life of me could just turn a vector
+        // All of these would be unnecessary if i for the life of me could just turn a vector correctly
         offsetPointer = new GameObject("Offset pointer").GetComponent<Transform>();
         offsetPointer.parent = velocityDirection;
         offsetHolder = new GameObject("Offset holder").GetComponent<Transform>();
@@ -60,9 +61,10 @@ public class BallBehaviour : MonoBehaviour
         spinDirection = spinDir;
         offsetHolder.localPosition = spinDirection;
         offsetPointer.LookAt(offsetHolder, Vector3.up);
-            Vector3 direction = offsetPointer.TransformDirection(offsetPointer.position);
-            rb.AddTorque(direction * 20, ForceMode.Impulse);
-        while (inMotion)
+        
+        Vector3 direction = offsetPointer.TransformDirection(offsetPointer.position);
+        rb.AddTorque(direction * 20, ForceMode.Impulse);
+        while(inMotion)
         {   
             direction = offsetPointer.TransformDirection(offsetPointer.position);
             displayVector = offsetPointer.forward;
@@ -73,6 +75,7 @@ public class BallBehaviour : MonoBehaviour
             //Vector3 rotateVector = Quaternion.AngleAxis(velocityDirection.localEulerAngles.y, velocityDirection.up) * spinDirection;
             //Vector3 rotateVector = velocityDirection.localEulerAngles * spinDirection;
             //Vector3 rotateVector = Quaternion.Euler(0,velocityDirection.localRotation.y,0) * spinDirection;
+            windDown -= Time.deltaTime;
             yield return null;
         }
     }
