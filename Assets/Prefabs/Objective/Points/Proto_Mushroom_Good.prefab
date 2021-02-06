@@ -125,34 +125,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8648471408893071223}
     m_Modifications:
-    - target: {fileID: 1004705883943846788, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.02
-      objectReference: {fileID: 0}
-    - target: {fileID: 1004705883943846788, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.19999997
-      objectReference: {fileID: 0}
-    - target: {fileID: 1004705883943846842, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1004705883943846842, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
-      propertyPath: moveWithTransform
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1004705883943846842, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
-      propertyPath: ForceModule.enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1004705883943846842, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
-      propertyPath: CollisionModule.enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1004705883943846843, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
-      propertyPath: m_SortMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1004705884427416787, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -163,7 +135,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1004705884427416787, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.2
+      value: 0.21
       objectReference: {fileID: 0}
     - target: {fileID: 1004705884427416787, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
       propertyPath: m_LocalPosition.z
@@ -196,14 +168,6 @@ PrefabInstance:
     - target: {fileID: 1004705884427416787, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1004705884427416796, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
-      propertyPath: playOnAwake
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1004705884427416796, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
-      propertyPath: CollisionModule.type
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1004705884427416798, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
       propertyPath: m_Name

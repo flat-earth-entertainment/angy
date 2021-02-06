@@ -8,6 +8,10 @@ public class Shooter : MonoBehaviour{
 
     public event Action Shot;
     
+    public GameObject lemming;
+    [HideInInspector]
+    public Animator lemmingAnim;
+    
     public PlayerView PlayerView { get; private set; }
 
     public GameObject BallStorage => ballStorage;
@@ -70,12 +74,16 @@ public class Shooter : MonoBehaviour{
 
         // MUST BE IMPROVED
         powerSlider = GameObject.FindGameObjectWithTag("TEMPFINDSLIDER").transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+
+        lemmingAnim = lemming.GetComponentInChildren<Animator>();
     }
 
 
 
-    void Update(){
+    void Update()
+    {
         if(activateShootingRetinae && active){
+            
             // Vertical movement controls
             float vertical = rewiredPlayer.GetAxis("Move Vertical");
             if(vertSnapCooldownTimer <= 0){ // delays snapping intervals
@@ -108,6 +116,11 @@ public class Shooter : MonoBehaviour{
                     horSnap += PositiveOrNegative(horizontal) * horSnapMultiplier;
                     horSnapCooldownTimer = snapCooldown;
                     movedRet = true;
+                    lemmingAnim.SetBool("isRot", true);
+                }
+                else
+                {
+                    lemmingAnim.SetBool("isRot", false);
                 }
                 if(rewiredPlayer.GetButtonDown("SnapLeft")){    
                     horSnap -= greatSnapAngle / horSnapAngle;
@@ -136,6 +149,7 @@ public class Shooter : MonoBehaviour{
             }
             if(movedRet){
                 transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0);
+                lemming.transform.rotation = Quaternion.Euler(0, (horSnap * horSnapAngle) + 180, 0);
                 
                 // Draw prediction curve if player has moved curve
                 if(currentRotation != transform.rotation){
@@ -153,6 +167,8 @@ public class Shooter : MonoBehaviour{
             if(rewiredPlayer.GetButtonDown("Confirm")){
                 StartCoroutine("PreShot");
             }
+            
+            
         }
     }
     void shoot(){
@@ -170,7 +186,8 @@ public class Shooter : MonoBehaviour{
     }
     private IEnumerator PreShot(){
         activateShootingRetinae = false;
-
+        lemmingAnim.SetBool("isBall", true);
+        
         // change spin and tilt goes here //
 
 
@@ -189,6 +206,7 @@ public class Shooter : MonoBehaviour{
         
         forcePercent = 1;
         activateShootingRetinae = true;
+        
     }
     private IEnumerator CalculateShootForce(){
         forcePercent = 0;

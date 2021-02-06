@@ -32,6 +32,9 @@ public class BallBehaviour : MonoBehaviour
                     shooter.activateShootingRetinae = true;
                     rb.velocity = new Vector3(0,0,0);
                     rb.angularVelocity = new Vector3(0,0,0);
+                    shooter.lemmingAnim.SetBool("isBall", false);
+                    transform.rotation = Quaternion.Euler(180,0,0);
+                    shooter.lemming.transform.rotation = Quaternion.Euler(0, 0, 0);
                 }
             }else{
                 stopTimer = 0;
