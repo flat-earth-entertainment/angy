@@ -22,6 +22,7 @@ namespace Ball
                             other.contacts[0].point, 1f);
                     }
 
+                    shooter.SetBallFormActive(true);
                     PlayerHit?.Invoke(shooter.PlayerView, transform.GetChild(0).GetComponent<Shooter>().PlayerView);
                 }
             }

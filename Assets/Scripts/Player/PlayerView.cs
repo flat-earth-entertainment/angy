@@ -24,10 +24,19 @@ public class PlayerView : MonoBehaviour
         set
         {
             _playerColor = value;
-            var newColorMaterial =
-                new Material(_shooter.BallStorage.GetComponent<MeshRenderer>().material) {color = PlayerColor};
+            var lemmingRenderer =
+                _shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
 
-            _shooter.BallStorage.GetComponent<MeshRenderer>().material = newColorMaterial;
+            Debug.Log(lemmingRenderer.materials[0].name);
+
+            var newColorMaterial =
+                new Material(lemmingRenderer.materials[0]);
+
+            newColorMaterial.SetColor("Color_Primary", value);
+
+            var oldMaterials = lemmingRenderer.materials;
+            oldMaterials[0] = newColorMaterial;
+            lemmingRenderer.materials = oldMaterials;
         }
     }
 
