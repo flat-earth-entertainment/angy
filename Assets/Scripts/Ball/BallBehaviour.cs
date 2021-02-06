@@ -11,6 +11,13 @@ public class BallBehaviour : MonoBehaviour
     public bool inMotion;
     private float timer, stopTimer;
     private Vector3 spinDirection, currentVelocity;
+
+    public void ResetRotation()
+    {
+        transform.rotation = Quaternion.Euler(180, 0, 0);
+        shooter.lemming.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+    
     // Start is called before the first frame update
     void Start()
     {

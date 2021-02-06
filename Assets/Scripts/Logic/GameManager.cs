@@ -165,6 +165,8 @@ namespace Logic
             _currentTurnPlayer = _playersManager.GetNextPlayer(_currentTurnPlayer);
             _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
 
+            _currentTurnPlayer.SetIdleAnimation();
+
             CinemachineVirtualCamera nextCamera = null;
 
             //Decide where to move camera to
