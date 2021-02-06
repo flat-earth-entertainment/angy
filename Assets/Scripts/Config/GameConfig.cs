@@ -50,6 +50,9 @@ namespace Config
         [field: SerializeField]
         public float TimeScale { get; private set; }
 
+        [field: SerializeField]
+        public float HoleOrbitTime { get; private set; }
+
 
         private const string ConfigPath = "Game Config";
 

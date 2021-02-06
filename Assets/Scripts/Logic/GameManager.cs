@@ -68,6 +68,8 @@ namespace Logic
             _playersManager.InitializedAllPlayers += OnAllPlayersInitialized;
 
             HitOtherPlayerTrigger.PlayerHit += OnPlayerGotHit;
+
+            GoodNeutralMushroom.BecameHole += OnHoleAppeared;
         }
 
         private void OnDisable()
@@ -80,6 +82,21 @@ namespace Logic
             }
 
             HitOtherPlayerTrigger.PlayerHit -= OnPlayerGotHit;
+            GoodNeutralMushroom.BecameHole -= OnHoleAppeared;
+        }
+
+        private async void OnHoleAppeared(GameObject obj)
+        {
+            Time.timeScale = 0;
+
+            await _camerasController.BlendTo(obj.GetComponentInChildren<CinemachineVirtualCamera>(),
+                GameConfig.Instance.FlyToNextPlayerTime);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.HoleOrbitTime), DelayType.Realtime);
+
+            await _camerasController.BlendTo(_currentTurnPlayer.BallCamera, GameConfig.Instance.FlyToNextPlayerTime);
+
+            Time.timeScale = GameConfig.Instance.TimeScale;
         }
 
         private void OnAllPlayersInitialized(PlayerView[] players)
