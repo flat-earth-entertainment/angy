@@ -155,7 +155,6 @@ public class Shooter : MonoBehaviour{
             }
             if(movedRet){
                 transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0);
-                lemming.transform.rotation = Quaternion.Euler(0, (horSnap * horSnapAngle) + 180, 0);
                 
                 // Draw prediction curve if player has moved curve
                 if(currentRotation != transform.rotation){
@@ -253,6 +252,7 @@ public class Shooter : MonoBehaviour{
 
     public void predict(){
         PredictionManager.instance.predict(ballPrefab, firePoint.transform.position, calculateForce());
+        lemming.transform.rotation = Quaternion.Euler(0, (horSnap * horSnapAngle) + 180, 0);
     }
     public void ToggleActive(){
         active = !active;
