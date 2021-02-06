@@ -55,6 +55,12 @@ public class Shooter : MonoBehaviour{
     private Vector3 spinDirection = new Vector3(0,0,0);
 
 
+
+    public void SetBallFormActive(bool state)
+    {
+        lemmingAnim.SetBool("isBall", state);
+    }
+    
     public void SetPlayer(PlayerView playerView)
     {
         PlayerView = playerView;
