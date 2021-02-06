@@ -17,8 +17,8 @@ public class BallBehaviour : MonoBehaviour
 
     public void ResetRotation()
     {
-        transform.rotation = Quaternion.Euler(180, 0, 0);
-        shooter.lemming.transform.rotation = Quaternion.Euler(0, 0, 0);
+        //transform.rotation = Quaternion.Euler(180, 0, 0);
+        //shooter.lemming.transform.rotation = Quaternion.Euler(0, 0, 0);
     }
     
     // Start is called before the first frame update
@@ -55,7 +55,7 @@ public class BallBehaviour : MonoBehaviour
                     shooter.lemmingAnim.SetBool("isBall", false);
                     shooter.lemmingAnim.SetBool("isKnockback", false);
                     transform.rotation = Quaternion.Euler(180,0,0);
-                    shooter.lemming.transform.rotation = Quaternion.Euler(0, 0, 0);
+                    shooter.lemming.transform.rotation = Quaternion.Euler(0, (shooter.horSnap * shooter.horSnapAngle) + 180, 0);
                 }
             }else{
                 stopTimer = 0;
