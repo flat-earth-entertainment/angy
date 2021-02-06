@@ -33,10 +33,7 @@ namespace Logic
 
         private void Awake()
         {
-            if (Time.timeScale < 1)
-            {
-                Time.timeScale = 1;
-            }
+            Time.timeScale = GameConfig.Instance.TimeScale;
 
             _spawnPoint = GameConfig.Instance.Tags.SpawnPointTag.SafeFindWithThisTag().transform;
 

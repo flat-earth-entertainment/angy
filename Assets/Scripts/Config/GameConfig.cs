@@ -47,6 +47,10 @@ namespace Config
         [field: SerializeField]
         public float PreNextTurnDelay { get; private set; }
 
+        [field: SerializeField]
+        public float TimeScale { get; private set; }
+
+
         private const string ConfigPath = "Game Config";
 
         public static GameConfig Instance
