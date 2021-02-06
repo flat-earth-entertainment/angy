@@ -9,22 +9,21 @@ public class VirtualCamerasController : MonoBehaviour
     private const int Inactive = 0;
     private const int Active = 10;
 
-    private readonly HashSet<CinemachineVirtualCamera> _cameras = new HashSet<CinemachineVirtualCamera>();
+    private HashSet<CinemachineVirtualCamera> _cameras = new HashSet<CinemachineVirtualCamera>();
 
     private CinemachineBrain _cinemachineBrain;
     private float _defaultTransitionTime;
-
 
     public UniTask BlendTo(CinemachineVirtualCamera virtualCamera, float? blendTime = null)
     {
         if (blendTime == null)
         {
             SetActiveCamera(virtualCamera);
-            return UniTask.Delay(TimeSpan.FromSeconds(_defaultTransitionTime));
+            return UniTask.Delay(TimeSpan.FromSeconds(_defaultTransitionTime), DelayType.Realtime);
         }
 
         SetActiveCamera(virtualCamera, blendTime);
-        return UniTask.Delay(TimeSpan.FromSeconds(blendTime.Value));
+        return UniTask.Delay(TimeSpan.FromSeconds(blendTime.Value), DelayType.Realtime);
     }
 
     private void Awake()
@@ -51,6 +50,8 @@ public class VirtualCamerasController : MonoBehaviour
         {
             _cinemachineBrain.m_DefaultBlend.m_Time = transitionTime.Value;
         }
+
+        _cameras = new HashSet<CinemachineVirtualCamera>(FindObjectsOfType<CinemachineVirtualCamera>());
 
         foreach (var virtualCamera in _cameras)
         {
