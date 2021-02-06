@@ -252,7 +252,7 @@ namespace Logic
             _currentTurnPlayer.PlayerState = PlayerState.ActiveInMotion;
         }
 
-        private void OnCurrentPlayerBecameStill()
+        private async void OnCurrentPlayerBecameStill()
         {
             _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
 
@@ -271,6 +271,7 @@ namespace Logic
                 _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
             }
 
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.PreNextTurnDelay));
             MakeTurn();
         }
 

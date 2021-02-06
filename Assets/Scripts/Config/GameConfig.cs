@@ -44,6 +44,8 @@ namespace Config
         [field: SerializeField]
         public MapPreview[] MapPreviews { get; private set; }
 
+        [field: SerializeField]
+        public float PreNextTurnDelay { get; private set; }
 
         private const string ConfigPath = "Game Config";
 
