@@ -101,6 +101,16 @@ public class PlayerView : MonoBehaviour
         _shooter.predict();
     }
 
+    public void SetIdleAnimation()
+    {
+        if (_shooter.lemmingAnim != null && !_shooter.lemmingAnim.Equals(null))
+        {
+            _ballBehaviour.ResetRotation();
+            _shooter.lemmingAnim?.SetBool("isBall", false);
+            _shooter.lemmingAnim?.SetBool("isKnockback", false);
+        }
+    }
+
     public void AlterAngy(AngyEvent angyEvent)
     {
         switch (angyEvent)

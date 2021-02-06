@@ -14,6 +14,13 @@ public class BallBehaviour : MonoBehaviour
     private Transform velocityDirection, offsetPointer, offsetHolder;
     public Vector3 displayVector;
     private float windDown = 1;
+
+    public void ResetRotation()
+    {
+        transform.rotation = Quaternion.Euler(180, 0, 0);
+        shooter.lemming.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +53,7 @@ public class BallBehaviour : MonoBehaviour
                     rb.velocity = new Vector3(0,0,0);
                     rb.angularVelocity = new Vector3(0,0,0);
                     shooter.lemmingAnim.SetBool("isBall", false);
+                    shooter.lemmingAnim.SetBool("isKnockback", false);
                     transform.rotation = Quaternion.Euler(180,0,0);
                     shooter.lemming.transform.rotation = Quaternion.Euler(0, 0, 0);
                 }
