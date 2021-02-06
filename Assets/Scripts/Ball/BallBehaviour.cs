@@ -76,14 +76,18 @@ public class BallBehaviour : MonoBehaviour
         {   
             direction = offsetPointer.TransformDirection(offsetPointer.position);
             displayVector = offsetPointer.forward;
-            rb.AddTorque(direction * Time.deltaTime, ForceMode.Impulse);
+            rb.AddTorque((direction * Time.deltaTime) * windDown, ForceMode.Impulse);
             //Quaternion rotation = Quaternion.Euler(0,velocityDirection.eulerAngles.y,0);
             //Vector3 rotateVector = rotation * spinDirection;
             //Vector3 rotateVector = velocityDirection.forward + spinDirection; 
             //Vector3 rotateVector = Quaternion.AngleAxis(velocityDirection.localEulerAngles.y, velocityDirection.up) * spinDirection;
             //Vector3 rotateVector = velocityDirection.localEulerAngles * spinDirection;
             //Vector3 rotateVector = Quaternion.Euler(0,velocityDirection.localRotation.y,0) * spinDirection;
-            windDown -= Time.deltaTime;
+            if(windDown > 0){
+                windDown -= Time.deltaTime;
+            }else{
+                windDown = 0;
+            }
             yield return null;
         }
     }
