@@ -11,11 +11,23 @@ public class BallBehaviour : MonoBehaviour
     public bool inMotion;
     private float timer, stopTimer;
     private Vector3 spinDirection, currentVelocity;
+    private Transform velocityDirection, offsetPointer, offsetHolder;
+    public Vector3 displayVector;
     // Start is called before the first frame update
     void Start()
     {
         shooter = GetComponentInChildren<Shooter>();
         rb = GetComponent<Rigidbody>();
+
+        velocityDirection = new GameObject("Velocity direction of player " + shooter.playerId).GetComponent<Transform>();
+        velocityDirection.parent = transform;
+
+        // All of these would be unnecessary if i for the life of me could just turn a vector
+        offsetPointer = new GameObject("Offset pointer").GetComponent<Transform>();
+        offsetPointer.parent = velocityDirection;
+        offsetHolder = new GameObject("Offset holder").GetComponent<Transform>();
+        offsetHolder.parent = velocityDirection;
+        offsetPointer.position = offsetHolder.position = new Vector3(0,0,0);
     }
 
     // Update is called once per frame
@@ -36,15 +48,28 @@ public class BallBehaviour : MonoBehaviour
             }else{
                 stopTimer = 0;
             }
-            currentVelocity = rb.velocity.normalized;
+            velocityDirection.transform.position = transform.position;
+            velocityDirection.LookAt(rb.velocity + transform.position, Vector3.up);
         }
     }
     public IEnumerator BallSpin(Vector3 spinDir){
-        spinDirection = spinDir;
         yield return null;
+        spinDirection = spinDir;
+        offsetHolder.localPosition = spinDirection;
+        offsetPointer.LookAt(offsetHolder, Vector3.up);
+            Vector3 direction = offsetPointer.TransformDirection(offsetPointer.position);
+            rb.AddTorque(direction * 20, ForceMode.Impulse);
         while (inMotion)
-        {
-            rb.AddTorque(transform.rotation * spinDirection, ForceMode.Force);
+        {   
+            direction = offsetPointer.TransformDirection(offsetPointer.position);
+            displayVector = offsetPointer.forward;
+            rb.AddTorque(direction * Time.deltaTime, ForceMode.Impulse);
+            //Quaternion rotation = Quaternion.Euler(0,velocityDirection.eulerAngles.y,0);
+            //Vector3 rotateVector = rotation * spinDirection;
+            //Vector3 rotateVector = velocityDirection.forward + spinDirection; 
+            //Vector3 rotateVector = Quaternion.AngleAxis(velocityDirection.localEulerAngles.y, velocityDirection.up) * spinDirection;
+            //Vector3 rotateVector = velocityDirection.localEulerAngles * spinDirection;
+            //Vector3 rotateVector = Quaternion.Euler(0,velocityDirection.localRotation.y,0) * spinDirection;
             yield return null;
         }
     }

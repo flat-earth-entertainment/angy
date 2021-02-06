@@ -48,7 +48,7 @@ public class Shooter : MonoBehaviour{
     private int vertSnapMultiplier = 1, horSnapMultiplier = 1;
     // Rotation cooldown modifier end
     // Ball Spin
-    private Vector3 spinDirection = new Vector3(0,0,0);
+    private Vector3 spinDirection = new Vector3(1,0,1);
 
 
     public void SetPlayer(PlayerView playerView)
