@@ -1,7 +1,5 @@
-using System;
 using DG.Tweening;
 using NaughtyAttributes;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +8,7 @@ namespace UI
     public class TitleScreenTransitionManager : MonoBehaviour
     {
         [SerializeField]
-        private TextMeshProUGUI logoText;
+        private RectTransform logoObject;
 
         [SerializeField]
         private int startFromY;
@@ -27,10 +25,11 @@ namespace UI
 
         private void Start()
         {
-            var initialPosition = logoText.rectTransform.position;
+            var initialPosition = logoObject.position;
 
-            logoText.rectTransform.position += Vector3.up * startFromY;
-            DOTween.Sequence().Append(logoText.rectTransform.DOMoveY(initialPosition.y, jumpInTime).SetEase(Ease.OutElastic))
+            logoObject.position += Vector3.up * startFromY;
+            DOTween.Sequence()
+                .Append(logoObject.DOMoveY(initialPosition.y, jumpInTime).SetEase(Ease.OutElastic))
                 .AppendInterval(waitAfterAnimationTime)
                 .AppendCallback(delegate { SceneManager.LoadScene(nextScene); });
         }
