@@ -14,10 +14,13 @@ public class GoodNeutralMushroom : MonoBehaviour
     public GameObject goal;
     private PointController pointController;
     public ParticleSystem splatter;
+    public Material baseFruitMat, baseFruitTopMat;
     // Owner Id 99 refers to no ownership, shouldn't be a problem unless we want 100 players.
     public int ownerId = 99, pointValue = 1;
     private void Start() {
         pointController = GameObject.FindObjectOfType<PointController>();
+        baseFruitMat = new Material(baseFruitMat);
+        baseFruitTopMat = new Material(baseFruitTopMat);
     }
     private void OnTriggerEnter(Collider other) {
         Trigger(other);
@@ -41,6 +44,9 @@ public class GoodNeutralMushroom : MonoBehaviour
             if(!point.GetComponent<Renderer>()){
                 foreach (Renderer item in point.GetComponentsInChildren<Renderer>())
                 {
+                    item.materials[0] = baseFruitMat;
+                    item.materials[1] = baseFruitTopMat;
+
                     item.materials[0].SetColor("_BaseColor", other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
                     item.materials[1].SetColor("_BaseColor", new Color(0.125f,1,0.35f,1));
                 }
