@@ -206,7 +206,7 @@ namespace Logic
 
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
             {
-                _currentTurnPlayer.ExplodeHideAndResetAngy(); //Angy=0
+                _currentTurnPlayer.ExplodeHideAndResetAngy();
                 _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawn;
                 MakeTurn();
                 return;
@@ -237,6 +237,7 @@ namespace Logic
                     SetTrajectoryActive(true);
 
                     _currentTurnPlayer.Shot += OnPlayerShot;
+                    _currentTurnPlayer.PlayerInputs.MapViewButtonPressed += OnMapButtonPressed;
 
                     _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
                     break;
@@ -260,8 +261,10 @@ namespace Logic
         private void OnPlayerShot()
         {
             _currentTurnPlayer.Shot -= OnPlayerShot;
+            _currentTurnPlayer.PlayerInputs.MapViewButtonPressed -= OnMapButtonPressed;
 
             _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
+            _currentTurnPlayer.PlayerInputs.AbilityButtonPressed += OnAbilityButtonPressed;
 
             _currentTurnPlayer.SetControlsActive(false);
             SetTrajectoryActive(false);
@@ -271,9 +274,25 @@ namespace Logic
             _currentTurnPlayer.PlayerState = PlayerState.ActiveInMotion;
         }
 
+        private void OnAbilityButtonPressed()
+        {
+            _currentTurnPlayer.PlayerInputs.AbilityButtonPressed -= OnAbilityButtonPressed;
+
+
+            if (_currentTurnPlayer.Ability != null)
+            {
+                _currentTurnPlayer.Ability.InvokeAbility(_currentTurnPlayer);
+            }
+            else
+            {
+                Debug.LogWarning("Current player doesn't have an ability!");
+            }
+        }
+
         private async void OnCurrentPlayerBecameStill()
         {
             _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
+            _currentTurnPlayer.PlayerInputs.AbilityButtonPressed -= OnAbilityButtonPressed;
 
             uiController.DisableAngyMeter();
 
@@ -294,28 +313,23 @@ namespace Logic
             MakeTurn();
         }
 
-        private async void Update()
+        private async void OnMapButtonPressed()
         {
-            if (_currentTurnPlayer != null
-                && _currentTurnPlayer.PlayerState == PlayerState.ActiveAiming &&
-                ReInput.players.GetPlayer(_currentTurnPlayer.PlayerId).GetButtonDown("CameraMode"))
+            _isInMapOverview = !_isInMapOverview;
+
+            _currentTurnPlayer.SetControlsActive(!_isInMapOverview);
+
+            if (_isInMapOverview)
             {
-                _isInMapOverview = !_isInMapOverview;
-
-                _currentTurnPlayer.SetControlsActive(!_isInMapOverview);
-
-                if (_isInMapOverview)
-                {
-                    await _camerasController.BlendTo(_panController.PanningCamera, 0f);
-                    _panController.EnableControls(_currentTurnPlayer);
-                    uiController.SetCameraModeActive(true);
-                }
-                else
-                {
-                    _panController.DisableControls();
-                    uiController.SetCameraModeActive(false);
-                    await _camerasController.BlendTo(_currentTurnPlayer.BallCamera, 0f);
-                }
+                await _camerasController.BlendTo(_panController.PanningCamera, 0f);
+                _panController.EnableControls(_currentTurnPlayer);
+                uiController.SetCameraModeActive(true);
+            }
+            else
+            {
+                _panController.DisableControls();
+                uiController.SetCameraModeActive(false);
+                await _camerasController.BlendTo(_currentTurnPlayer.BallCamera, 0f);
             }
         }
     }

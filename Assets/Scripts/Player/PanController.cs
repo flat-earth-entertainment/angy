@@ -36,7 +36,6 @@ namespace Player
 
             var vertical = _player.GetAxis("Move Vertical") * Time.deltaTime
                                                             * GameConfig.Instance.CameraPanningSpeed;
-            Debug.Log("vertical = " + vertical);
 
             if (vertical + currentPosition.z <= bottomLeftBound.z ||
                 vertical + currentPosition.z >= topRightBound.z)
