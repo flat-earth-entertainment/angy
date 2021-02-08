@@ -63,6 +63,9 @@ public class BallBehaviour : MonoBehaviour
             velocityDirection.transform.position = transform.position;
             velocityDirection.LookAt(rb.velocity + transform.position, Vector3.up);
         }
+        if(rb.velocity.magnitude > 0.2f && !inMotion){
+            inMotion = true;
+        }
     }
     public IEnumerator BallSpin(Vector3 spinDir){
         yield return null;
