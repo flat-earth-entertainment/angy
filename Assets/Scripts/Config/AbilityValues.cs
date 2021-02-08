@@ -9,5 +9,8 @@ namespace Config
     {
         [field: SerializeField]
         public NoGravityAbility NoGravityAbility { get; private set; }
+
+        [field: SerializeField]
+        public ExpandAbility ExpandAbility { get; private set; }
     }
 }

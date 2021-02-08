@@ -278,7 +278,15 @@ namespace Logic
         {
             _currentTurnPlayer.PlayerInputs.AbilityButtonPressed -= OnAbilityButtonPressed;
 
-            _currentTurnPlayer.Ability.InvokeAbility(_currentTurnPlayer);
+
+            if (_currentTurnPlayer.Ability != null)
+            {
+                _currentTurnPlayer.Ability.InvokeAbility(_currentTurnPlayer);
+            }
+            else
+            {
+                Debug.LogWarning("Current player doesn't have an ability!");
+            }
         }
 
         private async void OnCurrentPlayerBecameStill()

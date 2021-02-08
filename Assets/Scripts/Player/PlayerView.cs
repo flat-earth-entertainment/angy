@@ -71,7 +71,8 @@ public class PlayerView : MonoBehaviour
 
     public Vector3 LastStillPosition { get; private set; }
 
-    public Ability Ability => GameConfig.Instance.AbilityValues.NoGravityAbility;
+    public GameObject Ball => _ballBehaviour.gameObject;
+    public Ability Ability { get; set; }
 
     public IPlayerInputs PlayerInputs { get; set; }
 
