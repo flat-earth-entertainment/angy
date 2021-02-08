@@ -144,11 +144,14 @@ public class Shooter : MonoBehaviour{
                 horSnapCooldownTimer -= Time.deltaTime;
             }
             if(Mathf.Abs(horizontal) > 0){
-                if(horRotTimeMultiplier < 0.67f){
+                if(horRotTimeMultiplier < 0.75f){
                     horSnapMultiplier = 2;
                 }
-                if(horRotTimeMultiplier < 0.33f){
+                if(horRotTimeMultiplier < 0.5f){
                     horSnapMultiplier = 3;
+                }
+                if(horRotTimeMultiplier < 0.25f){
+                    horSnapMultiplier = 5;
                 }
                 horRotTimeMultiplier -= Time.deltaTime / 4;
             }else{
