@@ -16,20 +16,23 @@ namespace Logic
 {
     public class GameManager : MonoBehaviour
     {
+        public static PlayerView CurrentTurnPlayer => _currentTurnPlayer;
+
         [SerializeField]
         private LineRenderer lineRenderer;
 
         [SerializeField]
         private UiController uiController;
 
+        private static PlayerView _currentTurnPlayer;
         private CinemachineVirtualCamera _levelOverviewCamera;
         private CinemachineVirtualCamera _spawnPointCamera;
         private Transform _spawnPoint;
         private PlayersManager _playersManager;
-        private PlayerView _currentTurnPlayer;
         private VirtualCamerasController _camerasController;
         private PanController _panController;
         private bool _isInMapOverview;
+
 
         private void Awake()
         {
