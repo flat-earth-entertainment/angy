@@ -1,4 +1,5 @@
 using System;
+using Abilities;
 using Ball;
 using Cinemachine;
 using Config;
@@ -6,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using Player;
+using Player.Input;
 using UnityEngine;
 
 public class PlayerView : MonoBehaviour
@@ -26,8 +28,6 @@ public class PlayerView : MonoBehaviour
             _playerColor = value;
             var lemmingRenderer =
                 _shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
-
-            Debug.Log(lemmingRenderer.materials[0].name);
 
             var newColorMaterial =
                 new Material(lemmingRenderer.materials[0]);
@@ -68,7 +68,12 @@ public class PlayerView : MonoBehaviour
         }
     }
 
+
     public Vector3 LastStillPosition { get; private set; }
+
+    public Ability Ability => GameConfig.Instance.AbilityValues.NoGravityAbility;
+
+    public IPlayerInputs PlayerInputs { get; set; }
 
     public PlayerState PlayerState
     {
@@ -89,12 +94,14 @@ public class PlayerView : MonoBehaviour
     [SerializeField, ReadOnly]
     private PlayerState playerState;
 
+
     private BallBehaviour _ballBehaviour;
     private OutOfBoundsCheck _outOfBoundsCheck;
     private Shooter _shooter;
     private int _playerId;
     private int _angy;
     private Color _playerColor;
+
 
     public void Predict()
     {

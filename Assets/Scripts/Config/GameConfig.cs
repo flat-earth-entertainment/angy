@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using Abilities;
 using Map_Selection;
 using NaughtyAttributes;
 using Player;
@@ -52,6 +53,9 @@ namespace Config
 
         [field: SerializeField]
         public float HoleOrbitTime { get; private set; }
+
+        [field: SerializeField]
+        public AbilityValues AbilityValues { get; private set; }
 
 
         private const string ConfigPath = "Game Config";

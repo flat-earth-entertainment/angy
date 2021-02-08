@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Config;
 using Player;
+using Player.Input;
 using UnityEngine;
 
 public class PlayersManager : MonoBehaviour
@@ -37,8 +38,8 @@ public class PlayersManager : MonoBehaviour
             player.PlayerId = playerId;
             player.Nickname = playerPreset.PlayerName;
             player.PlayerColor = playerPreset.PlayerColor;
-
             player.PlayerState = PlayerState.ShouldSpawn;
+            player.PlayerInputs = RewiredPlayerInputs.AttachToPlayer(player);
 
             player.Hide();
 
