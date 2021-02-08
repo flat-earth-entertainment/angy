@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Config;
+using Logic;
 using UnityEngine;
 
 public class GoodNeutralMushroom : MonoBehaviour
@@ -29,16 +30,24 @@ public class GoodNeutralMushroom : MonoBehaviour
             int hitId = other.transform.GetChild(0).GetComponent<Shooter>().playerId;
             ownerId = hitId;
             if(point != null){
-                Destroy(point);
+                 
             }else{
                 pointController.EnemyHit(hitId);
                 GetComponent<Renderer>().enabled = false;
                 splatter.Play(true);
+                point = Instantiate(fruit[0], transform.position + new Vector3(0,1f,0), Quaternion.identity);
             }
-            point = Instantiate(fruit[hitId], transform.position + new Vector3(0,1f,0), Quaternion.identity);
             pointController.UpdateScore();
+            if(!point.GetComponent<Renderer>()){
+                foreach (Renderer item in point.GetComponentsInChildren<Renderer>())
+                {
+                    item.materials[0].SetColor("_BaseColor", other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
+                    item.materials[1].SetColor("_BaseColor", new Color(0.125f,1,0.35f,1));
+                }
+            }else{
+                point.GetComponent<Renderer>().materials[0].SetColor("_BaseColor", other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
+            }
         }
-
     }
     public void SpawnGoal(){
         pointValue++;
@@ -51,6 +60,6 @@ public class GoodNeutralMushroom : MonoBehaviour
             Destroy(hitObject);
         }
         GetComponent<Renderer>().enabled = false;
-        point = Instantiate(fruit[2], transform.position + new Vector3(0,1,0), Quaternion.identity);
+        point = Instantiate(fruit[fruit.Count-1], transform.position + new Vector3(0,1,0), Quaternion.identity);
     }
 }
