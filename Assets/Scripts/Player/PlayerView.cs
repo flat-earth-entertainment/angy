@@ -3,7 +3,6 @@ using Abilities;
 using Ball;
 using Cinemachine;
 using Config;
-using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using Player;
@@ -73,6 +72,12 @@ public class PlayerView : MonoBehaviour
 
     public GameObject Ball => _ballBehaviour.gameObject;
     public Ability Ability { get; set; }
+
+    public float Drag
+    {
+        get => ball.drag;
+        set => ball.drag = value;
+    }
 
     public IPlayerInputs PlayerInputs { get; set; }
 
@@ -194,7 +199,9 @@ public class PlayerView : MonoBehaviour
 
     private void OnBallBecameStill()
     {
-        LastStillPosition = ball.position;
+        var lastStillPosition = ball.position;
+        lastStillPosition.y -= ball.GetComponent<SphereCollider>().radius;
+        LastStillPosition = lastStillPosition;
         BecameStill?.Invoke();
     }
 
