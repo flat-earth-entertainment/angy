@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using Rewired;
+using Logic;
+using Config;
 
 public class Shooter : MonoBehaviour{
 
@@ -82,6 +84,7 @@ public class Shooter : MonoBehaviour{
         powerSlider = GameObject.FindGameObjectWithTag("TEMPFINDSLIDER").transform.GetChild(0).GetChild(0).GetComponent<Slider>();
 
         lemmingAnim = lemming.GetComponentInChildren<Animator>();
+        
     }
 
 
@@ -89,7 +92,6 @@ public class Shooter : MonoBehaviour{
     void Update()
     {
         if(activateShootingRetinae && active){
-            
             // Vertical movement controls
             float vertical = rewiredPlayer.GetAxis("Move Vertical");
             if(vertSnapCooldownTimer <= 0){ // delays snapping intervals
@@ -214,17 +216,18 @@ public class Shooter : MonoBehaviour{
         
     }
     private IEnumerator CalculateShootForce(){
+        float currentAngy = Mathf.Lerp(1,0.1f,GameManager.CurrentTurnPlayer.Angy / GameConfig.Instance.AngyValues.MaxAngy);
         forcePercent = 0;
         yield return null;
         while (!rewiredPlayer.GetButtonDown("Confirm") && forcePercent >= 0){
             powerSlider.value = forcePercent;
             if(!forcePercentBool){
-                forcePercent += Time.deltaTime / 3;
+                forcePercent += (Time.deltaTime / 3) / currentAngy;
                 if(forcePercent >= 1.033f){
                     forcePercentBool = true;
                 }
             }else{
-                forcePercent -= Time.deltaTime / 3;
+                forcePercent -= (Time.deltaTime / 3) / currentAngy;
             }
             yield return null;
         }
