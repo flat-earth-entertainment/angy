@@ -1,5 +1,5 @@
 ﻿using System;
-using Abilities;
+using Config.Abilities;
 using UnityEngine;
 
 namespace Config
@@ -8,9 +8,12 @@ namespace Config
     public class AbilityValues
     {
         [field: SerializeField]
-        public NoGravityAbility NoGravityAbility { get; private set; }
+        public NoGravityAbilityConfig NoGravityAbility { get; private set; }
 
         [field: SerializeField]
-        public ExpandAbility ExpandAbility { get; private set; }
+        public ExpandAbilityConfig ExpandAbility { get; private set; }
+
+        [field: SerializeField]
+        public IceBlockAbilityConfig IceBlockAbilityConfig { get; private set; }
     }
 }

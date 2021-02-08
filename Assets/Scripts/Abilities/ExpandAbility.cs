@@ -1,4 +1,5 @@
 ﻿using System;
+using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
@@ -8,17 +9,13 @@ namespace Abilities
     [Serializable]
     public class ExpandAbility : Ability
     {
-        [field: SerializeField]
-        public float TimeToInflate { get; private set; }
+        public float TimeToInflate => GameConfig.Instance.AbilityValues.ExpandAbility.TimeToInflate;
 
-        [field: SerializeField]
-        public float TimeToDeflate { get; private set; }
+        public float TimeToDeflate => GameConfig.Instance.AbilityValues.ExpandAbility.TimeToDeflate;
 
-        [field: SerializeField]
-        public float Duration { get; private set; }
+        public float Duration => GameConfig.Instance.AbilityValues.ExpandAbility.Duration;
 
-        [field: SerializeField]
-        public float Scale { get; private set; }
+        public float Scale => GameConfig.Instance.AbilityValues.ExpandAbility.Scale;
 
 
         public override async void InvokeAbility(PlayerView player)

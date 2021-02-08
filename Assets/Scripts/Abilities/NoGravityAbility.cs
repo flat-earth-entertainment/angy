@@ -1,4 +1,5 @@
 ﻿using System;
+using Config;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -7,8 +8,7 @@ namespace Abilities
     [Serializable]
     public class NoGravityAbility : Ability
     {
-        [field: SerializeField]
-        public float DurationTime { get; private set; }
+        public float DurationTime => GameConfig.Instance.AbilityValues.NoGravityAbility.DurationTime;
 
         public override async void InvokeAbility(PlayerView player)
         {

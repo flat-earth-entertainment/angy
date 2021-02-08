@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Abilities;
 using Ball;
 using Cinemachine;
@@ -25,18 +26,20 @@ public class PlayerView : MonoBehaviour
         set
         {
             _playerColor = value;
-            var lemmingRenderer =
-                _shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
 
-            var newColorMaterial =
-                new Material(lemmingRenderer.materials[0]);
+            var oldMaterials = Materials;
 
-            newColorMaterial.SetColor("Color_Primary", value);
+            oldMaterials[0].SetColor("Color_Primary", value);
 
-            var oldMaterials = lemmingRenderer.materials;
-            oldMaterials[0] = newColorMaterial;
-            lemmingRenderer.materials = oldMaterials;
+            Materials = oldMaterials;
         }
+    }
+
+    public Material[] Materials
+    {
+        get => _shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials
+            .Select(s => new Material(s)).ToArray();
+        set => _shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials = value;
     }
 
     public int Angy
@@ -107,7 +110,6 @@ public class PlayerView : MonoBehaviour
     private int _playerId;
     private int _angy;
     private Color _playerColor;
-
 
     public void Predict()
     {

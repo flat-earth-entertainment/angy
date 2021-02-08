@@ -1,4 +1,5 @@
 ﻿using System;
+using Abilities;
 using Config;
 using Logic;
 using UnityEngine;
@@ -11,19 +12,27 @@ namespace Debugs
         [SerializeField]
         private Button expandAbility;
 
-
         [SerializeField]
         private Button noGravityAbility;
+
+        [SerializeField]
+        private Button iceBlockAbility;
 
         private void Awake()
         {
             expandAbility.onClick.AddListener(delegate
             {
-                GameManager.CurrentTurnPlayer.Ability = GameConfig.Instance.AbilityValues.ExpandAbility;
+                GameManager.CurrentTurnPlayer.Ability = new ExpandAbility();
             });
+
             noGravityAbility.onClick.AddListener(delegate
             {
-                GameManager.CurrentTurnPlayer.Ability = GameConfig.Instance.AbilityValues.NoGravityAbility;
+                GameManager.CurrentTurnPlayer.Ability = new NoGravityAbility();
+            });
+
+            iceBlockAbility.onClick.AddListener(delegate
+            {
+                GameManager.CurrentTurnPlayer.Ability = new IceBlockAbility();
             });
         }
     }
