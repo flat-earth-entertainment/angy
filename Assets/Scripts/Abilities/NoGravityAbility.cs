@@ -12,11 +12,9 @@ namespace Abilities
 
         public override async void InvokeAbility(PlayerView player)
         {
-            Debug.Log(GetType().Name.Replace("Ability","") + " ability invoked!");
-
             var gravity = Physics.gravity;
             Physics.gravity = Vector3.zero;
-            await UniTask.Delay(TimeSpan.FromSeconds(DurationTime));
+            await UniTask.Delay(TimeSpan.FromSeconds(DurationTime), DelayType.UnscaledDeltaTime);
             Physics.gravity = gravity;
         }
     }
