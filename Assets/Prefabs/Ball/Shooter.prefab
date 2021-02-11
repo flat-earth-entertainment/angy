@@ -44,21 +44,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e402cd68c3f0bc24e9fb2ceec9a32bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lemming: {fileID: 0}
+  lemmingAnim: {fileID: 0}
   playerId: 0
   firePoint: {fileID: 1314000644727037030}
   ballPrefab: {fileID: 6734545923583936600, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
-  power: 10
+  power: 15
   rotationSpeed: 45
   rotationX: 0
   xMinAngle: 180
-  xMaxAngle: 270
-  lineRender: {fileID: 0}
+  xMaxAngle: 260
+  ballStorage: {fileID: 0}
   activateShootingRetinae: 1
   active: 0
-  vertSnapAngle: 5
-  horSnapAngle: 5
+  vertSnap: 180
+  horSnap: 270
+  vertSnapAngle: 1
+  horSnapAngle: 1
   greatSnapAngle: 30
-  snapCooldown: 0.2
+  snapCooldown: 0.05
+  rb: {fileID: 0}
+  forcePercent: 1
+  powerSlider: {fileID: 0}
 --- !u!1 &1314000644727037030
 GameObject:
   m_ObjectHideFlags: 0
