@@ -65,7 +65,7 @@ ModelImporter:
     second: Lemming_Armature|Star.001Action.002
   - first:
       74: -5917328886674838262
-    second: Lemming_Armature|StarAction
+    second: StarAction
   - first:
       74: -1392245285657681930
     second: Lemming_Armature|StarAction.001
@@ -78,6 +78,21 @@ ModelImporter:
   - first:
       74: 1436858461457161272
     second: ToBallTransition_Knockback
+  - first:
+      74: 205544015859591396
+    second: Idle1_SideToSide
+  - first:
+      74: 8042463507351619861
+    second: Idle2_HippityHop
+  - first:
+      74: 1707665346774637666
+    second: Idle3_Dab
+  - first:
+      74: -2542049235414601433
+    second: Idle4_PowerDab
+  - first:
+      74: 1851087329064008212
+    second: Rotate_Wiggle
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -117,7 +132,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Lemming_Armature|Idle1_SideToSide
+      name: Idle1_SideToSide
       takeName: Lemming_Armature|Idle1_SideToSide
       internalID: 0
       firstFrame: 0
@@ -146,7 +161,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Lemming_Armature|Idle2_HippityHop
+      name: Idle2_HippityHop
       takeName: Lemming_Armature|Idle2_HippityHop
       internalID: 0
       firstFrame: 0
@@ -175,7 +190,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Lemming_Armature|Idle3_Dab
+      name: Idle3_Dab
       takeName: Lemming_Armature|Idle3_Dab
       internalID: 0
       firstFrame: 0
@@ -204,7 +219,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Lemming_Armature|Idle4_PowerDab
+      name: Idle4_PowerDab
       takeName: Lemming_Armature|Idle4_PowerDab
       internalID: 0
       firstFrame: 0
@@ -233,7 +248,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Lemming_Armature|Rotate_Wiggle
+      name: Rotate_Wiggle
       takeName: Lemming_Armature|Rotate_Wiggle
       internalID: 0
       firstFrame: 0
@@ -291,7 +306,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Lemming_Armature|StarAction
+      name: StarAction
       takeName: Lemming_Armature|StarAction
       internalID: 0
       firstFrame: 0
