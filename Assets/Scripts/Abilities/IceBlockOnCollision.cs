@@ -11,7 +11,6 @@ namespace Abilities
         private Material _originalBodyMaterial;
         private Material[] _materials;
 
-
         private void OnCollisionEnter(Collision other)
         {
             if (other.collider.CompareTag("Lemming") && !other.transform.GetComponent<IceBlockOnCollision>())
@@ -23,16 +22,13 @@ namespace Abilities
                 _otherPlayerView.BecameStill += OnBecameStill;
 
                 _otherIceBlockOnCollision = other.gameObject.AddComponent<IceBlockOnCollision>();
-                Debug.Log($"Added ice from {transform.parent.name} to {other.transform.parent.name}");
 
                 _materials = _otherPlayerView.Materials;
                 _originalBodyMaterial = _materials[0];
-                Debug.Log(_originalBodyMaterial.name, gameObject);
                 _materials[0] = GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.IceMaterial;
                 _otherPlayerView.Materials = _materials;
             }
         }
-
 
         private void OnBecameStill()
         {
@@ -41,7 +37,6 @@ namespace Abilities
 
             _materials[0] = _originalBodyMaterial;
             _otherPlayerView.Materials = _materials;
-            Debug.Log(_otherPlayerView.Materials[0]);
 
             Destroy(_otherIceBlockOnCollision);
         }
