@@ -35,5 +35,17 @@ namespace Debugs
                 GameManager.CurrentTurnPlayer.Ability = new IceBlockAbility();
             });
         }
+
+        private void SetButtonInteractable(bool state)
+        {
+            expandAbility.interactable = state;
+            noGravityAbility.interactable = state;
+            iceBlockAbility.interactable = state;
+        }
+
+        private void Update()
+        {
+            SetButtonInteractable(GameManager.CurrentTurnPlayer != null);
+        }
     }
 }
