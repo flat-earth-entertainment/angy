@@ -285,7 +285,7 @@ namespace Logic
             }
             else
             {
-                Debug.LogWarning("Current player doesn't have an ability!");
+                Debug.LogWarning($"Player {_currentTurnPlayer.Nickname} doesn't have an ability!");
             }
         }
 
