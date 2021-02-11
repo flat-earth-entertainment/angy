@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -17,13 +19,42 @@ namespace Abilities
 
         public float Scale => GameConfig.Instance.AbilityValues.ExpandAbility.Scale;
 
+        private CancellationTokenSource _endOfTurn;
+        private PlayerView _player;
+        private Vector3 _initialScale;
+        private bool _deflated;
 
         public override async void InvokeAbility(PlayerView player)
         {
-            var initialScale = player.Ball.transform.localScale;
+            _endOfTurn = new CancellationTokenSource();
+            _player = player;
+            player.BecameStill += OnPlayerBecameStill;
+
+            _initialScale = player.Ball.transform.localScale;
             await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic).SetUpdate(true);
-            await UniTask.Delay(TimeSpan.FromSeconds(Duration), DelayType.UnscaledDeltaTime);
-            await player.Ball.transform.DOScale(initialScale, TimeToDeflate).SetUpdate(true);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(Duration), DelayType.UnscaledDeltaTime,
+                cancellationToken: _endOfTurn.Token).SuppressCancellationThrow();
+
+            await Deflate();
+
+            _deflated = true;
+        }
+
+        private async UniTask Deflate()
+        {
+            await _player.Ball.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(true);
+        }
+
+        private void OnPlayerBecameStill()
+        {
+            _player.BecameStill -= OnPlayerBecameStill;
+
+            if (!_deflated)
+            {
+                _endOfTurn.Cancel();
+                Deflate();
+            }
         }
     }
 }
