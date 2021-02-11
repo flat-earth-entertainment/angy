@@ -200,6 +200,7 @@ public class Shooter : MonoBehaviour{
         lemmingAnim.SetBool("isBall", true);
 
         // change spin and tilt goes here //
+        yield return StartCoroutine("CalculateSpin");
 
 
         // Power Goes Here //
@@ -213,11 +214,15 @@ public class Shooter : MonoBehaviour{
         DisableRetinae();
         active = false;
         
-        yield return true;
-        
+        // Wait 1 frame and Reset system
+        yield return null;
         forcePercent = 1;
         activateShootingRetinae = true;
         
+    }
+    private IEnumerator CalculateSpin(){
+        yield return null;
+
     }
     private IEnumerator CalculateShootForce(){
         float currentAngy = Mathf.Lerp(1,0.1f, (float) GameManager.CurrentTurnPlayer.Angy / GameConfig.Instance.AngyValues.MaxAngy);
