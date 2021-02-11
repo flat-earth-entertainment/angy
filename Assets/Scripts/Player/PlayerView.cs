@@ -9,6 +9,7 @@ using NaughtyAttributes;
 using Player;
 using Player.Input;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerView : MonoBehaviour
 {
@@ -110,6 +111,7 @@ public class PlayerView : MonoBehaviour
     private int _playerId;
     private int _angy;
     private Color _playerColor;
+    private BoneLookAt _boneLookAt;
 
     public void Predict()
     {
@@ -183,6 +185,7 @@ public class PlayerView : MonoBehaviour
 
         _ballBehaviour = _shooter.BallStorage.GetComponent<BallBehaviour>();
         _outOfBoundsCheck = _shooter.BallStorage.GetComponent<OutOfBoundsCheck>();
+        _boneLookAt = _shooter.BallStorage.GetComponentInChildren<BoneLookAt>();
     }
 
     private void OnEnable()
@@ -242,6 +245,11 @@ public class PlayerView : MonoBehaviour
     public void SetControlsActive(bool toggle)
     {
         _shooter.enabled = toggle;
+    }
+
+    public void SetLookAtTrajectory(bool state)
+    {
+        _boneLookAt.enabled = state;
     }
 
     public void SetBallPosition(Vector3 position)
