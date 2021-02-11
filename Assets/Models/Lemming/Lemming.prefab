@@ -444,6 +444,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2474745861943366858}
   - component: {fileID: 2725426827670473254}
+  - component: {fileID: 4862668091006839675}
   m_Layer: 0
   m_Name: Lemming
   m_TagString: Untagged
@@ -486,6 +487,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &4862668091006839675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2959921119587520112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a52fb28a101ec41afa9c32b39fc11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headTransform: {fileID: 665495113438056304}
+  target: {fileID: 0}
 --- !u!1 &3035333317232442252
 GameObject:
   m_ObjectHideFlags: 0
