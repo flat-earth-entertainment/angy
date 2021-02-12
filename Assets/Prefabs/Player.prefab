@@ -349,6 +349,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4629074905832054381}
     - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
+      propertyPath: power
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
       propertyPath: lemming
       value: 
       objectReference: {fileID: 8414885059241875502}
@@ -402,6 +406,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1314000643423763630, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4712823194654232124, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7319796037763302182, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
@@ -522,7 +530,8 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4862668091006839675, guid: de314a1a3947c6e42867e5712c545508, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: de314a1a3947c6e42867e5712c545508, type: 3}
 --- !u!4 &5107022567794977869 stripped
 Transform:

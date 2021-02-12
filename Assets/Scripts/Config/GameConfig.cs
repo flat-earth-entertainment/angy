@@ -1,5 +1,5 @@
-﻿using System.Data;
-using Abilities;
+﻿using System.Collections.Generic;
+using System.Data;
 using Map_Selection;
 using NaughtyAttributes;
 using Player;
@@ -57,6 +57,14 @@ namespace Config
         [field: SerializeField]
         public AbilityValues AbilityValues { get; private set; }
 
+        [field: SerializeField, BoxGroup("Technical")]
+        public GameObject AudioManager { get; private set; }
+
+        [field: SerializeField, Scene]
+        public List<string> PlayableMaps { get; private set; }
+
+        [field: SerializeField]
+        public ScenesSetup Scenes { get; private set; }
 
         private const string ConfigPath = "Game Config";
 

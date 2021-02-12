@@ -1,4 +1,5 @@
 ﻿using System;
+using Audio;
 using Config;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -18,6 +19,7 @@ namespace Abilities
         {
             _playerView = player;
 
+            AudioManager.PlaySfx(SfxType.IceBlockActivate);
             _playerView.BecameStill += OnBecameStill;
             _initialDrag = player.Drag;
             _playerView.Drag = GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.Drag;
@@ -31,6 +33,8 @@ namespace Abilities
 
         public void OnBecameStill()
         {
+            AudioManager.PlaySfx(SfxType.IceBlockDeactivate);
+
             _playerView.BecameStill -= OnBecameStill;
             _playerView.Drag = _initialDrag;
 

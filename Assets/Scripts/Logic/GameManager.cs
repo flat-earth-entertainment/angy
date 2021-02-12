@@ -6,10 +6,12 @@ using Ball.Objectives;
 using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Player;
 using Rewired;
 using UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utils;
 
 namespace Logic
@@ -67,6 +69,8 @@ namespace Logic
         private void OnEnable()
         {
             Hole.PlayerEnteredHole += OnPlayerEnteredHole;
+            Hole.PlayerLeftHole += OnPlayerLeftHole;
+
 
             _playersManager.InitializedAllPlayers += OnAllPlayersInitialized;
 
@@ -78,6 +82,7 @@ namespace Logic
         private void OnDisable()
         {
             Hole.PlayerEnteredHole -= OnPlayerEnteredHole;
+            Hole.PlayerLeftHole -= OnPlayerLeftHole;
 
             foreach (var player in _playersManager.Players)
             {
@@ -142,7 +147,22 @@ namespace Logic
             }
         }
 
+        private Tween _enteredHoleTimer;
+
         private void OnPlayerEnteredHole(PlayerView player)
+        {
+            _enteredHoleTimer = DOTween.Sequence()
+                .AppendInterval(.75f)
+                .OnComplete(delegate { OnPlayerConfirmedPresenceInHole(player); })
+                .SetUpdate(true);
+        }
+
+        private void OnPlayerLeftHole(PlayerView obj)
+        {
+            _enteredHoleTimer?.Kill(false);
+        }
+
+        private void OnPlayerConfirmedPresenceInHole(PlayerView player)
         {
             Time.timeScale = 0;
             var pointController = FindObjectOfType<PointController>();
@@ -164,6 +184,8 @@ namespace Logic
             }
 
             uiController.ShowWinScreen((winner, winnerPoints), others.ToArray());
+            CurrentGameSession.Leaderboard.Add(new MapScore(SceneManager.GetActiveScene().name, winnerPoints,
+                others[0].Item2));
         }
 
         private async void Start()
@@ -234,7 +256,7 @@ namespace Logic
                     _currentTurnPlayer.Predict();
 
                     _currentTurnPlayer.SetControlsActive(true);
-                    _currentTurnPlayer.SetLookAtTrajectory(true);
+                    // _currentTurnPlayer.SetLookAtTrajectory(true);
                     SetTrajectoryActive(true);
 
                     _currentTurnPlayer.Shot += OnPlayerShot;
@@ -268,7 +290,7 @@ namespace Logic
             _currentTurnPlayer.PlayerInputs.AbilityButtonPressed += OnAbilityButtonPressed;
 
             _currentTurnPlayer.SetControlsActive(false);
-            _currentTurnPlayer.SetLookAtTrajectory(false);
+            // _currentTurnPlayer.SetLookAtTrajectory(false);
             SetTrajectoryActive(false);
 
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
@@ -333,6 +355,16 @@ namespace Logic
                 uiController.SetCameraModeActive(false);
                 await _camerasController.BlendTo(_currentTurnPlayer.BallCamera, 0f);
             }
+        }
+
+        private void Update()
+        {
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                OnPlayerConfirmedPresenceInHole(null);
+            }
+#endif
         }
     }
 }

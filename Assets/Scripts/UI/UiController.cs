@@ -40,7 +40,7 @@ namespace UI
             angySlider.minValue = angySlider2.minValue = GameConfig.Instance.AngyValues.MinAngy;
             angySlider.maxValue = angySlider2.maxValue = GameConfig.Instance.AngyValues.MaxAngy;
 
-            restartButton.onClick.AddListener(OnRestartButtonClicked);
+            restartButton.onClick.AddListener(OnContinueButtonClicked);
 
             playersManager.InitializedAllPlayers += OnPlayersInitialized;
         }
@@ -63,11 +63,22 @@ namespace UI
         }
 
 
-        private async void OnRestartButtonClicked()
+        private async void OnContinueButtonClicked()
         {
             await SceneManager.UnloadSceneAsync("Prediction");
 
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            var currentMap = SceneManager.GetActiveScene().name;
+
+            if (!CurrentGameSession.IsLastMapInList(currentMap))
+            {
+                LeaderboardSceneUiController.SceneToLoad = CurrentGameSession.GetNextMap(currentMap);
+            }
+            else
+            {
+                LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.MainMenuScene;
+            }
+
+            SceneManager.LoadScene(GameConfig.Instance.Scenes.LeaderboardScene);
         }
 
         public void SetCameraModeActive(bool state)

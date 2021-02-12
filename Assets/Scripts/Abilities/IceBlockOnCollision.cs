@@ -1,4 +1,5 @@
-﻿using Config;
+﻿using Audio;
+using Config;
 using UnityEngine;
 
 namespace Abilities
@@ -15,6 +16,8 @@ namespace Abilities
         {
             if (other.collider.CompareTag("Lemming") && !other.transform.GetComponent<IceBlockOnCollision>())
             {
+                AudioManager.PlaySfx(SfxType.IceBlockActivate);
+
                 _initialDrag = other.rigidbody.drag;
                 other.rigidbody.drag = GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.Drag;
 
@@ -32,6 +35,8 @@ namespace Abilities
 
         private void OnBecameStill()
         {
+            AudioManager.PlaySfx(SfxType.IceBlockDeactivate);
+
             _otherPlayerView.BecameStill -= OnBecameStill;
             _otherPlayerView.Drag = _initialDrag;
 
