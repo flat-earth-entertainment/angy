@@ -23,11 +23,11 @@ public class Teleporter : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "Lemming" && teleportCooldown <= 0){
-            other.transform.position = teleportTarget.position;
+            other.transform.position = teleportTarget.GetComponentInChildren<Teleporter>().transform.position;
             if(directional){
-                other.gameObject.GetComponent<Rigidbody>().velocity = teleportTarget.forward * other.gameObject.GetComponent<Rigidbody>().velocity.magnitude;
+                other.gameObject.GetComponent<Rigidbody>().velocity = teleportTarget.GetComponentInChildren<Teleporter>().transform.forward * other.gameObject.GetComponent<Rigidbody>().velocity.magnitude;
             }
-            teleportTarget.GetComponentInChildren<Teleporter>().teleportCooldown = 0.1f;
+            teleportTarget.GetComponentInChildren<Teleporter>().teleportCooldown = 0.25f;
         }
     }
 }
