@@ -161,7 +161,8 @@ public class PlayerView : MonoBehaviour
         ball.GetComponent<Collider>().enabled = false;
         ball.useGravity = false;
 
-        if (DOTween.TweensByTarget(ball.transform).Count > 0)
+        var tweensByTarget = DOTween.TweensByTarget(ball.transform);
+        if (tweensByTarget != null && tweensByTarget.Count > 0)
         {
             Hide();
         }
