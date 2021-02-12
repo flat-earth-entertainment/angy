@@ -160,12 +160,20 @@ public class PlayerView : MonoBehaviour
         //TODO: Convert to proper animation
         ball.GetComponent<Collider>().enabled = false;
         ball.useGravity = false;
-        ball.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
+
+        if (DOTween.TweensByTarget(ball.transform).Count > 0)
         {
-            ball.GetComponent<Collider>().enabled = true;
-            ball.useGravity = true;
             Hide();
-        });
+        }
+        else
+        {
+            ball.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
+            {
+                ball.GetComponent<Collider>().enabled = true;
+                ball.useGravity = true;
+                Hide();
+            });
+        }
     }
 
     public void ShouldPlayerActivate(int playerId)
