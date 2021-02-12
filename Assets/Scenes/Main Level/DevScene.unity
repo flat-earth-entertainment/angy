@@ -12006,7 +12006,7 @@ MonoBehaviour:
   teleporters: []
   teleportToId: 0
   teleportCooldown: 0
-  directional: 0
+  directional: 1
 --- !u!1001 &789765352
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14830,6 +14830,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Teleporter
       objectReference: {fileID: 0}
+    - target: {fileID: 4301612780832114365, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
 --- !u!1001 &1002270482
@@ -15038,7 +15042,7 @@ MonoBehaviour:
   teleporters: []
   teleportToId: 1
   teleportCooldown: 0
-  directional: 0
+  directional: 1
 --- !u!1 &1017954770 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8641261531361634797, guid: 5674c40747dd91b41bccc4d9c43827d2, type: 3}
@@ -31766,6 +31770,10 @@ PrefabInstance:
     - target: {fileID: 4301612780832114365, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
       propertyPath: m_Name
       value: Teleporter (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4301612780832114365, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
