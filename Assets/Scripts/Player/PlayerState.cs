@@ -1,7 +1,8 @@
 public enum PlayerState
 {
-    ShouldSpawn,
-    ShouldSpawnCantMove,
+    ShouldSpawnFirstTime,
+    ShouldSpawnCanMove,
+    ShouldSpawnCanNotMove,
     ShouldMakeTurn,
     ActiveAiming,
     ActiveInMotion

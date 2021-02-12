@@ -137,7 +137,7 @@ namespace Logic
                 player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
             }
 
-            player.PlayerState = PlayerState.ShouldSpawn;
+            player.PlayerState = PlayerState.ShouldSpawnFirstTime;
 
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
@@ -215,11 +215,11 @@ namespace Logic
             //Decide where to move camera to
             switch (_currentTurnPlayer.PlayerState)
             {
-                case PlayerState.ShouldSpawn:
+                case PlayerState.ShouldSpawnFirstTime:
                     nextCamera = _spawnPointCamera;
                     break;
                 //TODO: Decide where should spawn in this case
-                case PlayerState.ShouldSpawnCantMove:
+                case PlayerState.ShouldSpawnCanNotMove:
                 case PlayerState.ShouldMakeTurn:
                     nextCamera = _currentTurnPlayer.BallCamera;
                     break;
@@ -227,10 +227,11 @@ namespace Logic
 
             await _camerasController.BlendTo(nextCamera, GameConfig.Instance.FlyToNextPlayerTime);
 
+            //Explode and skip turn if needed
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
             {
                 _currentTurnPlayer.ExplodeHideAndResetAngy();
-                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawn;
+                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnFirstTime;
                 MakeTurn();
                 return;
             }
@@ -238,7 +239,7 @@ namespace Logic
             //Actual loop
             switch (_currentTurnPlayer.PlayerState)
             {
-                case PlayerState.ShouldSpawnCantMove:
+                case PlayerState.ShouldSpawnCanNotMove:
                     await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
 
                     _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
@@ -246,9 +247,12 @@ namespace Logic
                     MakeTurn();
                     return;
 
-                case PlayerState.ShouldSpawn:
+                case PlayerState.ShouldSpawnFirstTime:
                     await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _spawnPoint.position);
+                    goto case PlayerState.ShouldMakeTurn;
 
+                case PlayerState.ShouldSpawnCanMove:
+                    await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
                     goto case PlayerState.ShouldMakeTurn;
 
                 case PlayerState.ShouldMakeTurn:
@@ -322,7 +326,7 @@ namespace Logic
             //If angy became full
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
             {
-                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnCantMove;
+                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnCanNotMove;
 
                 //TODO: Play explosion animation
                 _currentTurnPlayer.ExplodeHideAndResetAngy();
