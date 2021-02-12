@@ -303,6 +303,7 @@ namespace Logic
             if (_currentTurnPlayer.Ability != null)
             {
                 _currentTurnPlayer.Ability.InvokeAbility(_currentTurnPlayer);
+                _currentTurnPlayer.Ability = null;
             }
             else
             {
