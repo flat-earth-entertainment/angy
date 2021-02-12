@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class Teleporter : MonoBehaviour
 {
-    public List<Teleporter> teleporters;
-    public int teleportToId;
+    public Transform teleportTarget;
     [HideInInspector]
     public float teleportCooldown;
     public bool directional;
     // Start is called before the first frame update
     void Start()
     {
-        teleporters.AddRange(GameObject.FindObjectsOfType<Teleporter>());
+
     }
 
     // Update is called once per frame
@@ -24,11 +23,11 @@ public class Teleporter : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "Lemming" && teleportCooldown <= 0){
-            other.transform.position = teleporters[teleportToId].transform.position;
+            other.transform.position = teleportTarget.position;
             if(directional){
-                other.gameObject.GetComponent<Rigidbody>().velocity = teleporters[teleportToId].transform.forward * other.gameObject.GetComponent<Rigidbody>().velocity.magnitude;
+                other.gameObject.GetComponent<Rigidbody>().velocity = teleportTarget.forward * other.gameObject.GetComponent<Rigidbody>().velocity.magnitude;
             }
-            teleporters[teleportToId].teleportCooldown = 0.1f;
+            teleportTarget.GetComponentInChildren<Teleporter>().teleportCooldown = 0.1f;
         }
     }
 }

@@ -12003,8 +12003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce29050a37b5ce43b3433f244f67b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teleporters: []
-  teleportToId: 0
+  teleportTarget: {fileID: 2110641634}
   teleportCooldown: 0
   directional: 1
 --- !u!1001 &789765352
@@ -12445,6 +12444,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5674c40747dd91b41bccc4d9c43827d2, type: 3}
+--- !u!4 &813301899 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2319136698642692215, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
+  m_PrefabInstance: {fileID: 999157822}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &813398666
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15039,8 +15043,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce29050a37b5ce43b3433f244f67b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teleporters: []
-  teleportToId: 1
+  teleportTarget: {fileID: 813301899}
   teleportCooldown: 0
   directional: 1
 --- !u!1 &1017954770 stripped
@@ -31599,6 +31602,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5674c40747dd91b41bccc4d9c43827d2, type: 3}
+--- !u!4 &2110641634 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2319136698642692215, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
+  m_PrefabInstance: {fileID: 2119313015}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2110680941
 PrefabInstance:
   m_ObjectHideFlags: 0
