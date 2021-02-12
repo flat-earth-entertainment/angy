@@ -165,12 +165,11 @@ namespace Logic
         private void OnPlayerConfirmedPresenceInHole(PlayerView player)
         {
             Time.timeScale = 0;
-            var pointController = FindObjectOfType<PointController>();
 
-            var winnerPoints = pointController.pointIds.Max();
+            var points = FindObjectOfType<PointController>().GetPoints();
 
-            var winnerId = pointController.pointIds.IndexOf(winnerPoints);
-
+            var winnerPoints = points.Max();
+            var winnerId = points.IndexOf(winnerPoints);
             var winner = _playersManager.Players.First(p => p.PlayerId == winnerId);
 
             var others = new List<(PlayerView, int)>();
@@ -180,12 +179,14 @@ namespace Logic
                 if (i == winnerId)
                     continue;
 
-                others.Add((_playersManager.Players.First(p => p.PlayerId == i), pointController.pointIds[i]));
+                others.Add((_playersManager.Players.First(p => p.PlayerId == i), points[i]));
             }
 
             uiController.ShowWinScreen((winner, winnerPoints), others.ToArray());
-            CurrentGameSession.Leaderboard.Add(new MapScore(SceneManager.GetActiveScene().name, winnerPoints,
-                others[0].Item2));
+
+
+            CurrentGameSession.Leaderboard
+                .Add(new MapScore(SceneManager.GetActiveScene().name, points[0], points[1]));
         }
 
         private async void Start()
