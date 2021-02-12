@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Audio;
 using Config;
 using Logic;
 using UnityEngine;
@@ -33,6 +34,10 @@ public class GoodNeutralMushroom : MonoBehaviour
     void Trigger(Collider other){
         if(other.tag == "Lemming"){
             int hitId = other.transform.GetChild(0).GetComponent<Shooter>().playerId;
+            if (ownerId != hitId)
+            {
+                AudioManager.PlaySfx(SfxType.PointReclaimed);
+            }
             ownerId = hitId;
             if(point != null){
                  
@@ -41,6 +46,7 @@ public class GoodNeutralMushroom : MonoBehaviour
                 GetComponent<Renderer>().enabled = false;
                 splatter.Play(true);
                 point = Instantiate(fruit[0], transform.position + new Vector3(0,1f,0), Quaternion.identity);
+                AudioManager.PlaySfx(SfxType.MushroomHit);
 
                 if(mushroomDropAbility == AbilitySelect.none){
 
@@ -75,6 +81,7 @@ public class GoodNeutralMushroom : MonoBehaviour
             print($"HIT {hitObject.name} {LayerMask.LayerToName(hitObject.layer)}");
             Instantiate(goal, hitObject.transform.position, Quaternion.identity);
             BecameHole?.Invoke(hitObject);
+            AudioManager.PlaySfx(SfxType.HoleAppeared);
             Destroy(hitObject);
         }
         GetComponent<Renderer>().enabled = false;

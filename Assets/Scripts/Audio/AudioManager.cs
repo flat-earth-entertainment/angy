@@ -47,13 +47,31 @@ namespace Audio
         private AudioSource sfxSource;
 
         [SerializeField]
+        private AudioSource tapSource;
+
+        [SerializeField]
         private AudioMixerGroup audioMixer;
 
         public static void PlaySfx(SfxType sfxType)
         {
-            var clip = Instance.sfxPresets.FirstOrDefault(p => p.SfxType == sfxType);
+            var sfxPreset = Instance.sfxPresets.FirstOrDefault(p => p.SfxType == sfxType);
 
-            if (clip != null) Instance.sfxSource.PlayOneShot(clip.RandomClip);
+            if (sfxPreset != null)
+            {
+                var clip = sfxPreset.RandomClip;
+
+                if (clip != null && !clip.Equals(null))
+                {
+                    switch (sfxType)
+                    {
+                        case SfxType.LemmingRotate:
+                            _instance.tapSource.PlayOneShot(clip);
+                            return;
+                    }
+
+                    Instance.sfxSource.PlayOneShot(clip);
+                }
+            }
         }
 
         public void DoLowPass(float fadeInDuration = 2f)

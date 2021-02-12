@@ -1,4 +1,5 @@
 using System;
+using NaughtyAttributes;
 using UnityEngine;
 using Utils;
 
@@ -11,8 +12,39 @@ namespace Audio
         public SfxType SfxType { get; private set; }
 
         [field: SerializeField]
-        public AudioClip[] Clips { get; private set; }
+        private AudioClip[] Clips { get; set; }
 
-        public AudioClip RandomClip => Clips.RandomElement();
+        [SerializeField]
+        private bool limitFrequency;
+
+        [SerializeField]
+        private float minimumInterval;
+
+        private float _frequencyTimer;
+        private float _previousTime;
+
+        public AudioClip RandomClip
+        {
+            get
+            {
+                if (limitFrequency)
+                {
+                    if (_frequencyTimer < minimumInterval * 2f)
+                        _frequencyTimer += Time.unscaledTime - _previousTime;
+
+                    _previousTime = Time.unscaledTime;
+
+                    if (_frequencyTimer >= minimumInterval)
+                    {
+                        _frequencyTimer = 0f;
+                        return Clips.RandomElement();
+                    }
+
+                    return null;
+                }
+
+                return Clips.RandomElement();
+            }
+        }
     }
 }

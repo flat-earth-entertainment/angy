@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -31,6 +32,9 @@ namespace Abilities
             player.BecameStill += OnPlayerBecameStill;
 
             _initialScale = player.Ball.transform.localScale;
+
+            AudioManager.PlaySfx(SfxType.ExpandActivate);
+
             await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic)
                 .SetUpdate(UpdateType.Fixed);
 
@@ -44,6 +48,7 @@ namespace Abilities
 
         private async UniTask Deflate()
         {
+            AudioManager.PlaySfx(SfxType.ExpandDeactivate);
             await _player.Ball.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(UpdateType.Fixed);
         }
 

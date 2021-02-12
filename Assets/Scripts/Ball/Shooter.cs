@@ -130,6 +130,7 @@ public class Shooter : MonoBehaviour{
                     horSnapCooldownTimer = snapCooldown;
                     movedRet = true;
                     lemmingAnim.SetBool("isRot", true);
+                    AudioManager.PlaySfx(SfxType.LemmingRotate);
                 }
                 else
                 {
@@ -139,11 +140,14 @@ public class Shooter : MonoBehaviour{
                     horSnap -= greatSnapAngle / horSnapAngle;
                     horSnapCooldownTimer = snapCooldown;
                     movedRet = true;
+                    AudioManager.PlaySfx(SfxType.LemmingRotate);
+
                 }
                 if(rewiredPlayer.GetButtonDown("SnapRight")){
                     horSnap += greatSnapAngle / horSnapAngle;
                     horSnapCooldownTimer = snapCooldown;
                     movedRet = true;
+                    AudioManager.PlaySfx(SfxType.LemmingRotate);
                 }
             }else{
                 horSnapCooldownTimer -= Time.deltaTime;
@@ -197,6 +201,7 @@ public class Shooter : MonoBehaviour{
         }
 
         AudioManager.PlaySfx(SfxType.LemmingLaunch);
+        AudioManager.PlaySfx(SfxType.LemmingLaunchVoice);
     }
     public Vector3 calculateForce(){
         return transform.forward * power * forcePercent;
