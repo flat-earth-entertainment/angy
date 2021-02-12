@@ -234,7 +234,7 @@ namespace Logic
                     _currentTurnPlayer.Predict();
 
                     _currentTurnPlayer.SetControlsActive(true);
-                    _currentTurnPlayer.SetLookAtTrajectory(true);
+                    // _currentTurnPlayer.SetLookAtTrajectory(true);
                     SetTrajectoryActive(true);
 
                     _currentTurnPlayer.Shot += OnPlayerShot;
@@ -268,7 +268,7 @@ namespace Logic
             _currentTurnPlayer.PlayerInputs.AbilityButtonPressed += OnAbilityButtonPressed;
 
             _currentTurnPlayer.SetControlsActive(false);
-            _currentTurnPlayer.SetLookAtTrajectory(false);
+            // _currentTurnPlayer.SetLookAtTrajectory(false);
             SetTrajectoryActive(false);
 
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
