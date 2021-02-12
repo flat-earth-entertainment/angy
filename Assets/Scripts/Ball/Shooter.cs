@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Rewired;
 using Logic;
 using Config;
+using Audio;
 
 public class Shooter : MonoBehaviour{
 
@@ -54,7 +55,9 @@ public class Shooter : MonoBehaviour{
     private int vertSnapMultiplier = 1, horSnapMultiplier = 1;
     // Rotation cooldown modifier end
     // Ball Spin
-    private Vector3 spinDirection = new Vector3(0,0,0);
+    public Vector3 spinDirection = new Vector3(0,0,0);
+    public float spinIncrement = 0.2f;
+    private Transform spinIndicator;
 
     // \/ \/ \/ REMOVE, ONLY FOR TESTING \/ \/ \/
     // /\ /\ /\ REMOVE, ONLY FOR TESTING /\ /\ /\
@@ -83,6 +86,7 @@ public class Shooter : MonoBehaviour{
 
         // MUST BE IMPROVED
         powerSlider = GameObject.FindGameObjectWithTag("TEMPFINDSLIDER").transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+        spinIndicator = powerSlider.transform.parent.GetChild(6).GetChild(2).GetChild(0).transform;
 
         lemmingAnim = lemming.GetComponentInChildren<Animator>();
         
@@ -191,6 +195,8 @@ public class Shooter : MonoBehaviour{
         if(spinDirection.magnitude > 0){
             StartCoroutine(ballStorage.GetComponent<BallBehaviour>().BallSpin(spinDirection));
         }
+
+        AudioManager.PlaySfx(SfxType.LemmingLaunch);
     }
     public Vector3 calculateForce(){
         return transform.forward * power * forcePercent;
@@ -200,11 +206,11 @@ public class Shooter : MonoBehaviour{
         lemmingAnim.SetBool("isBall", true);
 
         // change spin and tilt goes here //
-        yield return StartCoroutine("CalculateSpin");
+        powerSlider.transform.parent.gameObject.SetActive(true);
+        //yield return StartCoroutine("CalculateSpin");
 
 
         // Power Goes Here //
-        powerSlider.transform.parent.gameObject.SetActive(true);
         yield return StartCoroutine("CalculateShootForce");
         powerSlider.transform.parent.gameObject.SetActive(false);
         // Power Ends Here //
@@ -222,7 +228,36 @@ public class Shooter : MonoBehaviour{
     }
     private IEnumerator CalculateSpin(){
         yield return null;
-
+        float timer = 0.2f;
+        while (!rewiredPlayer.GetButtonDown("Confirm")){
+            float horizontal = rewiredPlayer.GetAxis("Move Horizontal");
+            float vertical = rewiredPlayer.GetAxis("Move Vertical");
+            if(timer > 0.2f){
+                if(Mathf.Abs(horizontal) > 0){
+                    spinDirection.x += PositiveOrNegative(horizontal) * spinIncrement;
+                    timer = 0;
+                    if(spinDirection.x > 1){
+                        spinDirection.x = 1;
+                    }
+                    if(spinDirection.x < -1){
+                        spinDirection.x = -1;
+                    }
+                }
+                if(Mathf.Abs(vertical) > 0){
+                    spinDirection.z += PositiveOrNegative(vertical) * spinIncrement;
+                    timer = 0;
+                    if(spinDirection.z > 1){
+                        spinDirection.z = 1;
+                    }
+                    if(spinDirection.z < -1){
+                        spinDirection.z = -1;
+                    }
+                }
+                    spinIndicator.localPosition = new Vector3(spinDirection.x,spinDirection.z,0);
+            }
+            timer += Time.deltaTime;
+            yield return null;
+        }
     }
     private IEnumerator CalculateShootForce(){
         float currentAngy = Mathf.Lerp(1,0.1f, (float) GameManager.CurrentTurnPlayer.Angy / GameConfig.Instance.AngyValues.MaxAngy);
