@@ -8,6 +8,22 @@ using Utils;
 
 namespace Audio
 {
+#if UNITY_EDITOR
+    public static class SelfLoader
+    {
+        [UnityEditor.InitializeOnEnterPlayMode]
+        private static void SelfInstantiate()
+        {
+            UnityEditor.SceneManagement.EditorSceneManager.sceneLoaded += delegate
+            {
+                if (AudioManager.Instance)
+                {
+                }
+            };
+        }
+    }
+#endif
+
     public class AudioManager : MonoBehaviour
     {
         private const string LowPassParameter = "LowPassFrequency";
