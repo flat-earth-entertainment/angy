@@ -300,9 +300,6 @@ namespace Logic
 
         private void OnAbilityButtonPressed()
         {
-            _currentTurnPlayer.PlayerInputs.AbilityButtonPressed -= OnAbilityButtonPressed;
-
-
             if (_currentTurnPlayer.Ability != null)
             {
                 _currentTurnPlayer.Ability.InvokeAbility(_currentTurnPlayer);
