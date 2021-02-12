@@ -67,7 +67,7 @@ namespace UI
         {
             await SceneManager.UnloadSceneAsync("Prediction");
 
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(CurrentGameSession.GetNextMap(SceneManager.GetActiveScene().name));
         }
 
         public void SetCameraModeActive(bool state)

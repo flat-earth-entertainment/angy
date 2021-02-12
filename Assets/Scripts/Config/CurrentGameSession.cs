@@ -2,6 +2,12 @@ namespace Config
 {
     public static class CurrentGameSession
     {
+        public static string GetNextMap(string currentMap)
+        {
+            var maps = GameConfig.Instance.PlayableMaps;
+            return maps[(maps.IndexOf(currentMap) + 1) % maps.Count];
+        }
+
         public static string ChosenMap
         {
             get

@@ -1,4 +1,6 @@
 ﻿using System.Data;
+﻿using System.Collections.Generic;
+using System.Data;
 using Abilities;
 using Map_Selection;
 using NaughtyAttributes;
@@ -57,6 +59,9 @@ namespace Config
         [field: SerializeField]
         public AbilityValues AbilityValues { get; private set; }
 
+
+        [field: SerializeField, Scene]
+        public List<string> PlayableMaps { get; private set; }
 
         private const string ConfigPath = "Game Config";
 
