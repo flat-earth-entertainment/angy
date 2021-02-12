@@ -31,7 +31,8 @@ namespace Abilities
             player.BecameStill += OnPlayerBecameStill;
 
             _initialScale = player.Ball.transform.localScale;
-            await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic).SetUpdate(true);
+            await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic)
+                .SetUpdate(UpdateType.Fixed);
 
             await UniTask.Delay(TimeSpan.FromSeconds(Duration), DelayType.UnscaledDeltaTime,
                 cancellationToken: _endOfTurn.Token).SuppressCancellationThrow();
@@ -43,7 +44,7 @@ namespace Abilities
 
         private async UniTask Deflate()
         {
-            await _player.Ball.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(true);
+            await _player.Ball.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(UpdateType.Fixed);
         }
 
         private void OnPlayerBecameStill()
