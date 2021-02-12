@@ -15,6 +15,8 @@ public class GoodNeutralMushroom : MonoBehaviour
     private PointController pointController;
     public ParticleSystem splatter;
     public Material baseFruitMat, baseFruitTopMat;
+    public enum AbilitySelect{none,IceBlockAbility,ExpandAbility,NoGravityAbility}
+    public AbilitySelect mushroomDropAbility;
     // Owner Id 99 refers to no ownership, shouldn't be a problem unless we want 100 players.
     public int ownerId = 99, pointValue = 1;
     private void Start() {
@@ -39,6 +41,17 @@ public class GoodNeutralMushroom : MonoBehaviour
                 GetComponent<Renderer>().enabled = false;
                 splatter.Play(true);
                 point = Instantiate(fruit[0], transform.position + new Vector3(0,1f,0), Quaternion.identity);
+
+                if(mushroomDropAbility == AbilitySelect.none){
+
+                }else if(mushroomDropAbility == AbilitySelect.IceBlockAbility){
+                    other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability = new Abilities.IceBlockAbility();
+                }else if(mushroomDropAbility == AbilitySelect.NoGravityAbility){
+                    other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability = new Abilities.NoGravityAbility();
+                }else if(mushroomDropAbility == AbilitySelect.ExpandAbility){
+                    other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability = new Abilities.ExpandAbility();
+                }
+                
             }
             pointController.UpdateScore();
             if(!point.GetComponent<Renderer>()){
