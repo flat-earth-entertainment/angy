@@ -310,10 +310,6 @@ namespace Logic
                 _currentTurnPlayer.Ability.InvokeAbility(_currentTurnPlayer);
                 _currentTurnPlayer.Ability = null;
             }
-            else
-            {
-                Debug.LogWarning($"Player {_currentTurnPlayer.Nickname} doesn't have an ability!");
-            }
         }
 
         private async void OnCurrentPlayerBecameStill()
