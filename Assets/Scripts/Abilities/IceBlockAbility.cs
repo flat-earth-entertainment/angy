@@ -17,13 +17,17 @@ namespace Abilities
 
         public override void InvokeAbility(PlayerView player)
         {
+            AudioManager.PlaySfx(SfxType.IceBlockActivate);
+            
             _playerView = player;
 
-            AudioManager.PlaySfx(SfxType.IceBlockActivate);
             _playerView.BecameStill += OnBecameStill;
+            
             _initialDrag = player.Drag;
             _playerView.Drag = GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.Drag;
+            
             _otherIceBlockOnCollision = _playerView.Ball.AddComponent<IceBlockOnCollision>();
+            
             //TODO: Replace model/Play animation
             _materials = _playerView.Materials;
             _originalBodyMaterial = _materials[0];
@@ -36,6 +40,7 @@ namespace Abilities
             AudioManager.PlaySfx(SfxType.IceBlockDeactivate);
 
             _playerView.BecameStill -= OnBecameStill;
+            
             _playerView.Drag = _initialDrag;
 
             _materials[0] = _originalBodyMaterial;
