@@ -11,6 +11,7 @@ using Player;
 using Rewired;
 using UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Utils;
 
 namespace Logic
@@ -183,6 +184,8 @@ namespace Logic
             }
 
             uiController.ShowWinScreen((winner, winnerPoints), others.ToArray());
+            CurrentGameSession.Leaderboard.Add(new MapScore(SceneManager.GetActiveScene().name, winnerPoints,
+                others[0].Item2));
         }
 
         private async void Start()
@@ -352,6 +355,16 @@ namespace Logic
                 uiController.SetCameraModeActive(false);
                 await _camerasController.BlendTo(_currentTurnPlayer.BallCamera, 0f);
             }
+        }
+
+        private void Update()
+        {
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                OnPlayerConfirmedPresenceInHole(null);
+            }
+#endif
         }
     }
 }

@@ -61,6 +61,9 @@ namespace Config
         [field: SerializeField, Scene]
         public List<string> PlayableMaps { get; private set; }
 
+        [field: SerializeField]
+        public ScenesSetup Scenes { get; private set; }
+
         private const string ConfigPath = "Game Config";
 
         public static GameConfig Instance
