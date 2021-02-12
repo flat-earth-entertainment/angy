@@ -6,6 +6,7 @@ using Ball.Objectives;
 using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Player;
 using Rewired;
 using UI;
@@ -67,6 +68,8 @@ namespace Logic
         private void OnEnable()
         {
             Hole.PlayerEnteredHole += OnPlayerEnteredHole;
+            Hole.PlayerLeftHole += OnPlayerLeftHole;
+
 
             _playersManager.InitializedAllPlayers += OnAllPlayersInitialized;
 
@@ -78,6 +81,7 @@ namespace Logic
         private void OnDisable()
         {
             Hole.PlayerEnteredHole -= OnPlayerEnteredHole;
+            Hole.PlayerLeftHole -= OnPlayerLeftHole;
 
             foreach (var player in _playersManager.Players)
             {
@@ -142,7 +146,22 @@ namespace Logic
             }
         }
 
+        private Tween _enteredHoleTimer;
+
         private void OnPlayerEnteredHole(PlayerView player)
+        {
+            _enteredHoleTimer = DOTween.Sequence()
+                .AppendInterval(.75f)
+                .OnComplete(delegate { OnPlayerConfirmedPresenceInHole(player); })
+                .SetUpdate(true);
+        }
+
+        private void OnPlayerLeftHole(PlayerView obj)
+        {
+            _enteredHoleTimer?.Kill(false);
+        }
+
+        private void OnPlayerConfirmedPresenceInHole(PlayerView player)
         {
             Time.timeScale = 0;
             var pointController = FindObjectOfType<PointController>();
