@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace Utils
 {
@@ -15,6 +17,20 @@ namespace Utils
             }
 
             return foundObject;
+        }
+
+        /// <summary>
+        /// Returns a random element from the given collection.
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException">Thrown if the collection is empty.</exception>
+        public static T RandomElement<T>(this IEnumerable<T> collection)
+        {
+            var count = collection.Count();
+
+            if (count < 2)
+                return collection.First();
+
+            return collection.ElementAt(Random.Range(0, count));
         }
     }
 }
