@@ -53,7 +53,9 @@ namespace Abilities
             if (!_deflated)
             {
                 _endOfTurn.Cancel();
+#pragma warning disable CS4014
                 Deflate();
+#pragma warning restore CS4014
             }
         }
     }
