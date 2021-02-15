@@ -17,6 +17,10 @@ namespace UI
         [SerializeField]
         private Button optionsButton;
 
+        [Scene]
+        [SerializeField]
+        private string optionsScene;
+
         [SerializeField]
         private Button creditsButton;
 
@@ -32,6 +36,8 @@ namespace UI
             startButton.onClick.AddListener(delegate { SceneManager.LoadScene(startScene); });
 
             creditsButton.onClick.AddListener(delegate { SceneManager.LoadScene(creditsScene); });
+
+            optionsButton.onClick.AddListener(delegate { SceneManager.LoadScene(optionsScene); });
 
             exitButton.onClick.AddListener(Application.Quit);
         }
