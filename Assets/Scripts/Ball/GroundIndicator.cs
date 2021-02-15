@@ -8,7 +8,7 @@ public class GroundIndicator : MonoBehaviour
     [HideInInspector]
     public GameObject spawnedIndicator;
     private int timer;
-    private bool isPlayer;
+    public bool isPlayer;
     void OnCollisionEnter(Collision collision){
         
         if(timer == 1 && !isPlayer){
