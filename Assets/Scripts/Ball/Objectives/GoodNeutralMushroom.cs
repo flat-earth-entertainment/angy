@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Audio;
 using Config;
 using Logic;
+using Player;
 using UnityEngine;
 
 public class GoodNeutralMushroom : MonoBehaviour
@@ -47,6 +48,7 @@ public class GoodNeutralMushroom : MonoBehaviour
                 splatter.Play(true);
                 point = Instantiate(fruit[0], transform.position + new Vector3(0,1f,0), Quaternion.identity);
                 AudioManager.PlaySfx(SfxType.MushroomHit);
+                other.transform.parent.GetComponent<PlayerView>().AlterAngy(AngyEvent.MushroomHit);
 
                 if(mushroomDropAbility == AbilitySelect.none){
 

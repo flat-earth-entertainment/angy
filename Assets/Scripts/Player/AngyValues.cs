@@ -29,5 +29,8 @@ namespace Player
 
         [field: SerializeField]
         public int PlayerGotHit { get; private set; }
+
+        [field: SerializeField]
+        public int MushroomHit { get; private set; }
     }
 }

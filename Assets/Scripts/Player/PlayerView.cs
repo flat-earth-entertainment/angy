@@ -153,6 +153,9 @@ public class PlayerView : MonoBehaviour
             case AngyEvent.GotHit:
                 Angy += GameConfig.Instance.AngyValues.PlayerGotHit;
                 break;
+            case AngyEvent.MushroomHit:
+                Angy -= GameConfig.Instance.AngyValues.MushroomHit;
+                break;
         }
     }
 

@@ -7,6 +7,7 @@ namespace Player
         AfterFellOutOfTheMapAndReachedMaxAngy,
         ShotMade,
         HitSomeone,
-        GotHit
+        GotHit,
+        MushroomHit
     }
 }
