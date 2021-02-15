@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8365493346235312384}
   - component: {fileID: -5632628007550634790}
   - component: {fileID: 8217169897652553532}
+  - component: {fileID: 4514702531311316250}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Lemming
@@ -153,3 +154,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6aeebd5c84554d1eb3cba0e6d016c839, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4514702531311316250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6734545923583936600}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c0b85e32c069e340b4cf289a1ec1735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitIndicator: {fileID: 3237909556963912532, guid: df840b357490615438bef8f173510635, type: 3}

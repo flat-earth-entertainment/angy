@@ -17,6 +17,7 @@ public class PredictionManager : Singleton<PredictionManager>{
 
     LineRenderer lineRenderer;
     GameObject dummy;
+    GameObject indicatorHolder;
 
     void Start(){
         Physics.autoSimulation = false;
@@ -61,6 +62,9 @@ public class PredictionManager : Singleton<PredictionManager>{
     }
 
     public void predict(GameObject subject, Vector3 currentPosition, Vector3 force){
+        if(indicatorHolder != null){
+            Destroy(indicatorHolder);
+        }
         if (currentPhysicsScene.IsValid() && predictionPhysicsScene.IsValid()){
             if(dummy == null){
                 dummy = Instantiate(subject);
@@ -77,7 +81,8 @@ public class PredictionManager : Singleton<PredictionManager>{
                 predictionPhysicsScene.Simulate(Time.fixedDeltaTime * 2);
                 lineRenderer.SetPosition(i, dummy.transform.position);
             }
-
+            indicatorHolder = dummy.GetComponent<GroundIndicator>().spawnedIndicator;
+            
             Destroy(dummy);
         }
     }
