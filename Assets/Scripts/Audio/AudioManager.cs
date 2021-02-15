@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Config;
 using Cysharp.Threading.Tasks;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Audio;
 using Utils;
@@ -26,8 +28,6 @@ namespace Audio
 
     public class AudioManager : MonoBehaviour
     {
-        private const string LowPassParameter = "LowPassFrequency";
-
         [SerializeField]
         private SfxPreset[] sfxPresets;
 
@@ -50,7 +50,54 @@ namespace Audio
         private AudioSource tapSource;
 
         [SerializeField]
-        private AudioMixerGroup audioMixer;
+        private AudioMixer masterMixer;
+
+        private readonly Dictionary<GameSettings.Settings, MixerBand> MixerBands =
+            new Dictionary<GameSettings.Settings, MixerBand>();
+
+        private class MixerBand
+        {
+            private const float MinVolumeValueZeroOne = 0.0001f;
+            private readonly float _maxVolumeValueZeroOne;
+
+            private string BandName { get; }
+
+            private AudioMixer Mixer { get; }
+
+            public MixerBand(string bandName, AudioMixer mixer)
+            {
+                BandName = bandName;
+                Mixer = mixer;
+                mixer.GetFloat(bandName, out _maxVolumeValueZeroOne);
+                _maxVolumeValueZeroOne = DbToZeroOne(_maxVolumeValueZeroOne);
+            }
+
+            public void SetVolume(float volume)
+            {
+                volume = ZeroOneToDb(LinearRemap(volume, 0, 1,
+                    MinVolumeValueZeroOne, _maxVolumeValueZeroOne));
+
+                Mixer?.SetFloat(BandName, volume);
+            }
+
+            private static float DbToZeroOne(float db)
+            {
+                return Mathf.Pow(10, db / 20);
+            }
+
+            private static float ZeroOneToDb(float value)
+            {
+                return Mathf.Log10(value) * 20;
+            }
+
+            private static float LinearRemap(float value,
+                float valueRangeMin, float valueRangeMax,
+                float newRangeMin, float newRangeMax)
+            {
+                return (value - valueRangeMin) / (valueRangeMax - valueRangeMin) * (newRangeMax - newRangeMin) +
+                       newRangeMin;
+            }
+        }
 
         public static void PlaySfx(SfxType sfxType)
         {
@@ -95,6 +142,24 @@ namespace Audio
             PlayNextMusic();
         }
 
+        private static void OnVolumeChanged(GameSettings.Settings setting, float newValue)
+        {
+            if (Instance.MixerBands.ContainsKey(setting))
+            {
+                Instance.MixerBands[setting].SetVolume(newValue);
+            }
+        }
+
+        private void OnEnable()
+        {
+            GameSettings.FloatChanged += OnVolumeChanged;
+        }
+
+        private void OnDisable()
+        {
+            GameSettings.FloatChanged -= OnVolumeChanged;
+        }
+
         private void Start()
         {
             PlayNextMusic();
@@ -103,6 +168,15 @@ namespace Audio
         private void Awake()
         {
             DontDestroyOnLoad(gameObject);
+
+            MixerBands.Add(GameSettings.Settings.MasterVolume, new MixerBand("MasterVolume", masterMixer));
+            MixerBands.Add(GameSettings.Settings.MusicVolume, new MixerBand("MusicVolume", masterMixer));
+            MixerBands.Add(GameSettings.Settings.SfxVolume, new MixerBand("SfxVolume", masterMixer));
+
+            foreach (var mixerBand in MixerBands)
+            {
+                mixerBand.Value.SetVolume(GameSettings.GetFloat(mixerBand.Key));
+            }
         }
 
         public static AudioManager Instance

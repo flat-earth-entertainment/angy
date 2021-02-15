@@ -27,6 +27,7 @@ namespace Logic
         private UiController uiController;
 
         private static PlayerView _currentTurnPlayer;
+        private PlayerView _playerInOptions;
         private CinemachineVirtualCamera _levelOverviewCamera;
         private CinemachineVirtualCamera _spawnPointCamera;
         private Transform _spawnPoint;
@@ -34,7 +35,6 @@ namespace Logic
         private VirtualCamerasController _camerasController;
         private PanController _panController;
         private bool _isInMapOverview;
-
 
         private void Awake()
         {
@@ -64,19 +64,32 @@ namespace Logic
 
 
             uiController.HideAllUi();
+
+            OptionsController.BackButtonClicked = OptionsController.Hide;
         }
+
+        private async void Start()
+        {
+            await _camerasController.BlendTo(_levelOverviewCamera, GameConfig.Instance.LevelOverviewTime);
+
+            await _camerasController.BlendTo(_spawnPointCamera, 2f);
+
+            MakeTurn();
+        }
+
 
         private void OnEnable()
         {
             Hole.PlayerEnteredHole += OnPlayerEnteredHole;
             Hole.PlayerLeftHole += OnPlayerLeftHole;
 
-
             _playersManager.InitializedAllPlayers += OnAllPlayersInitialized;
 
             HitOtherPlayerTrigger.PlayerHit += OnPlayerGotHit;
 
             GoodNeutralMushroom.BecameHole += OnHoleAppeared;
+
+            PlayerView.OptionsMenuRequested += OnOptionsMenuOpenRequested;
         }
 
         private void OnDisable()
@@ -91,6 +104,57 @@ namespace Logic
 
             HitOtherPlayerTrigger.PlayerHit -= OnPlayerGotHit;
             GoodNeutralMushroom.BecameHole -= OnHoleAppeared;
+
+            PlayerView.OptionsMenuRequested -= OnOptionsMenuOpenRequested;
+        }
+
+
+        private void OnOptionsMenuOpenRequested(PlayerView caller)
+        {
+            if (_playerInOptions == null)
+            {
+                caller.PlayerInputs.MenuButtonPressed += OnOptionsMenuCloseRequested;
+                OptionsController.Show();
+                Time.timeScale = 0f;
+                _playerInOptions = caller;
+
+                if (_currentTurnPlayer == caller)
+                {
+                    switch (_currentTurnPlayer.PlayerState)
+                    {
+                        case PlayerState.ActiveAiming:
+                            UnsubscribeFromPreShotEvents(_currentTurnPlayer);
+                            break;
+                        case PlayerState.ActiveInMotion:
+                            UnsubscribeFromPreStillEvents(_currentTurnPlayer);
+                            break;
+                    }
+                }
+            }
+        }
+
+        private async void OnOptionsMenuCloseRequested()
+        {
+            _playerInOptions.PlayerInputs.MenuButtonPressed -= OnOptionsMenuCloseRequested;
+
+            OptionsController.Hide();
+            Time.timeScale = GameConfig.Instance.TimeScale;
+
+            if (_currentTurnPlayer == _playerInOptions)
+            {
+                switch (_currentTurnPlayer.PlayerState)
+                {
+                    case PlayerState.ActiveAiming:
+                        SubscribeToPreShotEvents(_currentTurnPlayer);
+                        break;
+                    case PlayerState.ActiveInMotion:
+                        SubscribeToPreStillEvents(_currentTurnPlayer);
+                        break;
+                }
+            }
+
+            await UniTask.Delay(TimeSpan.FromMilliseconds(100));
+            _playerInOptions = null;
         }
 
         private async void OnHoleAppeared(GameObject obj)
@@ -137,7 +201,7 @@ namespace Logic
                 player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
             }
 
-            player.PlayerState = PlayerState.ShouldSpawnFirstTime;
+            player.PlayerState = PlayerState.ShouldSpawnAtSpawn;
 
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
@@ -189,15 +253,6 @@ namespace Logic
                 .Add(new MapScore(SceneManager.GetActiveScene().name, points[0], points[1]));
         }
 
-        private async void Start()
-        {
-            await _camerasController.BlendTo(_levelOverviewCamera, GameConfig.Instance.LevelOverviewTime);
-
-            await _camerasController.BlendTo(_spawnPointCamera, 2f);
-
-            MakeTurn();
-        }
-
         private void SetTrajectoryActive(bool state)
         {
             lineRenderer.enabled = state;
@@ -215,7 +270,7 @@ namespace Logic
             //Decide where to move camera to
             switch (_currentTurnPlayer.PlayerState)
             {
-                case PlayerState.ShouldSpawnFirstTime:
+                case PlayerState.ShouldSpawnAtSpawn:
                     nextCamera = _spawnPointCamera;
                     break;
                 //TODO: Decide where should spawn in this case
@@ -231,7 +286,7 @@ namespace Logic
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
             {
                 _currentTurnPlayer.ExplodeHideAndResetAngy();
-                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnFirstTime;
+                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnAtSpawn;
                 MakeTurn();
                 return;
             }
@@ -247,11 +302,11 @@ namespace Logic
                     MakeTurn();
                     return;
 
-                case PlayerState.ShouldSpawnFirstTime:
+                case PlayerState.ShouldSpawnAtSpawn:
                     await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _spawnPoint.position);
                     goto case PlayerState.ShouldMakeTurn;
 
-                case PlayerState.ShouldSpawnCanMove:
+                case PlayerState.ShouldSpawnAtLastPosition:
                     await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
                     goto case PlayerState.ShouldMakeTurn;
 
@@ -264,12 +319,23 @@ namespace Logic
                     // _currentTurnPlayer.SetLookAtTrajectory(true);
                     SetTrajectoryActive(true);
 
-                    _currentTurnPlayer.Shot += OnPlayerShot;
-                    _currentTurnPlayer.PlayerInputs.MapViewButtonPressed += OnMapButtonPressed;
+                    SubscribeToPreShotEvents(_currentTurnPlayer);
 
                     _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
                     break;
             }
+        }
+
+        private void SubscribeToPreShotEvents(PlayerView player)
+        {
+            player.Shot += OnPlayerShot;
+            player.PlayerInputs.MapViewButtonPressed += OnMapButtonPressed;
+        }
+
+        private void UnsubscribeFromPreShotEvents(PlayerView player)
+        {
+            player.Shot -= OnPlayerShot;
+            player.PlayerInputs.MapViewButtonPressed -= OnMapButtonPressed;
         }
 
         private async UniTask SpawnShowJumpInAndSetCamera(PlayerView player, Vector3 spawnPosition)
@@ -288,11 +354,9 @@ namespace Logic
 
         private void OnPlayerShot()
         {
-            _currentTurnPlayer.Shot -= OnPlayerShot;
-            _currentTurnPlayer.PlayerInputs.MapViewButtonPressed -= OnMapButtonPressed;
+            UnsubscribeFromPreShotEvents(_currentTurnPlayer);
 
-            _currentTurnPlayer.BecameStill += OnCurrentPlayerBecameStill;
-            _currentTurnPlayer.PlayerInputs.AbilityButtonPressed += OnAbilityButtonPressed;
+            SubscribeToPreStillEvents(_currentTurnPlayer);
 
             _currentTurnPlayer.SetControlsActive(false);
             // _currentTurnPlayer.SetLookAtTrajectory(false);
@@ -301,6 +365,18 @@ namespace Logic
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
             _currentTurnPlayer.PlayerState = PlayerState.ActiveInMotion;
+        }
+
+        private void SubscribeToPreStillEvents(PlayerView player)
+        {
+            player.BecameStill += OnCurrentPlayerBecameStill;
+            player.PlayerInputs.AbilityButtonPressed += OnAbilityButtonPressed;
+        }
+
+        private void UnsubscribeFromPreStillEvents(PlayerView player)
+        {
+            player.BecameStill -= OnCurrentPlayerBecameStill;
+            player.PlayerInputs.AbilityButtonPressed -= OnAbilityButtonPressed;
         }
 
         private void OnAbilityButtonPressed()
@@ -314,8 +390,7 @@ namespace Logic
 
         private async void OnCurrentPlayerBecameStill()
         {
-            _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
-            _currentTurnPlayer.PlayerInputs.AbilityButtonPressed -= OnAbilityButtonPressed;
+            UnsubscribeFromPreStillEvents(_currentTurnPlayer);
 
             uiController.DisableAngyMeter();
 

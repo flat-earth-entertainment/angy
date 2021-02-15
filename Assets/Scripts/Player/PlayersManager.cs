@@ -38,7 +38,7 @@ public class PlayersManager : MonoBehaviour
             player.PlayerId = playerId;
             player.Nickname = playerPreset.PlayerName;
             player.PlayerColor = playerPreset.PlayerColor;
-            player.PlayerState = PlayerState.ShouldSpawnFirstTime;
+            player.PlayerState = PlayerState.ShouldSpawnAtSpawn;
             player.PlayerInputs = RewiredPlayerInputs.AttachToPlayer(player);
 
             player.Hide();

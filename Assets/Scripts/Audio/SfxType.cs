@@ -7,6 +7,7 @@ namespace Audio
         LemmingGroundRoll = 3,
         LemmingLaunch = 4,
         LemmingLaunchVoice = 11,
+        LemmingExplosion = 13,
         IceBlockActivate = 5,
         IceBlockDeactivate = 6,
         ExpandActivate = 7,

@@ -4,6 +4,7 @@ using Abilities;
 using Ball;
 using Cinemachine;
 using Config;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using Player;
@@ -13,6 +14,8 @@ using UnityEngine.UI;
 
 public class PlayerView : MonoBehaviour
 {
+    public static event Action<PlayerView> OptionsMenuRequested;
+
     public event Action BecameStill;
     public event Action Shot;
     public event Action<PlayerView> WentOutOfBounds;
@@ -197,11 +200,14 @@ public class PlayerView : MonoBehaviour
         _boneLookAt = _shooter.BallStorage.GetComponentInChildren<BoneLookAt>();
     }
 
-    private void OnEnable()
+    private async void OnEnable()
     {
         _ballBehaviour.BecameStill += OnBallBecameStill;
         _shooter.Shot += OnBallShot;
         _outOfBoundsCheck.WentOutOfBounds += OnWentOutOfBounds;
+
+        await UniTask.WaitUntil(() => PlayerInputs != null);
+        PlayerInputs.MenuButtonPressed += OnMenuButtonPressed;
     }
 
     private void OnDisable()
@@ -209,7 +215,14 @@ public class PlayerView : MonoBehaviour
         _ballBehaviour.BecameStill -= OnBallBecameStill;
         _shooter.Shot -= OnBallShot;
         _outOfBoundsCheck.WentOutOfBounds -= OnWentOutOfBounds;
+        PlayerInputs.MenuButtonPressed -= OnMenuButtonPressed;
     }
+
+    private void OnMenuButtonPressed()
+    {
+        OptionsMenuRequested?.Invoke(this);
+    }
+
 
     private void OnBallBecameStill()
     {

@@ -8,6 +8,7 @@ namespace Player.Input
     {
         public event Action AbilityButtonPressed;
         public event Action MapViewButtonPressed;
+        public event Action MenuButtonPressed;
 
         private Rewired.Player _thisPlayer;
 
@@ -40,6 +41,11 @@ namespace Player.Input
             if (_thisPlayer.GetButtonDown("CameraMode"))
             {
                 MapViewButtonPressed?.Invoke();
+            }
+
+            if (_thisPlayer.GetButtonDown("Menu"))
+            {
+                MenuButtonPressed?.Invoke();
             }
         }
     }

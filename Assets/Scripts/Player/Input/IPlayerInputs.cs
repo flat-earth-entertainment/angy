@@ -6,5 +6,6 @@ namespace Player.Input
     {
         public event Action AbilityButtonPressed;
         public event Action MapViewButtonPressed;
+        public event Action MenuButtonPressed;
     }
 }

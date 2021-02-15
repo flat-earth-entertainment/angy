@@ -249,7 +249,9 @@ MonoBehaviour:
   musicSource: {fileID: 7689676235058604987}
   sfxSource: {fileID: 7689676235729611805}
   tapSource: {fileID: 672282868959172956}
-  audioMixer: {fileID: 0}
+  masterMixer: {fileID: 24100000, guid: 5f04db0597e7f2642a732acb10842f61, type: 2}
+  musicMixer: {fileID: 0}
+  sfxMixer: {fileID: 0}
 --- !u!1 &7689676235058604985
 GameObject:
   m_ObjectHideFlags: 0

@@ -60,6 +60,9 @@ namespace Config
         [field: SerializeField, BoxGroup("Technical")]
         public GameObject AudioManager { get; private set; }
 
+        [field: SerializeField, BoxGroup("Technical")]
+        public GameObject OptionsController { get; private set; }
+
         [field: SerializeField, Scene]
         public List<string> PlayableMaps { get; private set; }
 
