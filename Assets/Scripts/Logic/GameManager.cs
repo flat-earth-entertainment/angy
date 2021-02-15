@@ -18,6 +18,7 @@ namespace Logic
 {
     public class GameManager : MonoBehaviour
     {
+        public static event Action RoundPassed;
         public static PlayerView CurrentTurnPlayer => _currentTurnPlayer;
 
         [SerializeField]
@@ -27,6 +28,7 @@ namespace Logic
         private UiController uiController;
 
         private static PlayerView _currentTurnPlayer;
+        private PlayerView _firstPlayer;
         private PlayerView _playerInOptions;
         private CinemachineVirtualCamera _levelOverviewCamera;
         private CinemachineVirtualCamera _spawnPointCamera;
@@ -38,6 +40,8 @@ namespace Logic
 
         private void Awake()
         {
+            _currentTurnPlayer = null;
+
             Time.timeScale = GameConfig.Instance.TimeScale;
 
             _spawnPoint = GameConfig.Instance.Tags.SpawnPointTag.SafeFindWithThisTag().transform;
@@ -261,6 +265,13 @@ namespace Logic
         private async void MakeTurn()
         {
             _currentTurnPlayer = _playersManager.GetNextPlayer(_currentTurnPlayer);
+
+            if (_currentTurnPlayer == _firstPlayer)
+                RoundPassed?.Invoke();
+
+            if (_firstPlayer == null)
+                _firstPlayer = _currentTurnPlayer;
+
             _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
 
             _currentTurnPlayer.SetIdleAnimation();
