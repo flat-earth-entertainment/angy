@@ -286,7 +286,7 @@ namespace Logic
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
             {
                 _currentTurnPlayer.ExplodeHideAndResetAngy();
-                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnAtSpawn;
+                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnAtLastPosition;
                 MakeTurn();
                 return;
             }
