@@ -202,6 +202,8 @@ public class Shooter : MonoBehaviour{
 
         AudioManager.PlaySfx(SfxType.LemmingLaunch);
         AudioManager.PlaySfx(SfxType.LemmingLaunchVoice);
+
+        Destroy(PredictionManager.instance.indicatorHolder);
     }
     public Vector3 calculateForce(){
         return transform.forward * power * forcePercent;

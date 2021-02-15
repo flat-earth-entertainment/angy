@@ -17,7 +17,8 @@ public class PredictionManager : Singleton<PredictionManager>{
 
     LineRenderer lineRenderer;
     GameObject dummy;
-    GameObject indicatorHolder;
+    [HideInInspector]
+    public GameObject indicatorHolder;
 
     void Start(){
         Physics.autoSimulation = false;
