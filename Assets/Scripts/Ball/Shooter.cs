@@ -265,7 +265,7 @@ public class Shooter : MonoBehaviour{
         }
     }
     private IEnumerator CalculateShootForce(){
-        float currentAngy = Mathf.Lerp(1,0.1f, (float) GameManager.CurrentTurnPlayer.Angy / GameConfig.Instance.AngyValues.MaxAngy);
+        float currentAngy = Mathf.Lerp(1,0.25f, (float) GameManager.CurrentTurnPlayer.Angy / GameConfig.Instance.AngyValues.MaxAngy);
         forcePercent = 0;
         yield return null;
         while (!rewiredPlayer.GetButtonDown("Confirm") && forcePercent >= 0){
