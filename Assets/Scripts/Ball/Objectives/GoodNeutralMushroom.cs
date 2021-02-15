@@ -43,7 +43,7 @@ public class GoodNeutralMushroom : MonoBehaviour
                  
             }else{
                 pointController.EnemyHit(hitId);
-                GetComponent<Renderer>().enabled = false;
+                transform.GetChild(0).gameObject.SetActive(false);
                 splatter.Play(true);
                 point = Instantiate(fruit[0], transform.position + new Vector3(0,1f,0), Quaternion.identity);
                 AudioManager.PlaySfx(SfxType.MushroomHit);

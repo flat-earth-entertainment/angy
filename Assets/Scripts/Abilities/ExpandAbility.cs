@@ -38,8 +38,14 @@ namespace Abilities
             await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic)
                 .SetUpdate(UpdateType.Fixed);
 
+            // Expand mass
+            _player.Ball.GetComponent<Rigidbody>().mass = 10;
+
             await UniTask.Delay(TimeSpan.FromSeconds(Duration), DelayType.UnscaledDeltaTime,
                 cancellationToken: _endOfTurn.Token).SuppressCancellationThrow();
+
+            // Lower Mass
+            _player.Ball.GetComponent<Rigidbody>().mass = 1;
 
             await Deflate();
 
