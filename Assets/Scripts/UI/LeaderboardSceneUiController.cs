@@ -1,4 +1,3 @@
-using System;
 using Config;
 using NaughtyAttributes;
 using TMPro;
@@ -25,7 +24,7 @@ namespace UI
         {
             mainMenuButton.onClick.AddListener(delegate
             {
-                SceneManager.LoadScene(SceneToLoad);
+                SceneChanger.ChangeScene(SceneToLoad);
                 if (SceneToLoad == GameConfig.Instance.Scenes.MainMenuScene)
                 {
                     CurrentGameSession.ClearSession();

@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using Config;
 using Cysharp.Threading.Tasks;
-using NaughtyAttributes;
 using Rewired;
 using TMPro;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -97,7 +97,7 @@ namespace Dice
                     dieImage.gameObject.SetActive(false);
                     player1First.SetActive(true);
                     await UniTask.Delay(TimeSpan.FromSeconds(2f));
-                    SceneManager.LoadScene(CurrentGameSession.ChosenMap);
+                    SceneChanger.ChangeScene(CurrentGameSession.ChosenMap);
                 }
             }
         }

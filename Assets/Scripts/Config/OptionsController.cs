@@ -1,5 +1,4 @@
 using System;
-using Audio;
 using Config;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -46,7 +45,7 @@ namespace UI
 
             mainMenuButton.onClick.AddListener(delegate
             {
-                SceneManager.LoadScene(GameConfig.Instance.Scenes.MainMenuScene);
+                SceneChanger.ChangeScene(GameConfig.Instance.Scenes.MainMenuScene);
                 CurrentGameSession.ClearSession();
             });
 
