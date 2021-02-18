@@ -1,6 +1,5 @@
 using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
@@ -33,11 +32,11 @@ namespace UI
 
         private void Awake()
         {
-            startButton.onClick.AddListener(delegate { SceneManager.LoadScene(startScene); });
+            startButton.onClick.AddListener(delegate { SceneChanger.ChangeScene(startScene); });
 
-            creditsButton.onClick.AddListener(delegate { SceneManager.LoadScene(creditsScene); });
+            creditsButton.onClick.AddListener(delegate { SceneChanger.ChangeScene(creditsScene); });
 
-            optionsButton.onClick.AddListener(delegate { SceneManager.LoadScene(optionsScene); });
+            optionsButton.onClick.AddListener(delegate { SceneChanger.ChangeScene(optionsScene); });
 
             exitButton.onClick.AddListener(Application.Quit);
         }
