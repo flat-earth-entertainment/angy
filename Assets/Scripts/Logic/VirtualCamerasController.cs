@@ -1,68 +1,98 @@
 using System;
 using System.Collections.Generic;
 using Cinemachine;
+using Config;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
-public class VirtualCamerasController : MonoBehaviour
+namespace Logic
 {
-    private const int Inactive = 0;
-    private const int Active = 10;
-
-    private HashSet<CinemachineVirtualCamera> _cameras = new HashSet<CinemachineVirtualCamera>();
-
-    private CinemachineBrain _cinemachineBrain;
-    private float _defaultTransitionTime;
-
-    public UniTask BlendTo(CinemachineVirtualCamera virtualCamera, float? blendTime = null)
+    public class VirtualCamerasController : MonoBehaviour
     {
-        if (blendTime == null)
+        private const int Inactive = 0;
+        private const int Active = 10;
+
+        private HashSet<CinemachineVirtualCamera> _cameras = new HashSet<CinemachineVirtualCamera>();
+
+        private CinemachineBrain _cinemachineBrain;
+        private float _defaultTransitionTime;
+        private CinemachineVirtualCamera _activeCamera;
+
+        public async void ZoomBoomActiveCamera(float newFov, float zoomTime, float zoomStayTime,
+            Ease ease = Ease.Linear)
         {
-            SetActiveCamera(virtualCamera);
-            return UniTask.Delay(TimeSpan.FromSeconds(_defaultTransitionTime), DelayType.Realtime);
-        }
+            var initialFov = _activeCamera.m_Lens.FieldOfView;
 
-        SetActiveCamera(virtualCamera, blendTime);
-        return UniTask.Delay(TimeSpan.FromSeconds(blendTime.Value), DelayType.Realtime);
-    }
-
-    private void Awake()
-    {
-        _cinemachineBrain = FindObjectOfType<CinemachineBrain>();
-        _defaultTransitionTime = _cinemachineBrain.m_DefaultBlend.m_Time;
-    }
-
-    private void Start()
-    {
-        foreach (var virtualCamera in FindObjectsOfType<CinemachineVirtualCamera>())
-        {
-            _cameras.Add(virtualCamera);
-        }
-    }
-
-    public void SetActiveCamera(CinemachineVirtualCamera newActiveCamera, float? transitionTime = null)
-    {
-        if (transitionTime == null)
-        {
-            _cinemachineBrain.m_DefaultBlend.m_Time = _defaultTransitionTime;
-        }
-        else
-        {
-            _cinemachineBrain.m_DefaultBlend.m_Time = transitionTime.Value;
-        }
-
-        _cameras = new HashSet<CinemachineVirtualCamera>(FindObjectsOfType<CinemachineVirtualCamera>());
-
-        foreach (var virtualCamera in _cameras)
-        {
-            if (virtualCamera == newActiveCamera)
+            var cameraNoise = _activeCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            if (!cameraNoise)
             {
-                virtualCamera.Priority = Active;
+                cameraNoise = _activeCamera.AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            }
+
+            cameraNoise.m_NoiseProfile = GameConfig.Instance.HitStop.HitStopNoiseSettings;
+            await UniTask.Delay(TimeSpan.FromSeconds(zoomStayTime), DelayType.Realtime);
+            cameraNoise.m_NoiseProfile = null;
+            // await DOTween.To(() => _activeCamera.m_Lens.FieldOfView, f => _activeCamera.m_Lens.FieldOfView = f,
+            // newFov, zoomTime).SetUpdate(true).SetEase(ease);
+
+
+            // await DOTween.To(() => _activeCamera.m_Lens.FieldOfView, f => _activeCamera.m_Lens.FieldOfView = f,
+            // initialFov, zoomTime).SetUpdate(true).SetEase(ease);
+        }
+
+        public UniTask BlendTo(CinemachineVirtualCamera virtualCamera, float? blendTime = null)
+        {
+            if (blendTime == null)
+            {
+                SetActiveCamera(virtualCamera);
+                return UniTask.Delay(TimeSpan.FromSeconds(_defaultTransitionTime), DelayType.Realtime);
+            }
+
+            SetActiveCamera(virtualCamera, blendTime);
+            return UniTask.Delay(TimeSpan.FromSeconds(blendTime.Value), DelayType.Realtime);
+        }
+
+        private void Awake()
+        {
+            _cinemachineBrain = FindObjectOfType<CinemachineBrain>();
+            _defaultTransitionTime = _cinemachineBrain.m_DefaultBlend.m_Time;
+        }
+
+        private void Start()
+        {
+            foreach (var virtualCamera in FindObjectsOfType<CinemachineVirtualCamera>())
+            {
+                _cameras.Add(virtualCamera);
+            }
+        }
+
+        public void SetActiveCamera(CinemachineVirtualCamera newActiveCamera, float? transitionTime = null)
+        {
+            if (transitionTime == null)
+            {
+                _cinemachineBrain.m_DefaultBlend.m_Time = _defaultTransitionTime;
             }
             else
             {
-                virtualCamera.Priority = Inactive;
+                _cinemachineBrain.m_DefaultBlend.m_Time = transitionTime.Value;
             }
+
+            _cameras = new HashSet<CinemachineVirtualCamera>(FindObjectsOfType<CinemachineVirtualCamera>());
+
+            foreach (var virtualCamera in _cameras)
+            {
+                if (virtualCamera == newActiveCamera)
+                {
+                    virtualCamera.Priority = Active;
+                }
+                else
+                {
+                    virtualCamera.Priority = Inactive;
+                }
+            }
+
+            _activeCamera = newActiveCamera;
         }
     }
 }

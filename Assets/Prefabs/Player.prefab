@@ -48,6 +48,18 @@ MonoBehaviour:
   <BallCamera>k__BackingField: {fileID: 2568511267011732018}
   ball: {fileID: 4629074905832054381}
   playerState: 0
+--- !u!114 &3357687179883922486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4629074905832054383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 815380c0cea84dd39ebc292a1161e75b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3630903673893550848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,7 +529,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2725426827670473254, guid: de314a1a3947c6e42867e5712c545508, type: 3}
       propertyPath: m_UpdateMode
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2725426827670473254, guid: de314a1a3947c6e42867e5712c545508, type: 3}
       propertyPath: m_CullingMode

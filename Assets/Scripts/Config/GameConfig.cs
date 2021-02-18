@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using Cinemachine;
 using Map_Selection;
 using NaughtyAttributes;
 using Player;
@@ -69,7 +70,12 @@ namespace Config
         [field: SerializeField]
         public ScenesSetup Scenes { get; private set; }
 
+        [field: SerializeField]
+        public HitStopValues HitStop { get; private set; }
+
+
         private const string ConfigPath = "Game Config";
+
 
         public static GameConfig Instance
         {
