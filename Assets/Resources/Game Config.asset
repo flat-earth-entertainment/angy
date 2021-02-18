@@ -71,5 +71,10 @@ MonoBehaviour:
   <Scenes>k__BackingField:
     <LeaderboardScene>k__BackingField: Leaderboard
     <MainMenuScene>k__BackingField: Main Menu
-  <HitStopTriggerImpulse>k__BackingField: 10
-  <HitStopNoiseSettings>k__BackingField: {fileID: 11400000, guid: fa1c02a7c4383084e8df2792869d2a42, type: 2}
+  <HitStop>k__BackingField:
+    <ZoomInTime>k__BackingField: 0.1
+    <TimeScale>k__BackingField: 0.2
+    <StayTime>k__BackingField: 0.5
+    <ZoomOutTime>k__BackingField: 0.1
+    <HitStopTriggerImpulse>k__BackingField: 10
+    <HitStopNoiseSettings>k__BackingField: {fileID: 11400000, guid: fa1c02a7c4383084e8df2792869d2a42, type: 2}
