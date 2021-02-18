@@ -26,7 +26,8 @@ namespace Ball
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.GetComponent<GoodNeutralMushroom>())
+            GoodNeutralMushroom mush = other.GetComponent<GoodNeutralMushroom>(); 
+            if (mush && !mush.mushroomDisabled)
             {
                 HitStop();
             }

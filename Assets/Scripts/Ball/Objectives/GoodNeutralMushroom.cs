@@ -21,6 +21,8 @@ public class GoodNeutralMushroom : MonoBehaviour
     public AbilitySelect mushroomDropAbility;
     // Owner Id 99 refers to no ownership, shouldn't be a problem unless we want 100 players.
     public int ownerId = 99, pointValue = 1;
+    [HideInInspector]
+    public bool mushroomDisabled;
     private void Start() {
         pointController = GameObject.FindObjectOfType<PointController>();
         baseFruitMat = new Material(baseFruitMat);
@@ -41,7 +43,7 @@ public class GoodNeutralMushroom : MonoBehaviour
             }
             ownerId = hitId;
             if(point != null){
-                 
+                mushroomDisabled = true;
             }else{
                 pointController.EnemyHit(hitId);
                 transform.GetChild(0).gameObject.SetActive(false);
