@@ -1,5 +1,4 @@
-﻿using System;
-using Logic;
+﻿using Logic;
 using UnityEngine;
 
 namespace Environment
