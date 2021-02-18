@@ -128,6 +128,7 @@ namespace Logic
                     {
                         case PlayerState.ActiveAiming:
                             UnsubscribeFromPreShotEvents(_currentTurnPlayer);
+                            _currentTurnPlayer.SetControlsActive(false);
                             break;
                         case PlayerState.ActiveInMotion:
                             UnsubscribeFromPreStillEvents(_currentTurnPlayer);
@@ -150,6 +151,7 @@ namespace Logic
                 {
                     case PlayerState.ActiveAiming:
                         SubscribeToPreShotEvents(_currentTurnPlayer);
+                        _currentTurnPlayer.SetControlsActive(true);
                         break;
                     case PlayerState.ActiveInMotion:
                         SubscribeToPreStillEvents(_currentTurnPlayer);
