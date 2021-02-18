@@ -1,4 +1,5 @@
 using Config;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Logic;
 using UnityEngine;
@@ -25,14 +26,14 @@ namespace Ball
 
         private void OnTriggerEnter(Collider other)
         {
-            GoodNeutralMushroom mush = other.GetComponent<GoodNeutralMushroom>(); 
+            GoodNeutralMushroom mush = other.GetComponent<GoodNeutralMushroom>();
             if (mush && !mush.mushroomDisabled)
             {
                 HitStop();
             }
         }
 
-        private static void HitStop()
+        private static async void HitStop()
         {
             var hitStopValues = GameConfig.Instance.HitStop;
             FindObjectOfType<VirtualCamerasController>().ShakeFor(hitStopValues.ZoomOutTime);
@@ -40,6 +41,12 @@ namespace Ball
             var initialFixedDeltaTime = Time.fixedDeltaTime;
             Time.fixedDeltaTime = initialFixedDeltaTime / 10f;
             _isInAction = true;
+
+            if (Time.timeScale == 0)
+            {
+                await UniTask.WaitUntil(() => Time.timeScale != 0);
+            }
+
             DOTween.Sequence()
                 .Append(DOTween.To(() => Time.timeScale, t => Time.timeScale = t, hitStopValues.TimeScale,
                     hitStopValues.ZoomInTime))
