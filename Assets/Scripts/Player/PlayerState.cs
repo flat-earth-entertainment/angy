@@ -5,5 +5,6 @@ public enum PlayerState
     ShouldSpawnCanNotMove,
     ShouldMakeTurn,
     ActiveAiming,
+    ActivePowerMode,
     ActiveInMotion
 }

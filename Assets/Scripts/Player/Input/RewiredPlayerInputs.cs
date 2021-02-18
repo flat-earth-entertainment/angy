@@ -9,6 +9,7 @@ namespace Player.Input
         public event Action AbilityButtonPressed;
         public event Action MapViewButtonPressed;
         public event Action MenuButtonPressed;
+        public event Action FireButtonPressed;
 
         private Rewired.Player _thisPlayer;
 
@@ -46,6 +47,11 @@ namespace Player.Input
             if (_thisPlayer.GetButtonDown("Menu"))
             {
                 MenuButtonPressed?.Invoke();
+            }
+
+            if (_thisPlayer.GetButtonDown("Confirm"))
+            {
+                FireButtonPressed?.Invoke();
             }
         }
     }

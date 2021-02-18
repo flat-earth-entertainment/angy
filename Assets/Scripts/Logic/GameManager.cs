@@ -117,7 +117,9 @@ namespace Logic
 
         private void OnOptionsMenuOpenRequested(PlayerView caller)
         {
-            if (_playerInOptions == null)
+            if (_playerInOptions == null
+                && caller.PlayerState != PlayerState.ActivePowerMode
+                && _currentTurnPlayer.PlayerState != PlayerState.ActivePowerMode)
             {
                 caller.PlayerInputs.MenuButtonPressed += OnOptionsMenuCloseRequested;
                 OptionsController.Show();
@@ -337,6 +339,7 @@ namespace Logic
                     SubscribeToPreShotEvents(_currentTurnPlayer);
 
                     _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
+
                     break;
             }
         }
@@ -345,12 +348,20 @@ namespace Logic
         {
             player.Shot += OnPlayerShot;
             player.PlayerInputs.MapViewButtonPressed += OnMapButtonPressed;
+            player.PlayerInputs.FireButtonPressed += OnFireButtonPressed;
         }
 
         private void UnsubscribeFromPreShotEvents(PlayerView player)
         {
             player.Shot -= OnPlayerShot;
             player.PlayerInputs.MapViewButtonPressed -= OnMapButtonPressed;
+            player.PlayerInputs.FireButtonPressed -= OnFireButtonPressed;
+        }
+
+        private void OnFireButtonPressed()
+        {
+            _currentTurnPlayer.PlayerState = PlayerState.ActivePowerMode;
+            _currentTurnPlayer.PlayerInputs.FireButtonPressed -= OnFireButtonPressed;
         }
 
         private async UniTask SpawnShowJumpInAndSetCamera(PlayerView player, Vector3 spawnPosition)
