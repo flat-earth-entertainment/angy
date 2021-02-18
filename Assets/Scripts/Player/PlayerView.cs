@@ -10,7 +10,6 @@ using NaughtyAttributes;
 using Player;
 using Player.Input;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class PlayerView : MonoBehaviour
 {

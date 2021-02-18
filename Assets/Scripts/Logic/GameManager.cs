@@ -8,7 +8,6 @@ using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Player;
-using Rewired;
 using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;

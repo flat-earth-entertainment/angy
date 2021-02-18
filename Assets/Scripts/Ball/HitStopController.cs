@@ -1,4 +1,3 @@
-using System;
 using Config;
 using DG.Tweening;
 using Logic;
