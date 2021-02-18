@@ -14,7 +14,10 @@ namespace UI
         [SerializeField]
         private float endScale;
 
-        public static async void ChangeScene(string sceneName, float transitionTime = 0.5f)
+        [SerializeField]
+        private float transitionTime;
+
+        public static async void ChangeScene(string sceneName)
         {
             Instance.gameObject.SetActive(true);
 
@@ -22,7 +25,7 @@ namespace UI
             sceneLoad.allowSceneActivation = false;
 
             Instance.logo.transform.localScale = Vector3.zero;
-            await Instance.logo.transform.DOScale(Instance.endScale, transitionTime).SetEase(Ease.InCubic);
+            await Instance.logo.transform.DOScale(Instance.endScale, Instance.transitionTime).SetEase(Ease.InCubic);
             sceneLoad.allowSceneActivation = true;
 
             await UniTask.NextFrame();
