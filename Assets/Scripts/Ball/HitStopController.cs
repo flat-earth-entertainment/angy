@@ -11,7 +11,6 @@ namespace Ball
         {
             if (collision.transform.CompareTag("Lemming"))
             {
-                Debug.Log(collision.impulse.sqrMagnitude);
                 if (collision.impulse.sqrMagnitude > GameConfig.Instance.HitStop.HitStopTriggerImpulse)
                 {
                     var hitStopValues = GameConfig.Instance.HitStop;
