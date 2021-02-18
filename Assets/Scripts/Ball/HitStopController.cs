@@ -18,13 +18,16 @@ namespace Ball
                         .ZoomBoomActiveCamera(20, hitStopValues.ZoomInTime,
                             hitStopValues.ZoomOutTime, Ease.Flash);
 
+                    var initialFixedDeltaTime = Time.fixedDeltaTime;
+                    Time.fixedDeltaTime = initialFixedDeltaTime / 10f;
                     DOTween.Sequence()
                         .Append(DOTween.To(() => Time.timeScale, t => Time.timeScale = t, hitStopValues.TimeScale,
                             hitStopValues.ZoomInTime))
                         .AppendInterval(hitStopValues.StayTime)
                         .Append(DOTween.To(() => Time.timeScale, t => Time.timeScale = t, GameConfig.Instance.TimeScale,
                             hitStopValues.ZoomOutTime))
-                        .SetUpdate(true);
+                        .SetUpdate(true)
+                        .OnComplete(() => Time.fixedDeltaTime = initialFixedDeltaTime);
                 }
             }
         }
