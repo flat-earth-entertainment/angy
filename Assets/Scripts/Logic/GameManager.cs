@@ -110,6 +110,8 @@ namespace Logic
             GoodNeutralMushroom.BecameHole -= OnHoleAppeared;
 
             PlayerView.OptionsMenuRequested -= OnOptionsMenuOpenRequested;
+
+            Time.timeScale = GameConfig.Instance.TimeScale;
         }
 
 

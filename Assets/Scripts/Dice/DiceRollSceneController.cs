@@ -35,10 +35,6 @@ namespace Dice
         [SerializeField]
         private GameObject player1First;
 
-        [Scene]
-        [SerializeField]
-        private string gameScene;
-
         private float _timer;
         private bool _player1Rolled;
         private bool _shouldChangeFaces;

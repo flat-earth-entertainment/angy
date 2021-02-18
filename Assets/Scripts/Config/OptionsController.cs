@@ -2,6 +2,7 @@ using System;
 using Audio;
 using Config;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
@@ -22,9 +23,16 @@ namespace UI
         [SerializeField]
         private Slider sfxVolume;
 
-        public static void Show()
+        [SerializeField]
+        private GameObject mainMenuGameObject;
+
+        [SerializeField]
+        private Button mainMenuButton;
+
+        public static void Show(bool showMainMenu = true)
         {
             Instance.gameObject.SetActive(true);
+            Instance.mainMenuGameObject.SetActive(showMainMenu);
         }
 
         public static void Hide()
@@ -35,6 +43,12 @@ namespace UI
         private void Awake()
         {
             backButton.onClick.AddListener(delegate { BackButtonClicked?.Invoke(); });
+
+            mainMenuButton.onClick.AddListener(delegate
+            {
+                SceneManager.LoadScene(GameConfig.Instance.Scenes.MainMenuScene);
+                CurrentGameSession.ClearSession();
+            });
 
             InitializeAndBindSlider(GameSettings.Settings.MasterVolume, masterVolume);
             InitializeAndBindSlider(GameSettings.Settings.MusicVolume, musicVolume);
