@@ -39,6 +39,21 @@ public class PlayerView : MonoBehaviour
         }
     }
 
+    public Color FresnelColor
+    {
+        get => _playerColor;
+        set
+        {
+            _playerColor = value;
+
+            var oldMaterials = Materials;
+
+            oldMaterials[0].SetColor("Fresnel_Color1", value);
+
+            Materials = oldMaterials;
+        }
+    }
+
     public Material[] Materials
     {
         get => _shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials

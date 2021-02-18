@@ -11,5 +11,8 @@ namespace Player
 
         [field: SerializeField]
         public Color PlayerColor { get; private set; }
+
+        [field: SerializeField]
+        public Color FresnelColor { get; private set; }
     }
 }
