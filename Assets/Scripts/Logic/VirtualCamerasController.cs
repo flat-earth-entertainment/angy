@@ -20,10 +20,12 @@ namespace Logic
 
         public async void ShakeFor(float zoomStayTime)
         {
-            var cameraNoise = _activeCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            var activeCameraAtEntryPoint = _activeCamera;
+
+            var cameraNoise = activeCameraAtEntryPoint.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             if (!cameraNoise)
             {
-                cameraNoise = _activeCamera.AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                cameraNoise = activeCameraAtEntryPoint.AddCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             }
 
             cameraNoise.m_NoiseProfile = GameConfig.Instance.HitStop.HitStopNoiseSettings;
