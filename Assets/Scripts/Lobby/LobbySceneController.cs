@@ -1,6 +1,7 @@
 using System.Linq;
 using NaughtyAttributes;
 using Rewired;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +17,7 @@ namespace Lobby
         {
             if (Input.anyKeyDown || ReInput.players.GetPlayers().Any(p => p.GetAnyButton()))
             {
-                SceneManager.LoadScene(gameScene);
+                SceneChanger.ChangeScene(gameScene);
             }
         }
     }

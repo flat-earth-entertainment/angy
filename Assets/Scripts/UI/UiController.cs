@@ -78,7 +78,7 @@ namespace UI
                 LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.MainMenuScene;
             }
 
-            SceneManager.LoadScene(GameConfig.Instance.Scenes.LeaderboardScene);
+            SceneChanger.ChangeScene(GameConfig.Instance.Scenes.LeaderboardScene);
         }
 
         public void SetCameraModeActive(bool state)

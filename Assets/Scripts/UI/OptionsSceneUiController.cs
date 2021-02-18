@@ -12,7 +12,7 @@ namespace UI
 
         private void Awake()
         {
-            OptionsController.BackButtonClicked = delegate { SceneManager.LoadScene(mainMenu); };
+            OptionsController.BackButtonClicked = delegate { SceneChanger.ChangeScene(mainMenu); };
             OptionsController.Show(false);
         }
     }

@@ -1,5 +1,6 @@
 using Config;
 using NaughtyAttributes;
+using UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -40,7 +41,7 @@ namespace Map_Selection
         {
             MapPreviewView.MapPreviewSelected -= OnMapPreviewSelected;
             CurrentGameSession.ChosenMap = mapPreview.Scene;
-            SceneManager.LoadSceneAsync(rollDiceScene);
+            SceneChanger.ChangeScene(rollDiceScene);
         }
     }
 }

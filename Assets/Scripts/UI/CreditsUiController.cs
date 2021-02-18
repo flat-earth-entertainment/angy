@@ -16,7 +16,7 @@ namespace UI
 
         private void Awake()
         {
-            backButton.onClick.AddListener(delegate { SceneManager.LoadScene(backScene); });
+            backButton.onClick.AddListener(delegate { SceneChanger.ChangeScene(backScene); });
         }
     }
 }
