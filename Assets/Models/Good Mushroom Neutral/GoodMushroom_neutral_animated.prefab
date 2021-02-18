@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 2024338343302049491}
   - component: {fileID: 4033845249792378524}
   - component: {fileID: 1875650722222669390}
+  - component: {fileID: 6113916259794343864}
+  - component: {fileID: 3583380577980552791}
   m_Layer: 0
   m_Name: GoodMushroom_neutral_animated
   m_TagString: Untagged
@@ -65,6 +67,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7132187f1d2d03941b0b550b7a3b943a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6113916259794343864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683277895759885417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7ab256eed56a0c4994282aed33623e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!136 &3583380577980552791
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683277895759885417}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 4
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &3296359198715820216
 GameObject:
   m_ObjectHideFlags: 0

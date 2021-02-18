@@ -89,6 +89,20 @@
         {
             "m_OutputSlot": {
                 "m_Node": {
+                    "m_Id": "4cd2ebd3bbf44945a14c6b2454c4a93e"
+                },
+                "m_SlotId": 3
+            },
+            "m_InputSlot": {
+                "m_Node": {
+                    "m_Id": "cb9f50497d81432990495029534fd974"
+                },
+                "m_SlotId": 2
+            }
+        },
+        {
+            "m_OutputSlot": {
+                "m_Node": {
                     "m_Id": "67856f3a517e4febadf43a3ad4e14aca"
                 },
                 "m_SlotId": 0
@@ -383,7 +397,7 @@
     },
     "m_Name": "Face [1,2,3,..]",
     "m_DefaultReferenceName": "Vector1_16f38dc3393048cbbc99cf9c25daa11a",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "MushroomFace",
     "m_GeneratePropertyBlock": true,
     "m_Precision": 0,
     "overrideHLSLDeclaration": false,
@@ -846,7 +860,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "X",
     "m_StageCapability": 3,
-    "m_Value": 0.33399999141693118,
+    "m_Value": 0.5,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
