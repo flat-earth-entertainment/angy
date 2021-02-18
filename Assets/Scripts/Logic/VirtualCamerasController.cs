@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using UnityEngine;
 
 namespace Logic
@@ -19,11 +18,8 @@ namespace Logic
         private float _defaultTransitionTime;
         private CinemachineVirtualCamera _activeCamera;
 
-        public async void ZoomBoomActiveCamera(float newFov, float zoomTime, float zoomStayTime,
-            Ease ease = Ease.Linear)
+        public async void ZoomBoomActiveCamera(float newFov, float zoomTime, float zoomStayTime)
         {
-            var initialFov = _activeCamera.m_Lens.FieldOfView;
-
             var cameraNoise = _activeCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             if (!cameraNoise)
             {
@@ -33,12 +29,6 @@ namespace Logic
             cameraNoise.m_NoiseProfile = GameConfig.Instance.HitStop.HitStopNoiseSettings;
             await UniTask.Delay(TimeSpan.FromSeconds(zoomStayTime), DelayType.Realtime);
             cameraNoise.m_NoiseProfile = null;
-            // await DOTween.To(() => _activeCamera.m_Lens.FieldOfView, f => _activeCamera.m_Lens.FieldOfView = f,
-            // newFov, zoomTime).SetUpdate(true).SetEase(ease);
-
-
-            // await DOTween.To(() => _activeCamera.m_Lens.FieldOfView, f => _activeCamera.m_Lens.FieldOfView = f,
-            // initialFov, zoomTime).SetUpdate(true).SetEase(ease);
         }
 
         public UniTask BlendTo(CinemachineVirtualCamera virtualCamera, float? blendTime = null)
