@@ -85,6 +85,9 @@ public class GoodNeutralMushroom : MonoBehaviour
             BecameHole?.Invoke(hitObject);
             AudioManager.PlaySfx(SfxType.HoleAppeared);
             Destroy(hitObject);
+            transform.GetChild(0).gameObject.SetActive(false);
+        }else{
+            Debug.Log("Error, ground not found");
         }
         GetComponent<Renderer>().enabled = false;
         point = Instantiate(fruit[fruit.Count-1], transform.position + new Vector3(0,1,0), Quaternion.identity);
