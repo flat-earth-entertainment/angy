@@ -35,9 +35,7 @@ namespace Ball
         private static void HitStop()
         {
             var hitStopValues = GameConfig.Instance.HitStop;
-            FindObjectOfType<VirtualCamerasController>()
-                .ZoomBoomActiveCamera(20, hitStopValues.ZoomInTime,
-                    hitStopValues.ZoomOutTime);
+            FindObjectOfType<VirtualCamerasController>().ShakeFor(hitStopValues.ZoomOutTime);
 
             var initialFixedDeltaTime = Time.fixedDeltaTime;
             Time.fixedDeltaTime = initialFixedDeltaTime / 10f;

@@ -18,7 +18,7 @@ namespace Logic
         private float _defaultTransitionTime;
         private CinemachineVirtualCamera _activeCamera;
 
-        public async void ZoomBoomActiveCamera(float newFov, float zoomTime, float zoomStayTime)
+        public async void ShakeFor(float zoomStayTime)
         {
             var cameraNoise = _activeCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             if (!cameraNoise)
