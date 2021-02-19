@@ -23,11 +23,11 @@ namespace MeshPhysics
             _meshFilter = transform.GetComponent<MeshFilter>();
             _meshCollider = transform.GetComponent<MeshCollider>();
 
-            foreach (Transform child in _obstacleParent)
+            foreach (Collider child in _obstacleParent.GetComponentsInChildren<Collider>())
             {
-                if (child.GetComponent<Collider>())
+                if (child)
                 {
-                    _meshObjects.Add(child);
+                    _meshObjects.Add(child.transform);
                     child.gameObject.layer = LayerMask.NameToLayer("IgnoredMap");
                 }
             }
