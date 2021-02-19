@@ -480,7 +480,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 520d986b43bb21f499ea882c4693da9b, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -735,7 +735,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: -8875981643544456209, guid: 445dc3fe77723e448b748ac63ca0c716, type: 3}
+  m_Mesh: {fileID: -6791482957353959067, guid: 29debb1065bdee648853db98ca707654, type: 3}
   m_Bones:
   - {fileID: 3408193845799250428}
   - {fileID: 2817219135028721690}
@@ -765,7 +765,8 @@ SkinnedMeshRenderer:
   - {fileID: 7785478052578578068}
   - {fileID: 8709303624494039597}
   - {fileID: 4129078262526868968}
-  m_BlendShapeWeights: []
+  m_BlendShapeWeights:
+  - 0
   m_RootBone: {fileID: 3408193845799250428}
   m_AABB:
     m_Center: {x: -0.00019429252, y: 0.0035577267, z: -0.023816941}
