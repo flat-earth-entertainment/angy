@@ -21,7 +21,7 @@ namespace Environment
             {
                 foreach (var block in blocksToToggle)
                 {
-                    block.SetActive(block.activeSelf);
+                    block.SetActive(!block.activeSelf);
                     _beenToggled = true;
                 }
             }
