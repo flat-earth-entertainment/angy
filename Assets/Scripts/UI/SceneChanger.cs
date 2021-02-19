@@ -25,7 +25,9 @@ namespace UI
             sceneLoad.allowSceneActivation = false;
 
             Instance.logo.transform.localScale = Vector3.zero;
-            await Instance.logo.transform.DOScale(Instance.endScale, Instance.transitionTime).SetEase(Ease.InCubic);
+            await Instance.logo.transform.DOScale(Instance.endScale, Instance.transitionTime)
+                .SetEase(Ease.InCubic)
+                .SetUpdate(true);
             sceneLoad.allowSceneActivation = true;
 
             await UniTask.NextFrame();
