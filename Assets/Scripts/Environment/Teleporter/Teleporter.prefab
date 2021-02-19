@@ -186,7 +186,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7782735673845060943}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.01, z: 0}
   m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_Children: []
   m_Father: {fileID: 2319136698642692215}
@@ -253,6 +253,7 @@ GameObject:
   - component: {fileID: 7313511250208536600}
   - component: {fileID: 1731422038513360359}
   - component: {fileID: 4237637043859698505}
+  - component: {fileID: 9150903448754264282}
   m_Layer: 0
   m_Name: TeleportTrigger
   m_TagString: Untagged
@@ -336,6 +337,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9150903448754264282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8316319657201457597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce29050a37b5ce43b3433f244f67b51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  teleportTarget: {fileID: 0}
+  teleportCooldown: 0
+  directional: 1
 --- !u!1 &8723426020656010112
 GameObject:
   m_ObjectHideFlags: 0
