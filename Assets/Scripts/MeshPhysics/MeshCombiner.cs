@@ -25,11 +25,8 @@ namespace MeshPhysics
 
             foreach (Collider child in _obstacleParent.GetComponentsInChildren<Collider>())
             {
-                if (child)
-                {
-                    _meshObjects.Add(child.transform);
-                    child.gameObject.layer = LayerMask.NameToLayer("IgnoredMap");
-                }
+                _meshObjects.Add(child.transform);
+                child.gameObject.layer = LayerMask.NameToLayer("IgnoredMap");
             }
 
             RebakeMesh();
