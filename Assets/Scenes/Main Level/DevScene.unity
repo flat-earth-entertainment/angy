@@ -12421,26 +12421,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5674c40747dd91b41bccc4d9c43827d2, type: 3}
---- !u!1 &786114095 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8316319657201457597, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
-  m_PrefabInstance: {fileID: 999157822}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &786114097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 786114095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ce29050a37b5ce43b3433f244f67b51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  teleportTarget: {fileID: 2110641634}
-  teleportCooldown: 0
-  directional: 1
 --- !u!1001 &789765352
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15676,6 +15656,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9150903448754264282, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
+      propertyPath: teleportTarget
+      value: 
+      objectReference: {fileID: 2110641634}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
 --- !u!1001 &1002270482
@@ -15895,26 +15879,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -4386902876339697503, guid: ec68822d2f67b8246b60c46463b4957e, type: 3}
---- !u!1 &1011105478 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8316319657201457597, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
-  m_PrefabInstance: {fileID: 2119313015}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1011105480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1011105478}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ce29050a37b5ce43b3433f244f67b51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  teleportTarget: {fileID: 813301899}
-  teleportCooldown: 0
-  directional: 1
 --- !u!1 &1017954770 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8641261531361634797, guid: 5674c40747dd91b41bccc4d9c43827d2, type: 3}
@@ -33827,6 +33791,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9150903448754264282, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
+      propertyPath: teleportTarget
+      value: 
+      objectReference: {fileID: 813301899}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 092625563e7ed9d4aad0647164466a5c, type: 3}
 --- !u!1 &2125158391 stripped
