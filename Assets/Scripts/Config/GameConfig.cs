@@ -43,7 +43,7 @@ namespace Config
         public Tags Tags { get; private set; }
 
         [field: SerializeField]
-        public MapPreview[] MapPreviews { get; private set; }
+        public MapCollection[] MapCollections { get; private set; }
 
         [field: SerializeField]
         public float PreNextTurnDelay { get; private set; }
@@ -62,9 +62,6 @@ namespace Config
 
         [field: SerializeField, BoxGroup("Technical")]
         public GameObject OptionsController { get; private set; }
-
-        [field: SerializeField, Scene]
-        public List<string> PlayableMaps { get; private set; }
 
         [field: SerializeField]
         public ScenesSetup Scenes { get; private set; }

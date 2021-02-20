@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Map_Selection;
 
 namespace Config
 {
@@ -20,39 +22,39 @@ namespace Config
     {
         public static void ClearSession()
         {
-            _chosenMap = null;
+            _mapCollection = null;
             Leaderboard.Clear();
         }
 
         public static string GetNextMap(string currentMap)
         {
-            var maps = GameConfig.Instance.PlayableMaps;
-            return maps[(maps.IndexOf(currentMap) + 1) % maps.Count];
+            var maps = MapCollection.Maps;
+            return maps[(maps.ToList().IndexOf(currentMap) + 1) % maps.Length];
         }
 
         public static readonly List<MapScore> Leaderboard = new List<MapScore>();
 
-        public static string ChosenMap
+        public static MapCollection MapCollection
         {
             get
             {
-                if (string.IsNullOrEmpty(_chosenMap))
+                if (_mapCollection == null)
                 {
-                    _chosenMap = GameConfig.Instance.MapPreviews[0].Scene;
+                    _mapCollection = GameConfig.Instance.MapCollections[0];
                 }
 
-                return _chosenMap;
+                return _mapCollection;
             }
-            set => _chosenMap = value;
+            set => _mapCollection = value;
         }
 
 
-        private static string _chosenMap;
+        private static MapCollection _mapCollection;
 
         public static bool IsLastMapInList(string currentMap)
         {
-            var maps = GameConfig.Instance.PlayableMaps;
-            return maps.IndexOf(currentMap) == maps.Count - 1;
+            var maps = MapCollection.Maps;
+            return maps.ToList().IndexOf(currentMap) == maps.Length - 1;
         }
     }
 }

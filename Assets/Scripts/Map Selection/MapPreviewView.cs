@@ -7,7 +7,7 @@ namespace Map_Selection
 {
     public class MapPreviewView : MonoBehaviour
     {
-        public static event Action<MapPreview> MapPreviewSelected;
+        public static event Action<MapCollection> MapPreviewSelected;
 
         [SerializeField]
         private TextMeshProUGUI nameText;
@@ -19,18 +19,18 @@ namespace Map_Selection
         private Button selectButton;
 
 
-        private MapPreview _mapPreview;
+        private MapCollection _mapCollection;
 
         private void Awake()
         {
-            selectButton.onClick.AddListener(delegate { MapPreviewSelected?.Invoke(_mapPreview); });
+            selectButton.onClick.AddListener(delegate { MapPreviewSelected?.Invoke(_mapCollection); });
         }
 
-        public void Setup(MapPreview mapPreview)
+        public void Setup(MapCollection mapCollection)
         {
-            _mapPreview = mapPreview;
-            nameText.text = mapPreview.Name;
-            previewImage.sprite = mapPreview.PreviewImage;
+            _mapCollection = mapCollection;
+            nameText.text = mapCollection.Name;
+            previewImage.sprite = mapCollection.PreviewImage;
         }
     }
 }

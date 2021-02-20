@@ -97,7 +97,7 @@ namespace Dice
                     dieImage.gameObject.SetActive(false);
                     player1First.SetActive(true);
                     await UniTask.Delay(TimeSpan.FromSeconds(2f));
-                    SceneChanger.ChangeScene(CurrentGameSession.ChosenMap);
+                    SceneChanger.ChangeScene(CurrentGameSession.MapCollection.Maps[0]);
                 }
             }
         }

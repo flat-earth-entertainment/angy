@@ -20,7 +20,7 @@ namespace Map_Selection
 
         private void Awake()
         {
-            foreach (var mapPreview in GameConfig.Instance.MapPreviews)
+            foreach (var mapPreview in GameConfig.Instance.MapCollections)
             {
                 Instantiate(mapPreviewViewPrefab, previewsLayoutParent).GetComponent<MapPreviewView>()
                     .Setup(mapPreview);
@@ -37,10 +37,10 @@ namespace Map_Selection
             MapPreviewView.MapPreviewSelected -= OnMapPreviewSelected;
         }
 
-        private void OnMapPreviewSelected(MapPreview mapPreview)
+        private void OnMapPreviewSelected(MapCollection mapCollection)
         {
             MapPreviewView.MapPreviewSelected -= OnMapPreviewSelected;
-            CurrentGameSession.ChosenMap = mapPreview.Scene;
+            CurrentGameSession.MapCollection = mapCollection;
             SceneChanger.ChangeScene(rollDiceScene);
         }
     }
