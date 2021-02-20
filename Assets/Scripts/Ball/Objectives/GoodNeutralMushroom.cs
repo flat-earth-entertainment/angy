@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Audio;
+using DinoFracture;
 using Player;
 using UnityEngine;
 
@@ -43,7 +44,11 @@ public class GoodNeutralMushroom : MonoBehaviour
                 mushroomDisabled = true;
             }else{
                 pointController.EnemyHit(hitId);
-                transform.GetChild(0).gameObject.SetActive(false);
+                if (!GetComponentInChildren<FractureOnCollision>())
+                {
+                    transform.GetChild(0).gameObject.SetActive(false);
+                }
+
                 splatter.Play(true);
                 point = Instantiate(fruit[0], transform.position + new Vector3(0,1f,0), Quaternion.identity);
                 AudioManager.PlaySfx(SfxType.MushroomHit);
