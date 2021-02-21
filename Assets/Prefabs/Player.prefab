@@ -45,9 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b86dc75e68489bb185df86803322a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Animator>k__BackingField: {fileID: 4707792727575392929}
   <BallCamera>k__BackingField: {fileID: 2568511267011732018}
   ball: {fileID: 4629074905832054381}
   playerState: 0
+  skinnedMeshRenderer: {fileID: 3996367952303146709}
 --- !u!114 &3357687179883922486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,5 +567,15 @@ PrefabInstance:
 --- !u!4 &5107022567794977869 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2474745861943366858, guid: de314a1a3947c6e42867e5712c545508, type: 3}
+  m_PrefabInstance: {fileID: 7243997980675684487}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4707792727575392929 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2725426827670473254, guid: de314a1a3947c6e42867e5712c545508, type: 3}
+  m_PrefabInstance: {fileID: 7243997980675684487}
+  m_PrefabAsset: {fileID: 0}
+--- !u!137 &3996367952303146709 stripped
+SkinnedMeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6048944197448957522, guid: de314a1a3947c6e42867e5712c545508, type: 3}
   m_PrefabInstance: {fileID: 7243997980675684487}
   m_PrefabAsset: {fileID: 0}

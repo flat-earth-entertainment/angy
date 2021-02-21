@@ -34,6 +34,12 @@ namespace Abilities
 
             AudioManager.PlaySfx(SfxType.ExpandActivate);
 
+            player.Animator.SetBool("isInflated", true);
+
+            DOTween.To(() => player.ExpandPercent, f => player.ExpandPercent = f, 100, TimeToInflate)
+                .SetEase(Ease.OutElastic)
+                .SetUpdate(UpdateType.Fixed);
+
             await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic)
                 .SetUpdate(UpdateType.Fixed);
 
@@ -43,9 +49,6 @@ namespace Abilities
             await UniTask.Delay(TimeSpan.FromSeconds(Duration), DelayType.UnscaledDeltaTime,
                 cancellationToken: _endOfTurn.Token).SuppressCancellationThrow();
 
-            // Lower Mass
-            _player.Ball.GetComponent<Rigidbody>().mass = 1;
-
             await Deflate();
 
             _deflated = true;
@@ -53,7 +56,17 @@ namespace Abilities
 
         private async UniTask Deflate()
         {
+            // Lower Mass
+            _player.Ball.GetComponent<Rigidbody>().mass = 1;
+
             AudioManager.PlaySfx(SfxType.ExpandDeactivate);
+
+            _player.Animator.SetBool("isInflated", false);
+
+            DOTween.To(() => _player.ExpandPercent, f => _player.ExpandPercent = f, 0, TimeToInflate)
+                .SetEase(Ease.OutElastic)
+                .SetUpdate(UpdateType.Fixed);
+
             await _player.Ball.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(UpdateType.Fixed);
         }
 

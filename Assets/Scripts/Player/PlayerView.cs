@@ -38,6 +38,12 @@ public class PlayerView : MonoBehaviour
         }
     }
 
+    public float ExpandPercent
+    {
+        get => skinnedMeshRenderer.GetBlendShapeWeight(0);
+        set => skinnedMeshRenderer.SetBlendShapeWeight(0, value);
+    }
+
     public Color FresnelColor
     {
         set
@@ -110,6 +116,9 @@ public class PlayerView : MonoBehaviour
     }
 
     [field: SerializeField]
+    public Animator Animator { get; private set; }
+
+    [field: SerializeField]
     public CinemachineVirtualCamera BallCamera { get; private set; }
 
     [SerializeField]
@@ -118,6 +127,8 @@ public class PlayerView : MonoBehaviour
     [SerializeField, ReadOnly]
     private PlayerState playerState;
 
+    [SerializeField]
+    private SkinnedMeshRenderer skinnedMeshRenderer;
 
     private BallBehaviour _ballBehaviour;
     private OutOfBoundsCheck _outOfBoundsCheck;
