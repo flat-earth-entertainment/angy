@@ -72,6 +72,9 @@ namespace Config
         [field: SerializeField]
         public GameObject SceneChanger { get; private set; }
 
+        [field: SerializeField]
+        public WidePModeConfig WidePMode { get; private set; }
+
         private const string ConfigPath = "Game Config";
 
 
