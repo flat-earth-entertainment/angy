@@ -9,6 +9,8 @@ namespace MeshPhysics
     {
         public bool Baked { get; private set; }
 
+        private static readonly List<Transform> _objectsToRemove = new List<Transform>();
+        private static readonly List<Transform> _objectsToAdd = new List<Transform>();
         private readonly List<Transform> _meshObjects = new List<Transform>();
         private readonly List<CombineInstance> _combineInstances = new List<CombineInstance>();
 
@@ -16,12 +18,24 @@ namespace MeshPhysics
         private MeshCollider _meshCollider;
         private MeshFilter _meshFilter;
 
+
+        public static void AddObject(Transform transform)
+        {
+            _objectsToAdd.Add(transform);
+        }
+
+        public static void RemoveObject(Transform transform)
+        {
+            _objectsToRemove.Add(transform);
+        }
+
         private void Awake()
         {
             _obstacleParent = GameConfig.Instance.Tags.MapPhysicalLayoutTag.SafeFindWithThisTag().transform;
 
             _meshFilter = transform.GetComponent<MeshFilter>();
             _meshCollider = transform.GetComponent<MeshCollider>();
+            _objectsToRemove.Clear();
 
             foreach (Collider child in _obstacleParent.GetComponentsInChildren<Collider>())
             {
@@ -40,6 +54,39 @@ namespace MeshPhysics
         private void OnDisable()
         {
             GoodNeutralMushroom.BecameHole -= OnSomethingBecameHole;
+        }
+
+        private bool _shouldBake;
+
+        private void Update()
+        {
+            if (_objectsToRemove.Count > 0)
+            {
+                foreach (var obj in _objectsToRemove)
+                {
+                    _meshObjects.Remove(obj);
+                }
+
+                _objectsToRemove.Clear();
+                _shouldBake = true;
+            }
+
+            if (_objectsToAdd.Count > 0)
+            {
+                foreach (var obj in _objectsToAdd)
+                {
+                    _meshObjects.Add(obj);
+                }
+
+                _objectsToAdd.Clear();
+                _shouldBake = true;
+            }
+
+            if (_shouldBake)
+            {
+                RebakeMesh();
+                _shouldBake = false;
+            }
         }
 
         private void RebakeMesh()

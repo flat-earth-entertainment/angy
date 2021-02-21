@@ -1,4 +1,5 @@
 ﻿using Logic;
+using MeshPhysics;
 using UnityEngine;
 
 namespace Environment
@@ -32,6 +33,7 @@ namespace Environment
             if (_timer <= 0)
             {
                 gameObject.SetActive(false);
+                MeshCombiner.RemoveObject(transform);
             }
         }
     }

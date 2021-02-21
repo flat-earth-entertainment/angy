@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using MeshPhysics;
+using UnityEngine;
 
 namespace Environment
 {
@@ -21,7 +22,18 @@ namespace Environment
             {
                 foreach (var block in blocksToToggle)
                 {
-                    block.SetActive(!block.activeSelf);
+                    var newState = !block.activeSelf;
+                    block.SetActive(newState);
+
+                    if (newState)
+                    {
+                        MeshCombiner.AddObject(block.transform);
+                    }
+                    else
+                    {
+                        MeshCombiner.RemoveObject(block.transform);
+                    }
+
                     _beenToggled = true;
                 }
             }
