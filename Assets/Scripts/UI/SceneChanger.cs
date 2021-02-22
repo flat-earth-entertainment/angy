@@ -17,7 +17,8 @@ namespace UI
         [SerializeField]
         private float transitionTime;
 
-        public static async void ChangeScene(string sceneName)
+        public static async void ChangeScene(string sceneName,
+            SceneChangeType sceneChangeType = SceneChangeType.Default)
         {
             Instance.gameObject.SetActive(true);
 
@@ -60,5 +61,10 @@ namespace UI
         }
 
         private static SceneChanger _instance;
+    }
+
+    public enum SceneChangeType
+    {
+        Default
     }
 }

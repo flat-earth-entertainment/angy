@@ -63,7 +63,7 @@ namespace UI
         }
 
 
-        private async void OnContinueButtonClicked()
+        public static async void OnContinueButtonClicked()
         {
             await SceneManager.UnloadSceneAsync("Prediction");
 
@@ -77,8 +77,6 @@ namespace UI
             {
                 LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.MainMenuScene;
             }
-
-            SceneChanger.ChangeScene(GameConfig.Instance.Scenes.LeaderboardScene);
         }
 
         public void SetCameraModeActive(bool state)

@@ -102,10 +102,7 @@ namespace Logic
             Hole.PlayerEnteredHole -= OnPlayerEnteredHole;
             Hole.PlayerLeftHole -= OnPlayerLeftHole;
 
-            foreach (var player in _playersManager.Players)
-            {
-                player.WentOutOfBounds -= OnPlayerWentOutOfBounds;
-            }
+            UnsubscribeOutOfBounds();
 
             HitOtherPlayerTrigger.PlayerHit -= OnPlayerGotHit;
             GoodNeutralMushroom.HoleSpawned -= OnHoleAppeared;
@@ -113,6 +110,14 @@ namespace Logic
             PlayerView.OptionsMenuRequested -= OnOptionsMenuOpenRequested;
 
             Time.timeScale = GameConfig.Instance.TimeScale;
+        }
+
+        private void UnsubscribeOutOfBounds()
+        {
+            foreach (var player in _playersManager.Players)
+            {
+                player.WentOutOfBounds -= OnPlayerWentOutOfBounds;
+            }
         }
 
 
@@ -177,7 +182,7 @@ namespace Logic
             await _camerasController.BlendTo(holeCamera,
                 GameConfig.Instance.FlyToNextPlayerTime);
 
-            await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.HoleOrbitTime), DelayType.Realtime);
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.HoleOrbitTime), DelayType.UnscaledDeltaTime);
 
             await _camerasController.BlendTo(_currentTurnPlayer.BallCamera, GameConfig.Instance.FlyToNextPlayerTime);
 
@@ -239,31 +244,30 @@ namespace Logic
             _enteredHoleTimer?.Kill();
         }
 
-        private void OnPlayerConfirmedPresenceInHole(PlayerView player)
+        private async void OnPlayerConfirmedPresenceInHole(PlayerView player)
         {
-            Time.timeScale = 0;
+            // Time.timeScale = 0;
 
+            player.BallRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+            UnsubscribeFromPreStillEvents(player);
             var points = FindObjectOfType<PointController>().GetPoints();
 
             var winnerPoints = points.Max();
             var winnerId = points.IndexOf(winnerPoints);
             var winner = _playersManager.Players.First(p => p.PlayerId == winnerId);
 
-            var others = new List<(PlayerView, int)>();
-
-            for (int i = 0; i < _playersManager.Players.Count; i++)
-            {
-                if (i == winnerId)
-                    continue;
-
-                others.Add((_playersManager.Players.First(p => p.PlayerId == i), points[i]));
-            }
-
-            uiController.ShowWinScreen((winner, winnerPoints), others.ToArray());
-
             CurrentGameSession.NextRoundRewiredPlayerId = winner.RewiredPlayer.id;
             CurrentGameSession.Leaderboard
                 .Add(new MapScore(SceneManager.GetActiveScene().name, points[0], points[1]));
+
+            UiController.OnContinueButtonClicked();
+
+            var sceneLoad = SceneManager.LoadSceneAsync(GameConfig.Instance.Scenes.LeaderboardScene);
+            sceneLoad.allowSceneActivation = false;
+
+            await _camerasController.DOZoom(_currentTurnPlayer.BallCamera, 1f,
+                GameConfig.Instance.AfterHoleEnteredZoomTime);
+            sceneLoad.allowSceneActivation = true;
         }
 
         private void SetTrajectoryActive(bool state)

@@ -100,8 +100,8 @@ public class PlayerView : MonoBehaviour
 
     public float Drag
     {
-        get => ball.drag;
-        set => ball.drag = value;
+        get => BallRigidbody.drag;
+        set => BallRigidbody.drag = value;
     }
 
     public IPlayerInputs PlayerInputs { get; set; }
@@ -123,8 +123,8 @@ public class PlayerView : MonoBehaviour
     public CinemachineVirtualCamera BallCamera { get; private set; }
 
 
-    [SerializeField]
-    private Rigidbody ball;
+    [field: SerializeField]
+    public Rigidbody BallRigidbody { get; private set; }
 
     [SerializeField, ReadOnly]
     private PlayerState playerState;
@@ -195,20 +195,20 @@ public class PlayerView : MonoBehaviour
         Angy = GameConfig.Instance.AngyValues.MinAngy;
 
         //TODO: Convert to proper animation
-        ball.GetComponent<Collider>().enabled = false;
-        ball.useGravity = false;
+        BallRigidbody.GetComponent<Collider>().enabled = false;
+        BallRigidbody.useGravity = false;
 
-        var tweensByTarget = DOTween.TweensByTarget(ball.transform);
+        var tweensByTarget = DOTween.TweensByTarget(BallRigidbody.transform);
         if (tweensByTarget != null && tweensByTarget.Count > 0)
         {
             Hide();
         }
         else
         {
-            ball.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
+            BallRigidbody.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
             {
-                ball.GetComponent<Collider>().enabled = true;
-                ball.useGravity = true;
+                BallRigidbody.GetComponent<Collider>().enabled = true;
+                BallRigidbody.useGravity = true;
                 Hide();
             });
         }
@@ -260,8 +260,8 @@ public class PlayerView : MonoBehaviour
 
     private void OnBallBecameStill()
     {
-        var lastStillPosition = ball.position;
-        lastStillPosition.y -= ball.GetComponent<SphereCollider>().radius;
+        var lastStillPosition = BallRigidbody.position;
+        lastStillPosition.y -= BallRigidbody.GetComponent<SphereCollider>().radius;
         LastStillPosition = lastStillPosition;
         BecameStill?.Invoke();
     }
@@ -278,13 +278,13 @@ public class PlayerView : MonoBehaviour
 
     public void JumpIn(Vector3 endPosition, float jumpTime = 1f)
     {
-        endPosition.y += ball.GetComponent<SphereCollider>().radius;
+        endPosition.y += BallRigidbody.GetComponent<SphereCollider>().radius;
 
-        ball.transform.DOMove(endPosition, jumpTime)
+        BallRigidbody.transform.DOMove(endPosition, jumpTime)
             .OnComplete(delegate
             {
-                ball.velocity = Vector3.zero;
-                ball.angularVelocity = Vector3.zero;
+                BallRigidbody.velocity = Vector3.zero;
+                BallRigidbody.angularVelocity = Vector3.zero;
             });
     }
 
@@ -310,7 +310,7 @@ public class PlayerView : MonoBehaviour
 
     public void SetBallPosition(Vector3 position)
     {
-        position.y += ball.GetComponent<SphereCollider>().radius;
-        ball.transform.position = position;
+        position.y += BallRigidbody.GetComponent<SphereCollider>().radius;
+        BallRigidbody.transform.position = position;
     }
 }

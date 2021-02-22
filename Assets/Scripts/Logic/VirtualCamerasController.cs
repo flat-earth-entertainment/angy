@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using UnityEngine;
 
 namespace Logic
@@ -29,8 +30,20 @@ namespace Logic
             }
 
             cameraNoise.m_NoiseProfile = GameConfig.Instance.HitStop.HitStopNoiseSettings;
-            await UniTask.Delay(TimeSpan.FromSeconds(zoomStayTime), DelayType.Realtime);
+            await UniTask.Delay(TimeSpan.FromSeconds(zoomStayTime), DelayType.UnscaledDeltaTime);
             cameraNoise.m_NoiseProfile = null;
+        }
+
+        public UniTask DOZoom(CinemachineVirtualCamera cinemachineVirtualCamera, float fovValue, float duration)
+        {
+            DOTween.To(f => cinemachineVirtualCamera.m_Lens.FieldOfView = f,
+                40f, fovValue, duration).SetUpdate(true).OnUpdate(delegate
+            {
+                Debug.Log(cinemachineVirtualCamera.gameObject.name);
+                Debug.Log(cinemachineVirtualCamera.m_Lens.FieldOfView);
+            });
+
+            return UniTask.Delay(TimeSpan.FromSeconds(duration), DelayType.UnscaledDeltaTime);
         }
 
         public UniTask BlendTo(CinemachineVirtualCamera virtualCamera, float? blendTime = null)
@@ -38,11 +51,11 @@ namespace Logic
             if (blendTime == null)
             {
                 SetActiveCamera(virtualCamera);
-                return UniTask.Delay(TimeSpan.FromSeconds(_defaultTransitionTime), DelayType.Realtime);
+                return UniTask.Delay(TimeSpan.FromSeconds(_defaultTransitionTime), DelayType.UnscaledDeltaTime);
             }
 
             SetActiveCamera(virtualCamera, blendTime);
-            return UniTask.Delay(TimeSpan.FromSeconds(blendTime.Value), DelayType.Realtime);
+            return UniTask.Delay(TimeSpan.FromSeconds(blendTime.Value), DelayType.UnscaledDeltaTime);
         }
 
         private void Awake()

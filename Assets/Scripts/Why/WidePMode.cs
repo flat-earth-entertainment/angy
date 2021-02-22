@@ -42,7 +42,7 @@ namespace Why
                 widePSource.volume = 0;
                 widePSource.Play();
                 widePSource.DOFade(1, GameConfig.Instance.WidePMode.InTime).SetUpdate(true);
-                await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.WidePMode.Duration), DelayType.Realtime);
+                await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.WidePMode.Duration), DelayType.UnscaledDeltaTime);
 
                 widePSource.DOFade(0, GameConfig.Instance.WidePMode.OutTime).SetUpdate(true);
                 DOTween.To(f => lensDistortion.intensity.value = f, 1f, 0f, GameConfig.Instance.WidePMode.OutTime)

@@ -16,6 +16,7 @@ MonoBehaviour:
   <LevelOverviewTime>k__BackingField: 2
   <PlayerPrefab>k__BackingField: {fileID: 3588541474785268593, guid: f67f3b7dddb365443aed0228a2528e31, type: 3}
   <FlyToNextPlayerTime>k__BackingField: 1
+  <AfterHoleEnteredZoomTime>k__BackingField: 2
   <AngyValues>k__BackingField:
     <MinAngy>k__BackingField: 0
     <MaxAngy>k__BackingField: 100
@@ -28,13 +29,6 @@ MonoBehaviour:
     <MushroomHit>k__BackingField: 25
   <OutOfBoundsReactionTime>k__BackingField: 2
   <ExplosionForceOnPlayerHit>k__BackingField: 100
-  <PlayerPresets>k__BackingField:
-  - <PlayerName>k__BackingField: Player 1
-    <PlayerColor>k__BackingField: {r: 1, g: 0.3537736, b: 0.3537736, a: 1}
-    <FresnelColor>k__BackingField: {r: 1, g: 0.51204026, b: 0, a: 0}
-  - <PlayerName>k__BackingField: Player 2
-    <PlayerColor>k__BackingField: {r: 0.1462264, g: 0.62760055, b: 1, a: 1}
-    <FresnelColor>k__BackingField: {r: 0, g: 0.99111605, b: 1, a: 0}
   <GroundMask>k__BackingField:
     serializedVersion: 2
     m_Bits: 72
@@ -44,6 +38,13 @@ MonoBehaviour:
     <SpawnPointVCamTag>k__BackingField: Spawn Point VCam
     <LevelOverviewVCamTag>k__BackingField: Level Overview VCam
     <MapPhysicalLayoutTag>k__BackingField: Map Physical Layout
+  <PlayerPresets>k__BackingField:
+  - <PlayerName>k__BackingField: Player 1
+    <PlayerColor>k__BackingField: {r: 1, g: 0.3537736, b: 0.3537736, a: 1}
+    <FresnelColor>k__BackingField: {r: 1, g: 0.51204026, b: 0, a: 0}
+  - <PlayerName>k__BackingField: Player 2
+    <PlayerColor>k__BackingField: {r: 0.1462264, g: 0.62760055, b: 1, a: 1}
+    <FresnelColor>k__BackingField: {r: 0, g: 0.99111605, b: 1, a: 0}
   <MapCollections>k__BackingField:
   - <Name>k__BackingField: Mushville
     <Maps>k__BackingField:
@@ -66,6 +67,7 @@ MonoBehaviour:
   <AbilityValues>k__BackingField:
     <NoGravityAbility>k__BackingField:
       <DurationTime>k__BackingField: 2
+      <Material>k__BackingField: {fileID: 2100000, guid: 4c513c43949d5994089f4d2693009981, type: 2}
     <ExpandAbility>k__BackingField:
       <TimeToInflate>k__BackingField: 0.5
       <TimeToDeflate>k__BackingField: 0.5

@@ -136,7 +136,7 @@ namespace Audio
 
             musicSource.clip = chosenClip;
             musicSource.Play();
-            await UniTask.Delay(TimeSpan.FromSeconds(chosenClip.length), DelayType.Realtime);
+            await UniTask.Delay(TimeSpan.FromSeconds(chosenClip.length), DelayType.UnscaledDeltaTime);
 
             PlayNextMusic();
         }
