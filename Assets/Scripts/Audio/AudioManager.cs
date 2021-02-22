@@ -166,6 +166,12 @@ namespace Audio
 
         private void Awake()
         {
+            if (_instance != null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
             DontDestroyOnLoad(gameObject);
 
             MixerBands.Add(GameSettings.Settings.MasterVolume, new MixerBand("MasterVolume", masterMixer));
