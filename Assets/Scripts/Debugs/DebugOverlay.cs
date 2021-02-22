@@ -56,7 +56,7 @@ namespace Debugs
         {
             SetButtonInteractable(GameManager.CurrentTurnPlayer != null);
 
-            if (Input.GetKeyDown(KeyCode.P) && !_isWide)
+            if (Input.GetKeyDown(GameConfig.Instance.WidePMode.Key) && !_isWide)
             {
                 EngageWidePMode();
             }
