@@ -79,7 +79,7 @@ public class PredictionManager : Singleton<PredictionManager>{
 
             for (int i = 0; i < _LineLength; i++){
                 predictionPhysicsScene.Simulate(Time.fixedDeltaTime * 2);
-                lineRenderer.SetPosition(i, dummy.transform.position);
+                lineRenderer.SetPosition(i, dummy.transform.position - new Vector3(0,0.49f,0));
             }
             indicatorHolder = dummy.GetComponent<GroundIndicator>().spawnedIndicator;
             
