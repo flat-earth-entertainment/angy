@@ -34,7 +34,7 @@ namespace Player.Input
 
         private void Update()
         {
-            if (_thisPlayer.GetButton("AbilityFire"))
+            if (_thisPlayer.GetButtonDown("AbilityFire"))
             {
                 AbilityButtonPressed?.Invoke();
             }

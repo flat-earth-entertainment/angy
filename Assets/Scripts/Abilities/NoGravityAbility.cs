@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
@@ -11,14 +12,32 @@ namespace Abilities
     {
         public float DurationTime => GameConfig.Instance.AbilityValues.NoGravityAbility.DurationTime;
 
+        private PlayerView _playerView;
+        private Vector3 _initialGravity;
+        private CancellationTokenSource _cancellationTokenSource;
+
         public override async void InvokeAbility(PlayerView player)
         {
-            var gravity = Physics.gravity;
+            _playerView = player;
+            _playerView.PlayerInputs.AbilityButtonPressed += DisableAbility;
+
+            _cancellationTokenSource = new CancellationTokenSource();
+
+            _initialGravity = Physics.gravity;
             Physics.gravity = Vector3.zero;
             AudioManager.Instance.DoLowPass(.5f);
-            await UniTask.Delay(TimeSpan.FromSeconds(DurationTime), DelayType.UnscaledDeltaTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(DurationTime), DelayType.UnscaledDeltaTime,
+                cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow();
+
+            DisableAbility();
+        }
+
+        private void DisableAbility()
+        {
+            _cancellationTokenSource.Cancel();
+            _playerView.PlayerInputs.AbilityButtonPressed -= DisableAbility;
             AudioManager.Instance.UndoLowPass(.5f);
-            Physics.gravity = gravity;
+            Physics.gravity = _initialGravity;
         }
     }
 }
