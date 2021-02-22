@@ -15,6 +15,7 @@ namespace Abilities
         private PlayerView _playerView;
         private Vector3 _initialGravity;
         private CancellationTokenSource _cancellationTokenSource;
+        private Material _originalMaterial;
 
         public override async void InvokeAbility(PlayerView player)
         {
@@ -23,6 +24,8 @@ namespace Abilities
 
             _cancellationTokenSource = new CancellationTokenSource();
 
+            _originalMaterial = player.Materials[0];
+            player.SetBodyMaterial(GameConfig.Instance.AbilityValues.NoGravityAbility.Material);
             _initialGravity = Physics.gravity;
             Physics.gravity = Vector3.zero;
             AudioManager.Instance.DoLowPass(.5f);
@@ -35,6 +38,7 @@ namespace Abilities
         private void DisableAbility()
         {
             _cancellationTokenSource.Cancel();
+            _playerView.SetBodyMaterial(_originalMaterial);
             _playerView.PlayerInputs.AbilityButtonPressed -= DisableAbility;
             AudioManager.Instance.UndoLowPass(.5f);
             Physics.gravity = _initialGravity;
