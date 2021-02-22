@@ -69,6 +69,8 @@ namespace Logic
             uiController.HideAllUi();
 
             OptionsController.BackButtonClicked = OptionsController.Hide;
+
+            SetTrajectoryActive(false);
         }
 
         private async void Start()
@@ -335,7 +337,7 @@ namespace Logic
 
                     _currentTurnPlayer.SetControlsActive(true);
                     // _currentTurnPlayer.SetLookAtTrajectory(true);
-                    // SetTrajectoryActive(true);
+                    SetTrajectoryActive(true);
 
                     SubscribeToPreShotEvents(_currentTurnPlayer);
 
@@ -387,7 +389,7 @@ namespace Logic
 
             _currentTurnPlayer.SetControlsActive(false);
             // _currentTurnPlayer.SetLookAtTrajectory(false);
-            // SetTrajectoryActive(false);
+            SetTrajectoryActive(false);
 
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
