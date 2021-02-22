@@ -6,11 +6,10 @@ using Rewired;
 using TMPro;
 using UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-namespace Dice
+namespace Scenes.Dice
 {
     public class DiceRollSceneController : MonoBehaviour
     {

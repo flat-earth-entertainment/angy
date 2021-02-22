@@ -2,9 +2,8 @@ using Config;
 using NaughtyAttributes;
 using UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace Map_Selection
+namespace Scenes.Map_Selection
 {
     public class MapSelectionSceneController : MonoBehaviour
     {

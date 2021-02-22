@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Map_Selection
+namespace Scenes.Map_Selection
 {
     public class MapPreviewView : MonoBehaviour
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Map_Selection;
+using Scenes.Map_Selection;
 
 namespace Config
 {

@@ -3,9 +3,8 @@ using NaughtyAttributes;
 using Rewired;
 using UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace Lobby
+namespace Scenes.Lobby
 {
     public class LobbySceneController : MonoBehaviour
     {
