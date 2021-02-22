@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using Map_Selection;
 using NaughtyAttributes;
 using Player;
+using Scenes.Map_Selection;
 using UnityEngine;
 
 namespace Config

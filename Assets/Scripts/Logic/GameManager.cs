@@ -279,7 +279,7 @@ namespace Logic
             if (_firstPlayer == null)
                 _firstPlayer = _currentTurnPlayer;
 
-            _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
+            // _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
 
             _currentTurnPlayer.SetIdleAnimation();
 
@@ -387,7 +387,7 @@ namespace Logic
 
             _currentTurnPlayer.SetControlsActive(false);
             // _currentTurnPlayer.SetLookAtTrajectory(false);
-            SetTrajectoryActive(false);
+            // SetTrajectoryActive(false);
 
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 

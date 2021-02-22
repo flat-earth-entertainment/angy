@@ -2,7 +2,7 @@ using System;
 using NaughtyAttributes;
 using UnityEngine;
 
-namespace Map_Selection
+namespace Scenes.Map_Selection
 {
     [Serializable]
     public class MapCollection
