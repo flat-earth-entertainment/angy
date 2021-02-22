@@ -40,11 +40,15 @@ namespace Abilities
                 .SetEase(Ease.OutElastic)
                 .SetUpdate(UpdateType.Fixed);
 
-            await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic)
+            // Expand mass
+            var playerRigidbody = _player.Ball.GetComponent<Rigidbody>();
+            playerRigidbody.mass = 10;
+
+            DOTween.To(f => playerRigidbody.mass = f, 1f, 1.33f * Mathf.PI * Scale * Scale, 1f)
                 .SetUpdate(UpdateType.Fixed);
 
-            // Expand mass
-            _player.Ball.GetComponent<Rigidbody>().mass = 10;
+            await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic)
+                .SetUpdate(UpdateType.Fixed);
 
             await UniTask.Delay(TimeSpan.FromSeconds(Duration), DelayType.UnscaledDeltaTime,
                 cancellationToken: _endOfTurn.Token).SuppressCancellationThrow();
@@ -57,7 +61,9 @@ namespace Abilities
         private async UniTask Deflate()
         {
             // Lower Mass
-            _player.Ball.GetComponent<Rigidbody>().mass = 1;
+            var playerRigidbody = _player.Ball.GetComponent<Rigidbody>();
+            DOTween.To(() => playerRigidbody.mass, f => playerRigidbody.mass = f, 1f, 1f)
+                .SetUpdate(UpdateType.Fixed);
 
             AudioManager.PlaySfx(SfxType.ExpandDeactivate);
 
