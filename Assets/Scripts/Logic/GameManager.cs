@@ -279,7 +279,7 @@ namespace Logic
             if (_firstPlayer == null)
                 _firstPlayer = _currentTurnPlayer;
 
-            // _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
+            _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
 
             _currentTurnPlayer.SetIdleAnimation();
 
@@ -335,7 +335,7 @@ namespace Logic
 
                     _currentTurnPlayer.SetControlsActive(true);
                     // _currentTurnPlayer.SetLookAtTrajectory(true);
-                    SetTrajectoryActive(true);
+                    // SetTrajectoryActive(true);
 
                     SubscribeToPreShotEvents(_currentTurnPlayer);
 
