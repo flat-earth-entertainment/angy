@@ -315,7 +315,6 @@ public class Shooter : MonoBehaviour{
         if(playerToActivate == playerId){
             active = true;
             rb.constraints = RigidbodyConstraints.FreezeAll;    // Freeze player
-            PredictionManager.instance.GetComponent<LineRenderer>().enabled = true;
             transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0); // Set aiming retinae to actual shooting direction
             predict();
         }else{
