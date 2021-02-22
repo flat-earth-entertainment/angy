@@ -37,11 +37,7 @@ namespace Logic
         public UniTask DOZoom(CinemachineVirtualCamera cinemachineVirtualCamera, float fovValue, float duration)
         {
             DOTween.To(f => cinemachineVirtualCamera.m_Lens.FieldOfView = f,
-                40f, fovValue, duration).SetUpdate(true).OnUpdate(delegate
-            {
-                Debug.Log(cinemachineVirtualCamera.gameObject.name);
-                Debug.Log(cinemachineVirtualCamera.m_Lens.FieldOfView);
-            });
+                40f, fovValue, duration).SetUpdate(true);
 
             return UniTask.Delay(TimeSpan.FromSeconds(duration), DelayType.UnscaledDeltaTime);
         }
