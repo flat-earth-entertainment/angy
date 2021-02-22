@@ -90,7 +90,7 @@ namespace Logic
 
             HitOtherPlayerTrigger.PlayerHit += OnPlayerGotHit;
 
-            GoodNeutralMushroom.BecameHole += OnHoleAppeared;
+            GoodNeutralMushroom.HoleSpawned += OnHoleAppeared;
 
             PlayerView.OptionsMenuRequested += OnOptionsMenuOpenRequested;
         }
@@ -106,7 +106,7 @@ namespace Logic
             }
 
             HitOtherPlayerTrigger.PlayerHit -= OnPlayerGotHit;
-            GoodNeutralMushroom.BecameHole -= OnHoleAppeared;
+            GoodNeutralMushroom.HoleSpawned -= OnHoleAppeared;
 
             PlayerView.OptionsMenuRequested -= OnOptionsMenuOpenRequested;
 
@@ -166,11 +166,13 @@ namespace Logic
             _playerInOptions = null;
         }
 
-        private async void OnHoleAppeared(GameObject obj)
+        private async void OnHoleAppeared(GameObject hole)
         {
             Time.timeScale = 0;
 
-            await _camerasController.BlendTo(obj.GetComponentInChildren<CinemachineVirtualCamera>(),
+            var holeCamera = hole.GetComponentInChildren<CinemachineVirtualCamera>();
+
+            await _camerasController.BlendTo(holeCamera,
                 GameConfig.Instance.FlyToNextPlayerTime);
 
             await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.HoleOrbitTime), DelayType.Realtime);

@@ -8,6 +8,7 @@ using UnityEngine;
 public class GoodNeutralMushroom : MonoBehaviour
 {
     public static event Action<GameObject> BecameHole;
+    public static event Action<GameObject> HoleSpawned;
     
     public List<GameObject> fruit;
     private GameObject point;
@@ -85,7 +86,8 @@ public class GoodNeutralMushroom : MonoBehaviour
         if(Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 10f, LayerMask.GetMask("IgnoredMap"))){
             GameObject hitObject = hit.collider.gameObject;
             print($"HIT {hitObject.name} {LayerMask.LayerToName(hitObject.layer)}");
-            Instantiate(goal, hitObject.transform.position, Quaternion.identity);
+            var hole = Instantiate(goal, hitObject.transform.position, Quaternion.identity);
+            HoleSpawned?.Invoke(hole);
             BecameHole?.Invoke(hitObject);
             AudioManager.PlaySfx(SfxType.HoleAppeared);
             Destroy(hitObject);
