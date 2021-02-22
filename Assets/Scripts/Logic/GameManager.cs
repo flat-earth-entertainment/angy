@@ -469,7 +469,7 @@ namespace Logic
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.O))
             {
-                OnPlayerConfirmedPresenceInHole(null);
+                OnPlayerConfirmedPresenceInHole(_currentTurnPlayer);
             }
 
             if (Input.GetKeyDown(KeyCode.I))
