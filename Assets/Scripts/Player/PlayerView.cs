@@ -9,6 +9,7 @@ using DG.Tweening;
 using NaughtyAttributes;
 using Player;
 using Player.Input;
+using Rewired;
 using UnityEngine;
 
 public class PlayerView : MonoBehaviour
@@ -93,8 +94,8 @@ public class PlayerView : MonoBehaviour
 
 
     public Vector3 LastStillPosition { get; private set; }
-
     public GameObject Ball => _ballBehaviour.gameObject;
+    public Rewired.Player RewiredPlayer => ReInput.players.GetPlayer(PlayerId);
     public Ability Ability { get; set; }
 
     public float Drag
@@ -120,6 +121,7 @@ public class PlayerView : MonoBehaviour
 
     [field: SerializeField]
     public CinemachineVirtualCamera BallCamera { get; private set; }
+
 
     [SerializeField]
     private Rigidbody ball;

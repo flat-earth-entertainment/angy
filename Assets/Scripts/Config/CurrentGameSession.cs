@@ -4,11 +4,11 @@ using Scenes.Map_Selection;
 
 namespace Config
 {
-    public class MapScore
+    public readonly struct MapScore
     {
-        public string Name;
-        public int Player1Score;
-        public int Player2Score;
+        public readonly string Name;
+        public readonly int Player1Score;
+        public readonly int Player2Score;
 
         public MapScore(string name, int player1Score, int player2Score)
         {
@@ -20,6 +20,11 @@ namespace Config
 
     public static class CurrentGameSession
     {
+        public static readonly List<MapScore> Leaderboard = new List<MapScore>();
+        public static int? NextRoundRewiredPlayerId { get; set; }
+
+        private static MapCollection _mapCollection;
+
         public static void ClearSession()
         {
             _mapCollection = null;
@@ -32,24 +37,11 @@ namespace Config
             return maps[(maps.ToList().IndexOf(currentMap) + 1) % maps.Length];
         }
 
-        public static readonly List<MapScore> Leaderboard = new List<MapScore>();
-
         public static MapCollection MapCollection
         {
-            get
-            {
-                if (_mapCollection == null)
-                {
-                    _mapCollection = GameConfig.Instance.MapCollections[0];
-                }
-
-                return _mapCollection;
-            }
+            get => _mapCollection ??= GameConfig.Instance.MapCollections[0];
             set => _mapCollection = value;
         }
-
-
-        private static MapCollection _mapCollection;
 
         public static bool IsLastMapInList(string currentMap)
         {

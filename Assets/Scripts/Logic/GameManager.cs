@@ -236,7 +236,7 @@ namespace Logic
 
         private void OnPlayerLeftHole(PlayerView obj)
         {
-            _enteredHoleTimer?.Kill(false);
+            _enteredHoleTimer?.Kill();
         }
 
         private void OnPlayerConfirmedPresenceInHole(PlayerView player)
@@ -261,7 +261,7 @@ namespace Logic
 
             uiController.ShowWinScreen((winner, winnerPoints), others.ToArray());
 
-
+            CurrentGameSession.NextRoundRewiredPlayerId = winner.RewiredPlayer.id;
             CurrentGameSession.Leaderboard
                 .Add(new MapScore(SceneManager.GetActiveScene().name, points[0], points[1]));
         }
@@ -466,6 +466,11 @@ namespace Logic
             if (Input.GetKeyDown(KeyCode.O))
             {
                 OnPlayerConfirmedPresenceInHole(null);
+            }
+
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                CurrentGameSession.NextRoundRewiredPlayerId = 1;
             }
 #endif
         }

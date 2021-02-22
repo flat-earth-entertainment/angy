@@ -56,6 +56,12 @@ public class PlayersManager : MonoBehaviour
     {
         if (currentPlayerView == null)
         {
+            if (CurrentGameSession.NextRoundRewiredPlayerId != null)
+            {
+                var foundPlayer = _players.Find(p => p.RewiredPlayer.id == CurrentGameSession.NextRoundRewiredPlayerId);
+                return foundPlayer;
+            }
+
             return _players[0];
         }
 
