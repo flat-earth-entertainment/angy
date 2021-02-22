@@ -153,6 +153,13 @@ public class PlayerView : MonoBehaviour
         }
     }
 
+    public void SetBodyMaterial(Material material)
+    {
+        var originalMaterials = Materials;
+        originalMaterials[0] = material;
+        Materials = originalMaterials;
+    }
+
     public void AlterAngy(AngyEvent angyEvent)
     {
         switch (angyEvent)

@@ -13,7 +13,6 @@ namespace Abilities
         private PlayerView _playerView;
         private IceBlockOnCollision _otherIceBlockOnCollision;
         private Material _originalBodyMaterial;
-        private Material[] _materials;
 
         public override void InvokeAbility(PlayerView player)
         {
@@ -29,10 +28,8 @@ namespace Abilities
             _otherIceBlockOnCollision = _playerView.Ball.AddComponent<IceBlockOnCollision>();
 
             //TODO: Replace model/Play animation
-            _materials = _playerView.Materials;
-            _originalBodyMaterial = _materials[0];
-            _materials[0] = GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.IceMaterial;
-            _playerView.Materials = _materials;
+            _originalBodyMaterial = player.Materials[0];
+            player.SetBodyMaterial(GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.IceMaterial);
         }
 
         public void OnBecameStill()
@@ -43,8 +40,7 @@ namespace Abilities
 
             _playerView.Drag = _initialDrag;
 
-            _materials[0] = _originalBodyMaterial;
-            _playerView.Materials = _materials;
+            _playerView.SetBodyMaterial(_originalBodyMaterial);
 
             Object.Destroy(_otherIceBlockOnCollision);
         }
