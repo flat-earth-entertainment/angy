@@ -244,10 +244,8 @@ namespace Logic
             _enteredHoleTimer?.Kill();
         }
 
-        private async void OnPlayerConfirmedPresenceInHole(PlayerView player)
+        private void OnPlayerConfirmedPresenceInHole(PlayerView player)
         {
-            // Time.timeScale = 0;
-
             player.BallRigidbody.constraints = RigidbodyConstraints.FreezeAll;
             UnsubscribeFromPreStillEvents(player);
             var points = FindObjectOfType<PointController>().GetPoints();
@@ -335,12 +333,12 @@ namespace Logic
                     _currentTurnPlayer.Predict();
 
                     _currentTurnPlayer.SetControlsActive(true);
-                    // _currentTurnPlayer.SetLookAtTrajectory(true);
+
                     SetTrajectoryActive(true);
 
-                    SubscribeToPreShotEvents(_currentTurnPlayer);
-
                     _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
+
+                    SubscribeToPreShotEvents(_currentTurnPlayer);
 
                     break;
             }
@@ -387,7 +385,7 @@ namespace Logic
             SubscribeToPreStillEvents(_currentTurnPlayer);
 
             _currentTurnPlayer.SetControlsActive(false);
-            // _currentTurnPlayer.SetLookAtTrajectory(false);
+
             SetTrajectoryActive(false);
 
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
@@ -411,7 +409,7 @@ namespace Logic
         {
             if (_currentTurnPlayer.Ability != null)
             {
-                _currentTurnPlayer.Ability.InvokeAbility(_currentTurnPlayer);
+                _currentTurnPlayer.Ability.Invoke(_currentTurnPlayer);
                 _currentTurnPlayer.Ability = null;
             }
         }
@@ -465,11 +463,6 @@ namespace Logic
             if (Input.GetKeyDown(KeyCode.O))
             {
                 OnPlayerConfirmedPresenceInHole(_currentTurnPlayer);
-            }
-
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                CurrentGameSession.NextRoundRewiredPlayerId = 1;
             }
 #endif
         }

@@ -49,19 +49,19 @@ public class PlayerView : MonoBehaviour
     {
         set
         {
-            var oldMaterials = Materials;
+            var bodyMaterial = Materials[0];
 
-            oldMaterials[0].SetColor("Fresnel_Color1", value);
+            bodyMaterial.SetColor("Fresnel_Color1", value);
 
-            Materials = oldMaterials;
+            SetBodyMaterial(bodyMaterial);
         }
     }
 
     public Material[] Materials
     {
-        get => _shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials
+        get => shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials
             .Select(s => new Material(s)).ToArray();
-        set => _shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials = value;
+        set => shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials = value;
     }
 
     public int Angy
@@ -88,15 +88,18 @@ public class PlayerView : MonoBehaviour
         set
         {
             _playerId = value;
-            _shooter.playerId = value;
+            shooter.playerId = value;
         }
     }
 
 
     public Vector3 LastStillPosition { get; private set; }
-    public GameObject Ball => _ballBehaviour.gameObject;
+
     public Rewired.Player RewiredPlayer => ReInput.players.GetPlayer(PlayerId);
+
     public Ability Ability { get; set; }
+
+    public Ability PreviousAbility { get; set; }
 
     public float Knockback { get; set; }
 
@@ -119,11 +122,13 @@ public class PlayerView : MonoBehaviour
     }
 
     [field: SerializeField]
+    public GameObject Ball { get; private set; }
+
+    [field: SerializeField]
     public Animator Animator { get; private set; }
 
     [field: SerializeField]
     public CinemachineVirtualCamera BallCamera { get; private set; }
-
 
     [field: SerializeField]
     public Rigidbody BallRigidbody { get; private set; }
@@ -134,26 +139,31 @@ public class PlayerView : MonoBehaviour
     [SerializeField]
     private SkinnedMeshRenderer skinnedMeshRenderer;
 
-    private BallBehaviour _ballBehaviour;
-    private OutOfBoundsCheck _outOfBoundsCheck;
-    private Shooter _shooter;
+    [SerializeField]
+    private Shooter shooter;
+
+    [SerializeField]
+    private BallBehaviour ballBehaviour;
+
+    [SerializeField]
+    private OutOfBoundsCheck outOfBoundsCheck;
+
     private int _playerId;
     private int _angy;
     private Color _playerColor;
-    private BoneLookAt _boneLookAt;
 
     public void Predict()
     {
-        _shooter.predict();
+        shooter.predict();
     }
 
     public void SetIdleAnimation()
     {
-        if (_shooter.lemmingAnim != null && !_shooter.lemmingAnim.Equals(null))
+        if (shooter.lemmingAnim != null && !shooter.lemmingAnim.Equals(null))
         {
-            _ballBehaviour.ResetRotation();
-            _shooter.lemmingAnim?.SetBool("isBall", false);
-            _shooter.lemmingAnim?.SetBool("isKnockback", false);
+            ballBehaviour.ResetRotation();
+            shooter.lemmingAnim?.SetBool("isBall", false);
+            shooter.lemmingAnim?.SetBool("isKnockback", false);
         }
     }
 
@@ -221,29 +231,19 @@ public class PlayerView : MonoBehaviour
 
     public void ShouldPlayerActivate(int playerId)
     {
-        _shooter.ShouldPlayerActivate(playerId);
+        shooter.ShouldPlayerActivate(playerId);
     }
 
     private void Awake()
     {
-        _shooter = GetComponentInChildren<Shooter>();
-        if (!_shooter)
-        {
-            Debug.LogError("Can't find Shooter in children!");
-        }
-
-        _shooter.SetPlayer(this);
-
-        _ballBehaviour = _shooter.BallStorage.GetComponent<BallBehaviour>();
-        _outOfBoundsCheck = _shooter.BallStorage.GetComponent<OutOfBoundsCheck>();
-        _boneLookAt = _shooter.BallStorage.GetComponentInChildren<BoneLookAt>();
+        shooter.SetPlayer(this);
     }
 
     private async void OnEnable()
     {
-        _ballBehaviour.BecameStill += OnBallBecameStill;
-        _shooter.Shot += OnBallShot;
-        _outOfBoundsCheck.WentOutOfBounds += OnWentOutOfBounds;
+        ballBehaviour.BecameStill += OnBallBecameStill;
+        shooter.Shot += OnBallShot;
+        outOfBoundsCheck.WentOutOfBounds += OnWentOutOfBounds;
 
         await UniTask.WaitUntil(() => PlayerInputs != null);
         PlayerInputs.MenuButtonPressed += OnMenuButtonPressed;
@@ -251,9 +251,9 @@ public class PlayerView : MonoBehaviour
 
     private void OnDisable()
     {
-        _ballBehaviour.BecameStill -= OnBallBecameStill;
-        _shooter.Shot -= OnBallShot;
-        _outOfBoundsCheck.WentOutOfBounds -= OnWentOutOfBounds;
+        ballBehaviour.BecameStill -= OnBallBecameStill;
+        shooter.Shot -= OnBallShot;
+        outOfBoundsCheck.WentOutOfBounds -= OnWentOutOfBounds;
         PlayerInputs.MenuButtonPressed -= OnMenuButtonPressed;
     }
 
@@ -300,23 +300,19 @@ public class PlayerView : MonoBehaviour
 
     public void Show()
     {
-        _shooter.BallStorage.SetActive(true);
+        Ball.SetActive(true);
     }
 
     public void Hide()
     {
-        _shooter.BallStorage.SetActive(false);
+        Ball.SetActive(false);
     }
 
     public void SetControlsActive(bool toggle)
     {
-        _shooter.enabled = toggle;
+        shooter.enabled = toggle;
     }
 
-    public void SetLookAtTrajectory(bool state)
-    {
-        _boneLookAt.enabled = state;
-    }
 
     public void SetBallPosition(Vector3 position)
     {

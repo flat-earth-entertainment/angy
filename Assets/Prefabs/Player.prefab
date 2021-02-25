@@ -45,11 +45,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b86dc75e68489bb185df86803322a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Ball>k__BackingField: {fileID: 4629074905832054383}
   <Animator>k__BackingField: {fileID: 4707792727575392929}
   <BallCamera>k__BackingField: {fileID: 2568511267011732018}
   <BallRigidbody>k__BackingField: {fileID: 4629074905832054381}
   playerState: 0
   skinnedMeshRenderer: {fileID: 3996367952303146709}
+  shooter: {fileID: 8148711711352872623}
+  ballBehaviour: {fileID: 7588597462155280183}
+  outOfBoundsCheck: {fileID: 3214668965113160429}
 --- !u!114 &3357687179883922486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,6 +360,28 @@ Rigidbody:
   m_CorrespondingSourceObject: {fileID: 6734545923583936602, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
   m_PrefabInstance: {fileID: 2109987895271872055}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7588597462155280183 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8365493346235312384, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
+  m_PrefabInstance: {fileID: 2109987895271872055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4629074905832054383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6226147906295fa4daf1f18a75a512ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3214668965113160429 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -5632628007550634790, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
+  m_PrefabInstance: {fileID: 2109987895271872055}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4629074905832054383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f800343a5247d6a30c8e47d69351d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7145610341654241798
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -371,6 +397,10 @@ PrefabInstance:
       propertyPath: lemming
       value: 
       objectReference: {fileID: 8414885059241875502}
+    - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
       propertyPath: ballStorage
       value: 
@@ -441,6 +471,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
+--- !u!114 &8148711711352872623 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
+  m_PrefabInstance: {fileID: 7145610341654241798}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e402cd68c3f0bc24e9fb2ceec9a32bff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &486227173533360416 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7319796037763302182, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
