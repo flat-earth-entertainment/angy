@@ -50,8 +50,6 @@ namespace UI
             int sum1, sum2;
             sum1 = sum2 = 0;
 
-            Debug.Log(CurrentGameSession.Leaderboard.Count);
-
             for (var i = 0; i < CurrentGameSession.Leaderboard.Count; i++)
             {
                 Debug.Log(i);
