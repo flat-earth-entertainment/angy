@@ -84,20 +84,6 @@ namespace UI
             cameraModeWarning.SetActive(state);
         }
 
-        public void ShowWinScreen((PlayerView, int) winner, params (PlayerView, int)[] others)
-        {
-            winText.text = winner.Item1.Nickname + " won!\n";
-            winText.text += winner.Item1.Nickname + " : " + winner.Item2 + "\n";
-
-            foreach (var playerAndScore in others)
-            {
-                winText.text += playerAndScore.Item1.Nickname + " : " + playerAndScore.Item2 + "\n";
-            }
-
-            HideAllUi();
-            winScreen.SetActive(true);
-        }
-
         public void HideAllUi()
         {
             angyMeter.SetActive(false);
