@@ -16,9 +16,13 @@ namespace Debugs
         [SerializeField]
         private Button iceBlockAbility;
 
+        private Canvas _debugCanvas;
 
         private void Awake()
         {
+            _debugCanvas = GetComponent<Canvas>();
+            _debugCanvas.enabled = false;
+
             expandAbility.onClick.AddListener(delegate
             {
                 GameManager.CurrentTurnPlayer.Ability = new ExpandAbility();
@@ -45,6 +49,11 @@ namespace Debugs
         private void Update()
         {
             SetButtonInteractable(GameManager.CurrentTurnPlayer != null);
+
+            if (Input.GetKeyDown(KeyCode.F3))
+            {
+                _debugCanvas.enabled = !_debugCanvas.enabled;
+            }
         }
     }
 }
