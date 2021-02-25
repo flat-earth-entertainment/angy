@@ -51,7 +51,7 @@ public class GoodNeutralMushroom : MonoBehaviour
                 }
 
                 splatter.Play(true);
-                point = Instantiate(fruit[0], transform.position + new Vector3(0,1f,0), Quaternion.identity);
+                point = Instantiate(fruit[0], transform.position + new Vector3(0,1f,0), Quaternion.Euler(0,0,15));
                 AudioManager.PlaySfx(SfxType.MushroomHit);
                 other.transform.parent.GetComponent<PlayerView>().AlterAngy(AngyEvent.MushroomHit);
 
@@ -73,8 +73,10 @@ public class GoodNeutralMushroom : MonoBehaviour
                     item.materials = new Material[1] {baseFruitMat};
 
                     item.materials[0].SetColor("BerryColor", other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
+                    item.gameObject.GetComponent<BerryAnim>().BerryHit();
                 }
             }else{
+                point.GetComponent<BerryAnim>().BerryHit();
                 point.GetComponent<Renderer>().materials[0].SetColor("BerryColor", other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
             }
         }
