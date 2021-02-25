@@ -19,7 +19,6 @@ public class GroundIndicator : MonoBehaviour
                 spawnedIndicator.transform.position = new Vector3(0,0.01f,0) + hit.point;
             }
             //spawnedIndicator.transform.rotation = Quaternion.LookRotation(direction, transform.up);
-            print("Done");
             
         }
         timer++;
