@@ -1,6 +1,5 @@
 using Config;
 using Cysharp.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,15 +8,6 @@ namespace UI
 {
     public class UiController : MonoBehaviour
     {
-        [SerializeField]
-        private Button restartButton;
-
-        [SerializeField]
-        private GameObject winScreen;
-
-        [SerializeField]
-        private TextMeshProUGUI winText;
-
         [SerializeField]
         private GameObject cameraModeWarning;
 
@@ -33,14 +23,10 @@ namespace UI
         [SerializeField]
         private PlayersManager playersManager;
 
-        // private PlayerView _activePlayer;
-
         private void Awake()
         {
             angySlider.minValue = angySlider2.minValue = GameConfig.Instance.AngyValues.MinAngy;
             angySlider.maxValue = angySlider2.maxValue = GameConfig.Instance.AngyValues.MaxAngy;
-
-            restartButton.onClick.AddListener(OnContinueButtonClicked);
 
             playersManager.InitializedAllPlayers += OnPlayersInitialized;
         }
@@ -87,24 +73,17 @@ namespace UI
         public void HideAllUi()
         {
             angyMeter.SetActive(false);
-            winScreen.SetActive(false);
             cameraModeWarning.SetActive(false);
         }
 
-        public void EnableAngyMeterFor(PlayerView player)
+        public void EnableAngyMeterFor()
         {
-            // _activePlayer = player;
-            // angySlider.value = player.Angy;
-            // player.AngyChanged += OnActivePlayerAngyChanged;
-
             angyMeter.SetActive(true);
         }
 
         public void DisableAngyMeter()
         {
             angyMeter.SetActive(false);
-            // _activePlayer.AngyChanged -= OnActivePlayerAngyChanged;
-            // _activePlayer = null;
         }
 
         private void OnPlayer1AngyChanged(int newAngyValue)

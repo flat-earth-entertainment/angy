@@ -335,7 +335,7 @@ namespace Logic
                     goto case PlayerState.ShouldMakeTurn;
 
                 case PlayerState.ShouldMakeTurn:
-                    uiController.EnableAngyMeterFor(_currentTurnPlayer);
+                    uiController.EnableAngyMeterFor();
 
                     _currentTurnPlayer.Predict();
 
