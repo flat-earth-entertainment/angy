@@ -262,12 +262,7 @@ namespace Logic
 
             UiController.OnContinueButtonClicked();
 
-            var sceneLoad = SceneManager.LoadSceneAsync(GameConfig.Instance.Scenes.LeaderboardScene);
-            sceneLoad.allowSceneActivation = false;
-
-            await _camerasController.DOZoom(_currentTurnPlayer.BallCamera, 1f,
-                GameConfig.Instance.AfterHoleEnteredZoomTime);
-            sceneLoad.allowSceneActivation = true;
+            SceneChanger.ChangeScene(GameConfig.Instance.Scenes.LeaderboardScene, SceneChangeType.MapChange);
         }
 
         private void SetTrajectoryActive(bool state)

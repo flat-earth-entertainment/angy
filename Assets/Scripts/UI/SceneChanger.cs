@@ -1,3 +1,4 @@
+using System;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -12,6 +13,9 @@ namespace UI
         private GameObject logo;
 
         [SerializeField]
+        private RectTransform cutout;
+
+        [SerializeField]
         private float endScale;
 
         [SerializeField]
@@ -21,14 +25,32 @@ namespace UI
             SceneChangeType sceneChangeType = SceneChangeType.Default)
         {
             Instance.gameObject.SetActive(true);
+            Instance.logo.SetActive(false);
+            Instance.cutout.gameObject.SetActive(false);
 
             var sceneLoad = SceneManager.LoadSceneAsync(sceneName);
             sceneLoad.allowSceneActivation = false;
 
-            Instance.logo.transform.localScale = Vector3.zero;
-            await Instance.logo.transform.DOScale(Instance.endScale, Instance.transitionTime)
-                .SetEase(Ease.InCubic)
-                .SetUpdate(true);
+            switch (sceneChangeType)
+            {
+                case SceneChangeType.Default:
+                    Instance.logo.SetActive(true);
+                    Instance.logo.transform.localScale = Vector3.zero;
+                    await Instance.logo.transform.DOScale(Instance.endScale, Instance.transitionTime)
+                        .SetEase(Ease.InCubic)
+                        .SetUpdate(true);
+                    break;
+
+                case SceneChangeType.MapChange:
+                    Instance.cutout.gameObject.SetActive(true);
+                    Instance.cutout.sizeDelta = new Vector2(4000, 4000);
+                    await Instance.cutout.DOSizeDelta(Vector2.zero, Instance.transitionTime)
+                        .SetEase(Ease.Linear)
+                        .SetUpdate(true);
+                    break;
+            }
+
+
             sceneLoad.allowSceneActivation = true;
 
             await UniTask.NextFrame();
@@ -65,6 +87,7 @@ namespace UI
 
     public enum SceneChangeType
     {
-        Default
+        Default,
+        MapChange
     }
 }
