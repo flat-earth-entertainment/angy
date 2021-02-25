@@ -70,13 +70,12 @@ public class GoodNeutralMushroom : MonoBehaviour
             if(!point.GetComponent<Renderer>()){
                 foreach (Renderer item in point.GetComponentsInChildren<Renderer>())
                 {
-                    item.materials = new Material[2] {baseFruitMat, baseFruitTopMat};
+                    item.materials = new Material[1] {baseFruitMat};
 
-                    item.materials[0].SetColor("_BaseColor", other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
-                    item.materials[1].SetColor("_BaseColor", new Color(0.125f,1,0.35f,1));
+                    item.materials[0].SetColor("BerryColor", other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
                 }
             }else{
-                point.GetComponent<Renderer>().materials[0].SetColor("_BaseColor", other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
+                point.GetComponent<Renderer>().materials[0].SetColor("BerryColor", other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
             }
         }
     }
