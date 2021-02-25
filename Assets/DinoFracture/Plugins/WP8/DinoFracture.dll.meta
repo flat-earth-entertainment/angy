@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 356410604d89c1b4fb4bc86f3dcce68b
+guid: d09ec96a865152a41845caa280912939
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -12,55 +12,35 @@ PluginImporter:
   validateReferences: 1
   platformData:
   - first:
-      : BlackBerry
-    second:
-      enabled: 1
-      settings: {}
-  - first:
       : Linux
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: x86
   - first:
-      : LinuxUniversal
-    second:
-      enabled: 1
-      settings: {}
-  - first:
       : OSXIntel
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
   - first:
       : OSXIntel64
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
   - first:
       : WP8
     second:
-      enabled: 0
+      enabled: 1
       settings:
         CPU: AnyCPU
         DontProcess: False
-        PlaceholderPath: 
-  - first:
-      : Web
-    second:
-      enabled: 1
-      settings: {}
-  - first:
-      : WebStreamed
-    second:
-      enabled: 1
-      settings: {}
+        PlaceholderPath: Assets/Plugins/DinoFracture.dll
   - first:
       Android: Android
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
   - first:
@@ -71,7 +51,7 @@ PluginImporter:
   - first:
       Editor: Editor
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
         DefaultValueInitialized: true
@@ -79,32 +59,21 @@ PluginImporter:
   - first:
       Standalone: Linux64
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
   - first:
-      Standalone: OSXUniversal
-    second:
-      enabled: 1
-      settings:
-        CPU: 
-  - first:
       Standalone: Win
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
   - first:
       Standalone: Win64
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CPU: AnyCPU
-  - first:
-      WebGL: WebGL
-    second:
-      enabled: 1
-      settings: {}
   - first:
       Windows Store Apps: WindowsStoreApps
     second:
@@ -112,12 +81,12 @@ PluginImporter:
       settings:
         CPU: AnyCPU
         DontProcess: False
-        PlaceholderPath: 
+        PlaceholderPath: Assets/Plugins/DinoFracture.dll
         SDK: AnySDK
   - first:
       iPhone: iOS
     second:
-      enabled: 1
+      enabled: 0
       settings:
         CompileFlags: 
         FrameworkDependencies: 

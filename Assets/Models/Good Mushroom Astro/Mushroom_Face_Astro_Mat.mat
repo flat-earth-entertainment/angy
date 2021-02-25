@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BerryMat
-  m_Shader: {fileID: -6465566751694194690, guid: dde604209ecfa91488e3e27d415af6f8, type: 3}
+  m_Name: Mushroom_Face_Astro_Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 1de166d69874f224da0e98678f3c0eb8, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,6 +19,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2DArray_05e1e6b53cd241838a0c5052e1b2380c:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_2203fa2a502a44eda9a8d290263d1d51:
+        m_Texture: {fileID: 2800000, guid: 1654a101947f7894489184b254997170, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -59,14 +67,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_493e32dbab21480bbd0e6e1f20fc67dd_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 2dff1b110153a404f84b79b8cf1370ff, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_619368e4c9a44de2b161224064e441f4_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 16cb7336c1b36194c9cdaf80bf8871eb, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -84,8 +84,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_146c56d36320483288b01e7f9139ce10: 0
-    - Vector1_8e303bdaf01340be96f3eefca3022959: 2.59
+    - MushroomFace: 0
+    - Vector1_16f38dc3393048cbbc99cf9c25daa11a: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -112,17 +112,16 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
-    - isGrey: 1
     m_Colors:
-    - BerryColor: {r: 0.32549024, g: 0.9245691, b: 1, a: 0}
-    - Color_7c88e49871014aa4976e624543f53508: {r: 0.32547167, g: 0.8852262, b: 1, a: 0}
-    - Color_9db10b5342b44ff28608eac81dc51f44: {r: 0.94128746, g: 1, b: 0.6745283, a: 0}
+    - Vector2_0e548d8a742a4f21917289b5b6e5c324: {r: 1, g: 0, b: 0, a: 0}
+    - Vector2_72cddcf73e644da2bf4b4713f2262156: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_bedcb1a744384220b21ec07368990b0f: {r: 0.27, g: 1, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &4626082530256681666
+--- !u!114 &2301255626568418279
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

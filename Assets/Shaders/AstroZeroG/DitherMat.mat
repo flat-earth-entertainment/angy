@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3698644853155747457
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 4
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -7,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ProtoMushGoodMat
+  m_Name: DitherMat
   m_Shader: {fileID: -6465566751694194690, guid: 400fa3a52038482429c2197ec78e01c5, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -19,8 +32,20 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Cubemap_09fdd681143947e7876e311cce69d49f:
+        m_Texture: {fileID: 8900000, guid: adc1c917d8b79a64991e312ef38b8a3b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _AlbedoTexture:
-        m_Texture: {fileID: 2800000, guid: 2f19bd62261ab714bb8c1fb65f5de723, type: 3}
+        m_Texture: {fileID: 2800000, guid: 37a058583b37455459057c753b1577b4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BASE_COLOR_MAP:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BUMP_MAP:
+        m_Texture: {fileID: 2800000, guid: 8878a782f4334ecbbcf683b3ac780966, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -43,12 +68,20 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _EMISSION_COLOR_MAP:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _MainTex:
+    - _METALNESS_MAP:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 55395ad1816d94641a7482fe0fbf71ab, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -63,15 +96,23 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_2354e8e4c51e4a53ab6d425270673f3a_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 2000921332cf36046845d344dce3e046, type: 3}
+    - _REFLECTIONS_COLOR_MAP:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_eb4ffeea9c8b480abf22f22dc72e4634_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 2f19bd62261ab714bb8c1fb65f5de723, type: 3}
+    - _REFLECTIONS_IOR_MAP:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _REFLECTIONS_ROUGHNESS_MAP:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _TRANSPARENCY_MAP:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -88,7 +129,13 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_033e360d8ea74a67a26eeff44dbf74c7: 6.77
+    - Vector1_37bb3c5b2461409982304662d472277b: 1.97
+    - Vector1_9692e06c43ff41ce910ef49e95a31ce8: 27.04
+    - Vector1_eaa148b43e944027a28bcdb33718e80b: 1.7
     - _AlphaClip: 0
+    - _BASE_COLOR_WEIGHT: 1
+    - _BUMP_MAP_STRENGTH: 7.26
     - _Blend: 0
     - _BumpScale: 1
     - _ClearCoatMask: 0
@@ -97,43 +144,44 @@ Material:
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
-    - _DitherSize: 2.2
+    - _DitherSize: 1.29
     - _DstBlend: 0
+    - _EMISSION_WEIGHT: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _METALNESS: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _Opacity: 0.64
+    - _Opacity: 0.76
     - _Parallax: 0.005
     - _QueueOffset: 0
+    - _REFLECTIONS_IOR: 1.52
+    - _REFLECTIONS_ROUGHNESS: 0.145
+    - _REFLECTIONS_WEIGHT: 1
     - _ReceiveShadows: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
+    - _TRANSPARENCY: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _AlbedoColor: {r: 1, g: 1, b: 1, a: 1}
+    - Color_08210d0322a04b919cb5c73ffa748484: {r: 1, g: 0.18228093, b: 0, a: 0}
+    - Color_082371b3586345d1b4381f5c1dedbdf5: {r: 0, g: 6.296432, b: 31.999996, a: 0}
+    - Color_7a753d9723a744eb9e37ed90e818ee97: {r: 0.7067391, g: 1, b: 0.32547167, a: 0}
+    - Color_7d11c5d643d947f0993520f992082a3a: {r: 1, g: 0.030305536, b: 0, a: 0}
+    - Color_c01b158aa3674087b843319d8d5496be: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_2f585fedc5b1458ca0d3b76abfdd09e2: {r: 0, g: 0.54, b: 0, a: 0}
+    - _AlbedoColor: {r: 0.076538086, g: 1, b: 0, a: 1}
+    - _BASE_COLOR: {r: 0.9811321, g: 0.97670054, b: 0.89320046, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Emission: {r: 2, g: 2, b: 2, a: 1}
+    - _EMISSION_COLOR: {r: 0.735849, g: 0.6820835, b: 0.51023495, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _REFLECTIONS_COLOR: {r: 0.82373774, g: 1, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &8029761368674755613
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 4

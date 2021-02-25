@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-3698644853155747457
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 4
 --- !u!21 &2100000
 Material:
   serializedVersion: 6
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BerryMat
-  m_Shader: {fileID: -6465566751694194690, guid: dde604209ecfa91488e3e27d415af6f8, type: 3}
+  m_Name: FlameBlueMat
+  m_Shader: {fileID: -6465566751694194690, guid: 4ee0f864f7650584dbd685cd5c9d5765, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,6 +32,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Cubemap_09fdd681143947e7876e311cce69d49f:
+        m_Texture: {fileID: 8900000, guid: adc1c917d8b79a64991e312ef38b8a3b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -59,14 +76,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_493e32dbab21480bbd0e6e1f20fc67dd_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 2dff1b110153a404f84b79b8cf1370ff, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_619368e4c9a44de2b161224064e441f4_Texture_1:
-        m_Texture: {fileID: 2800000, guid: 16cb7336c1b36194c9cdaf80bf8871eb, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -84,8 +93,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_146c56d36320483288b01e7f9139ce10: 0
-    - Vector1_8e303bdaf01340be96f3eefca3022959: 2.59
+    - Vector1_37bb3c5b2461409982304662d472277b: 1.97
+    - Vector1_9692e06c43ff41ce910ef49e95a31ce8: 27.04
+    - Vector1_eaa148b43e944027a28bcdb33718e80b: 1.7
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -112,26 +122,12 @@ Material:
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
-    - isGrey: 1
     m_Colors:
-    - BerryColor: {r: 0.32549024, g: 0.9245691, b: 1, a: 0}
-    - Color_7c88e49871014aa4976e624543f53508: {r: 0.32547167, g: 0.8852262, b: 1, a: 0}
-    - Color_9db10b5342b44ff28608eac81dc51f44: {r: 0.94128746, g: 1, b: 0.6745283, a: 0}
+    - Color_082371b3586345d1b4381f5c1dedbdf5: {r: 0, g: 6.296432, b: 31.999996, a: 0}
+    - Color_c01b158aa3674087b843319d8d5496be: {r: 0, g: 0, b: 0, a: 0}
+    - Vector2_2f585fedc5b1458ca0d3b76abfdd09e2: {r: 0, g: 0.54, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &4626082530256681666
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 4

@@ -7,8 +7,10 @@ using Logic;
 using Config;
 using Audio;
 
-public class Shooter : MonoBehaviour{
+public class Shooter : MonoBehaviour
+{
 
+    public ParticleSystem dust;
     public event Action Shot;
     
     public GameObject lemming;
@@ -224,6 +226,7 @@ public class Shooter : MonoBehaviour{
         
         // Shoot the ball
         shoot();
+        CreateDust();
         DisableRetinae();
         active = false;
         
@@ -320,5 +323,10 @@ public class Shooter : MonoBehaviour{
         }else{
             active = false;
         }
+    }
+
+    private void CreateDust()
+    {
+        dust.Play();
     }
 }
