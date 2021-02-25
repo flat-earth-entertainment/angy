@@ -10,20 +10,20 @@ namespace Ball
 
         private void OnCollisionEnter(Collision other)
         {
-            if (other.transform.childCount >= 1)
+            if (other.transform.CompareTag("Lemming"))
             {
-                if (other.transform.GetChild(0).TryGetComponent(out Shooter shooter))
+                if (other.transform.GetChild(0).TryGetComponent(out Shooter otherShooter))
                 {
                     if (GameConfig.Instance.ExplosionForceOnPlayerHit != 0)
                     {
-                        GetComponent<Rigidbody>().AddExplosionForce(GameConfig.Instance.ExplosionForceOnPlayerHit,
-                            other.contacts[0].point, 1f);
-                        other.rigidbody.AddExplosionForce(GameConfig.Instance.ExplosionForceOnPlayerHit,
-                            other.contacts[0].point, 1f);
+                        GetComponent<Rigidbody>()
+                            .AddForce((other.transform.position - transform.position) *
+                                      otherShooter.PlayerView.Knockback);
                     }
 
-                    shooter.SetBallFormActive(true);
-                    PlayerHit?.Invoke(shooter.PlayerView, transform.GetChild(0).GetComponent<Shooter>().PlayerView);
+                    otherShooter.SetBallFormActive(true);
+                    PlayerHit?.Invoke(otherShooter.PlayerView,
+                        transform.GetChild(0).GetComponent<Shooter>().PlayerView);
                 }
             }
         }

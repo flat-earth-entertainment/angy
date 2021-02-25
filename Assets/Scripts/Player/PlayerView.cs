@@ -98,6 +98,8 @@ public class PlayerView : MonoBehaviour
     public Rewired.Player RewiredPlayer => ReInput.players.GetPlayer(PlayerId);
     public Ability Ability { get; set; }
 
+    public float Knockback { get; set; }
+
     public float Drag
     {
         get => BallRigidbody.drag;
@@ -201,10 +203,13 @@ public class PlayerView : MonoBehaviour
         var tweensByTarget = DOTween.TweensByTarget(BallRigidbody.transform);
         if (tweensByTarget != null && tweensByTarget.Count > 0)
         {
+            BallRigidbody.GetComponent<Collider>().enabled = true;
+            BallRigidbody.useGravity = true;
             Hide();
         }
         else
         {
+            BallRigidbody.transform.localScale = Vector3.one;
             BallRigidbody.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
             {
                 BallRigidbody.GetComponent<Collider>().enabled = true;
@@ -261,7 +266,12 @@ public class PlayerView : MonoBehaviour
     private void OnBallBecameStill()
     {
         var lastStillPosition = BallRigidbody.position;
-        lastStillPosition.y -= BallRigidbody.GetComponent<SphereCollider>().radius;
+        if (Physics.Raycast(BallRigidbody.position, Vector3.down, out var hit, 10f, LayerMask.GetMask("IgnoredMap")))
+        {
+            lastStillPosition = hit.point;
+        }
+
+        // lastStillPosition.y += BallRigidbody.GetComponent<SphereCollider>().radius;
         LastStillPosition = lastStillPosition;
         BecameStill?.Invoke();
     }

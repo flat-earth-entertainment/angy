@@ -39,6 +39,7 @@ public class PlayersManager : MonoBehaviour
             player.Nickname = playerPreset.PlayerName;
             player.PlayerColor = playerPreset.PlayerColor;
             player.FresnelColor = playerPreset.FresnelColor;
+            player.Knockback = GameConfig.Instance.ExplosionForceOnPlayerHit;
             player.PlayerState = PlayerState.ShouldSpawnAtSpawn;
             player.PlayerInputs = RewiredPlayerInputs.AttachToPlayer(player);
 
