@@ -24,7 +24,7 @@ namespace Abilities
         private Vector3 _initialScale;
         private bool _deflated;
 
-        public override async void InvokeAbility(PlayerView player)
+        protected override async void InvokeAbility(PlayerView player)
         {
             _endOfTurn = new CancellationTokenSource();
             _player = player;

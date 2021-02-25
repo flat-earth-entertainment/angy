@@ -14,7 +14,7 @@ namespace Abilities
         private IceBlockOnCollision _otherIceBlockOnCollision;
         private Material _originalBodyMaterial;
 
-        public override void InvokeAbility(PlayerView player)
+        protected override void InvokeAbility(PlayerView player)
         {
             AudioManager.PlaySfx(SfxType.IceBlockActivate);
 

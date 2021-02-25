@@ -17,7 +17,7 @@ namespace Abilities
         private CancellationTokenSource _cancellationTokenSource;
         private Material _originalMaterial;
 
-        public override async void InvokeAbility(PlayerView player)
+        protected override async void InvokeAbility(PlayerView player)
         {
             _playerView = player;
             _playerView.PlayerInputs.AbilityButtonPressed += DisableAbility;

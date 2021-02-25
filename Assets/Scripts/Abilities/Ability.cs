@@ -5,6 +5,22 @@ namespace Abilities
     [Serializable]
     public abstract class Ability
     {
-        public abstract void InvokeAbility(PlayerView player);
+        public static Ability Copy(Ability ability)
+        {
+            if (ability == null)
+            {
+                return null;
+            }
+
+            return (Ability) Activator.CreateInstance(ability.GetType());
+        }
+
+        public void Invoke(PlayerView player)
+        {
+            player.PreviousAbility = this;
+            InvokeAbility(player);
+        }
+
+        protected abstract void InvokeAbility(PlayerView player);
     }
 }

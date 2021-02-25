@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Abilities;
 using Ball;
 using Ball.Objectives;
 using Cinemachine;
@@ -329,6 +330,8 @@ namespace Logic
 
                 case PlayerState.ShouldMakeTurn:
                     uiController.EnableAngyMeterFor();
+
+                    _currentTurnPlayer.Ability = Ability.Copy(_currentTurnPlayer.PreviousAbility);
 
                     _currentTurnPlayer.Predict();
 
