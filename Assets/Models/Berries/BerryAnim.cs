@@ -24,7 +24,7 @@ public class BerryAnim : MonoBehaviour
     {
         transform.Rotate(new Vector3(0, rotSpeed * Time.deltaTime, 0), Space.World);
        
-       if (Input.GetButtonDown("Fire1"))
+       if (Input.GetButtonDown("Fire1") && !DOTween.IsTweening(transform))
        {
            transform.DOPunchScale(punchScale, duration, vibrato, elasticity);
            transform.Rotate(new Vector3());
