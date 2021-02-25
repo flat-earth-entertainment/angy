@@ -40,11 +40,15 @@ namespace Abilities
                 .SetEase(Ease.OutElastic)
                 .SetUpdate(UpdateType.Fixed);
 
-            // Expand mass
-            var playerRigidbody = _player.Ball.GetComponent<Rigidbody>();
-            playerRigidbody.mass = 10;
+            DOTween.To(() => _player.Knockback, f => _player.Knockback = f,
+                    _player.Knockback * 1000f, TimeToInflate)
+                .SetEase(Ease.OutElastic)
+                .SetUpdate(UpdateType.Fixed);
 
-            DOTween.To(f => playerRigidbody.mass = f, 1f, 1.33f * Mathf.PI * Scale * Scale, 1f)
+            // Expand mass
+            _player.BallRigidbody.mass = 10;
+
+            DOTween.To(f => _player.BallRigidbody.mass = f, 1f, (float) 1e+8, 1f)
                 .SetUpdate(UpdateType.Fixed);
 
             await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic)
@@ -61,9 +65,8 @@ namespace Abilities
         private async UniTask Deflate()
         {
             // Lower Mass
-            var playerRigidbody = _player.Ball.GetComponent<Rigidbody>();
-            DOTween.To(() => playerRigidbody.mass, f => playerRigidbody.mass = f, 1f, 1f)
-                .SetUpdate(UpdateType.Fixed);
+            DOTween.To(() => _player.BallRigidbody.mass, f => _player.BallRigidbody.mass = f, 1f, 1f)
+                .SetUpdate(UpdateType.Fixed).OnComplete(delegate { _player.BallRigidbody.mass = 1; });
 
             AudioManager.PlaySfx(SfxType.ExpandDeactivate);
 
@@ -73,7 +76,13 @@ namespace Abilities
                 .SetEase(Ease.OutElastic)
                 .SetUpdate(UpdateType.Fixed);
 
-            await _player.Ball.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(UpdateType.Fixed);
+            DOTween.To(() => _player.Knockback, f => _player.Knockback = f,
+                    GameConfig.Instance.ExplosionForceOnPlayerHit, TimeToInflate)
+                .SetEase(Ease.OutElastic)
+                .SetUpdate(UpdateType.Fixed);
+
+            await _player.BallRigidbody.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(UpdateType.Fixed);
+            _deflated = true;
         }
 
         private void OnPlayerBecameStill()
