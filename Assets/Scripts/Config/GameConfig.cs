@@ -75,6 +75,9 @@ namespace Config
         [field: SerializeField, BoxGroup("Technical")]
         public GameObject SceneChanger { get; private set; }
 
+        [field: SerializeField, BoxGroup("Technical")]
+        public GameObject PauseMenu { get; private set; }
+
         [field: SerializeField, BoxGroup("Mechanics")]
         public WidePModeConfig WidePMode { get; private set; }
 

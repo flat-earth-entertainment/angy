@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Abilities;
 using Ball;
 using Ball.Objectives;
@@ -66,10 +67,7 @@ namespace Logic
                 Debug.LogError(
                     "Can't find Pan Controller! Make sure it is in scene or is not spawned after frame 1!");
 
-
             uiController.HideAllUi();
-
-            OptionsController.BackButtonClicked = OptionsController.Hide;
 
             SetTrajectoryActive(false);
         }
@@ -95,7 +93,7 @@ namespace Logic
 
             GoodNeutralMushroom.HoleSpawned += OnHoleAppeared;
 
-            PlayerView.OptionsMenuRequested += OnOptionsMenuOpenRequested;
+            PlayerView.OptionsMenuRequested += OnPauseMenuOpenRequested;
         }
 
         private void OnDisable()
@@ -108,7 +106,7 @@ namespace Logic
             HitOtherPlayerTrigger.PlayerHit -= OnPlayerGotHit;
             GoodNeutralMushroom.HoleSpawned -= OnHoleAppeared;
 
-            PlayerView.OptionsMenuRequested -= OnOptionsMenuOpenRequested;
+            PlayerView.OptionsMenuRequested -= OnPauseMenuOpenRequested;
 
             Time.timeScale = GameConfig.Instance.TimeScale;
         }
@@ -122,29 +120,31 @@ namespace Logic
         }
 
 
-        private void OnOptionsMenuOpenRequested(PlayerView caller)
+        private void OnPauseMenuOpenRequested(PlayerView caller)
         {
-            if (_playerInOptions == null
-                && caller.PlayerState != PlayerState.ActivePowerMode
-                && _currentTurnPlayer.PlayerState != PlayerState.ActivePowerMode)
-            {
-                caller.PlayerInputs.MenuButtonPressed += OnOptionsMenuCloseRequested;
-                OptionsController.Show();
-                Time.timeScale = 0f;
-                _playerInOptions = caller;
+            if (_playerInOptions != null
+                || caller.PlayerState == PlayerState.ActivePowerMode
+                || _currentTurnPlayer.PlayerState == PlayerState.ActivePowerMode)
+                return;
 
-                if (_currentTurnPlayer == caller)
+            caller.PlayerInputs.MenuButtonPressed += OnOptionsMenuCloseRequested;
+
+            PauseMenu.Show(OnOptionsMenuCloseRequested);
+
+            Time.timeScale = 0f;
+            _playerInOptions = caller;
+
+            if (_currentTurnPlayer == caller)
+            {
+                switch (_currentTurnPlayer.PlayerState)
                 {
-                    switch (_currentTurnPlayer.PlayerState)
-                    {
-                        case PlayerState.ActiveAiming:
-                            UnsubscribeFromPreShotEvents(_currentTurnPlayer);
-                            _currentTurnPlayer.SetControlsActive(false);
-                            break;
-                        case PlayerState.ActiveInMotion:
-                            UnsubscribeFromPreStillEvents(_currentTurnPlayer);
-                            break;
-                    }
+                    case PlayerState.ActiveAiming:
+                        UnsubscribeFromPreShotEvents(_currentTurnPlayer);
+                        _currentTurnPlayer.SetControlsActive(false);
+                        break;
+                    case PlayerState.ActiveInMotion:
+                        UnsubscribeFromPreStillEvents(_currentTurnPlayer);
+                        break;
                 }
             }
         }
@@ -153,7 +153,7 @@ namespace Logic
         {
             _playerInOptions.PlayerInputs.MenuButtonPressed -= OnOptionsMenuCloseRequested;
 
-            OptionsController.Hide();
+            PauseMenu.Hide();
             Time.timeScale = GameConfig.Instance.TimeScale;
 
             if (_currentTurnPlayer == _playerInOptions)
@@ -170,7 +170,7 @@ namespace Logic
                 }
             }
 
-            await UniTask.Delay(TimeSpan.FromMilliseconds(100));
+            await UniTask.Delay(TimeSpan.FromMilliseconds(100), DelayType.UnscaledDeltaTime);
             _playerInOptions = null;
         }
 
