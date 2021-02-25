@@ -12,9 +12,6 @@ namespace Ball
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (_isInAction)
-                return;
-
             if (collision.transform.CompareTag("Lemming"))
             {
                 if (collision.impulse.sqrMagnitude > GameConfig.Instance.HitStop.HitStopTriggerImpulse)
@@ -35,6 +32,9 @@ namespace Ball
 
         private static async void HitStop()
         {
+            if (_isInAction)
+                return;
+
             var hitStopValues = GameConfig.Instance.HitStop;
             FindObjectOfType<VirtualCamerasController>().ShakeFor(hitStopValues.ZoomOutTime);
 
