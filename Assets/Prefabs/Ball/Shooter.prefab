@@ -45,12 +45,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e402cd68c3f0bc24e9fb2ceec9a32bff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dust: {fileID: 741197340632538276, guid: 0632a5e3aeeb7114ebf51b7c67f1c11a, type: 3}
   lemming: {fileID: 0}
   lemmingAnim: {fileID: 0}
   playerId: 0
   firePoint: {fileID: 1314000644727037030}
   ballPrefab: {fileID: 6734545923583936600, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
-  power: 15
+  power: 13
   rotationSpeed: 45
   rotationX: 0
   xMinAngle: 180
@@ -67,6 +68,8 @@ MonoBehaviour:
   rb: {fileID: 0}
   forcePercent: 1
   powerSlider: {fileID: 0}
+  spinDirection: {x: 0, y: 0, z: 0}
+  spinIncrement: 0.2
 --- !u!1 &1314000644727037030
 GameObject:
   m_ObjectHideFlags: 0
