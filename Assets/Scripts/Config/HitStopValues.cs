@@ -24,5 +24,8 @@ namespace Config
 
         [field: SerializeField]
         public NoiseSettings HitStopNoiseSettings { get; private set; }
+
+        [field: SerializeField]
+        public GameObject ImpactParticle { get; private set; }
     }
 }

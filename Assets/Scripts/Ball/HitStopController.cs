@@ -16,7 +16,7 @@ namespace Ball
             {
                 if (collision.impulse.sqrMagnitude > GameConfig.Instance.HitStop.HitStopTriggerImpulse)
                 {
-                    HitStop();
+                    HitStop(collision.contacts[0].point);
                 }
             }
         }
@@ -26,14 +26,16 @@ namespace Ball
             GoodNeutralMushroom mush = other.GetComponent<GoodNeutralMushroom>();
             if (mush && !mush.mushroomDisabled)
             {
-                HitStop();
+                HitStop(Vector3.Lerp(other.transform.position, transform.position, 0.5f));
             }
         }
 
-        private static async void HitStop()
+        private static async void HitStop(Vector3 hitPoint)
         {
             if (_isInAction)
                 return;
+
+            Destroy(Instantiate(GameConfig.Instance.HitStop.ImpactParticle, hitPoint, Quaternion.identity), 1f);
 
             var hitStopValues = GameConfig.Instance.HitStop;
             FindObjectOfType<VirtualCamerasController>().ShakeFor(hitStopValues.ZoomOutTime);
