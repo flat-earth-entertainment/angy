@@ -1,29 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
 public class CellFractureOptimizer : MonoBehaviour
 {
-    public float duration = 5f;
-    public float timeleft;
+    [SerializeField]
+    private float duration = 5f;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        timeleft = duration;
-        DOTween.Init(true, true, LogBehaviour.Verbose).SetCapacity(200, 10);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        timeleft -= Time.deltaTime;
-        transform.DOScale(0f, 5);
-        
-        if (timeleft < 0)
-        {
-            gameObject.SetActive(false);
-        }
+        DOTween.Sequence().Append(transform.DOScale(0f, duration)).AppendCallback(delegate { Destroy(gameObject); });
     }
 }
