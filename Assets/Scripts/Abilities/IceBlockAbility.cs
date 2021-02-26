@@ -23,13 +23,13 @@ namespace Abilities
             _playerView.BecameStill += OnBecameStill;
 
             _initialDrag = player.Drag;
-            _playerView.Drag = GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.Drag;
+            _playerView.Drag = GameConfig.Instance.AbilityValues.IceBlockAbility.Drag;
 
             _otherIceBlockOnCollision = _playerView.Ball.AddComponent<IceBlockOnCollision>();
 
             //TODO: Replace model/Play animation
             _originalBodyMaterial = player.Materials[0];
-            player.SetBodyMaterial(GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.IceMaterial);
+            player.SetBodyMaterial(GameConfig.Instance.AbilityValues.IceBlockAbility.IceMaterial);
         }
 
         public void OnBecameStill()
@@ -43,6 +43,8 @@ namespace Abilities
             _playerView.SetBodyMaterial(_originalBodyMaterial);
 
             Object.Destroy(_otherIceBlockOnCollision);
+
+            Finished = true;
         }
     }
 }

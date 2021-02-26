@@ -5,6 +5,8 @@ namespace Abilities
     [Serializable]
     public abstract class Ability
     {
+        public bool Finished { get; protected set; }
+
         public static Ability Copy(Ability ability)
         {
             if (ability == null)

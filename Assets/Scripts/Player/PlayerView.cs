@@ -22,6 +22,8 @@ public class PlayerView : MonoBehaviour
     public event Action ReachedMaxAngy;
     public event Action<int> AngyChanged;
 
+    public static event Action<PlayerView, Ability> NewAbilitySet;
+
     public string Nickname { get; set; }
 
     public Color PlayerColor
@@ -97,7 +99,15 @@ public class PlayerView : MonoBehaviour
 
     public Rewired.Player RewiredPlayer => ReInput.players.GetPlayer(PlayerId);
 
-    public Ability Ability { get; set; }
+    public Ability Ability
+    {
+        get => _ability;
+        set
+        {
+            _ability = value;
+            NewAbilitySet?.Invoke(this, value);
+        }
+    }
 
     public Ability PreviousAbility { get; set; }
 
@@ -151,6 +161,7 @@ public class PlayerView : MonoBehaviour
     private int _playerId;
     private int _angy;
     private Color _playerColor;
+    private Ability _ability;
 
     public void Predict()
     {

@@ -41,7 +41,8 @@ namespace Abilities
                 .SetUpdate(UpdateType.Fixed);
 
             DOTween.To(() => _player.Knockback, f => _player.Knockback = f,
-                    _player.Knockback * 1000f, TimeToInflate)
+                    _player.Knockback * GameConfig.Instance.AbilityValues.ExpandAbility.KnockbackMultiplier,
+                    TimeToInflate)
                 .SetEase(Ease.OutElastic)
                 .SetUpdate(UpdateType.Fixed);
 
@@ -58,8 +59,6 @@ namespace Abilities
                 cancellationToken: _endOfTurn.Token).SuppressCancellationThrow();
 
             await Deflate();
-
-            _deflated = true;
         }
 
         private async UniTask Deflate()
@@ -83,6 +82,7 @@ namespace Abilities
 
             await _player.BallRigidbody.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(UpdateType.Fixed);
             _deflated = true;
+            Finished = true;
         }
 
         private void OnPlayerBecameStill()

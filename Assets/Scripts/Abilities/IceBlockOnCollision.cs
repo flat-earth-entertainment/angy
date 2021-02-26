@@ -19,7 +19,7 @@ namespace Abilities
                 AudioManager.PlaySfx(SfxType.IceBlockActivate);
 
                 _initialDrag = other.rigidbody.drag;
-                other.rigidbody.drag = GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.Drag;
+                other.rigidbody.drag = GameConfig.Instance.AbilityValues.IceBlockAbility.Drag;
 
                 _otherPlayerView = other.transform.GetComponentInChildren<Shooter>().PlayerView;
                 _otherPlayerView.BecameStill += OnBecameStill;
@@ -28,7 +28,7 @@ namespace Abilities
 
                 _materials = _otherPlayerView.Materials;
                 _originalBodyMaterial = _materials[0];
-                _materials[0] = GameConfig.Instance.AbilityValues.IceBlockAbilityConfig.IceMaterial;
+                _materials[0] = GameConfig.Instance.AbilityValues.IceBlockAbility.IceMaterial;
                 _otherPlayerView.Materials = _materials;
             }
         }

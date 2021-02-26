@@ -329,7 +329,8 @@ namespace Logic
                     goto case PlayerState.ShouldMakeTurn;
 
                 case PlayerState.ShouldMakeTurn:
-                    uiController.EnableAngyMeterFor();
+                    uiController.EnableAngyMeter();
+                    uiController.EnableAbilityUi();
 
                     _currentTurnPlayer.Ability = Ability.Copy(_currentTurnPlayer.PreviousAbility);
 
@@ -383,6 +384,11 @@ namespace Logic
 
         private void OnPlayerShot()
         {
+            if (_currentTurnPlayer.Ability != null)
+            {
+                uiController.WobbleAbilityUi(_currentTurnPlayer, true);
+            }
+
             UnsubscribeFromPreShotEvents(_currentTurnPlayer);
 
             SubscribeToPreStillEvents(_currentTurnPlayer);
@@ -422,6 +428,7 @@ namespace Logic
             UnsubscribeFromPreStillEvents(_currentTurnPlayer);
 
             uiController.DisableAngyMeter();
+            uiController.DisableAbilityUi();
 
             //If angy became full
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)

@@ -42,6 +42,7 @@ namespace Abilities
             _playerView.PlayerInputs.AbilityButtonPressed -= DisableAbility;
             AudioManager.Instance.UndoLowPass(.5f);
             Physics.gravity = _initialGravity;
+            Finished = true;
         }
     }
 }
