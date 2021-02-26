@@ -21,15 +21,21 @@ namespace UI
         [SerializeField]
         private float transitionTime;
 
+        private static bool _isCurrentlyChanging;
+
         public static async void ChangeScene(string sceneName,
             SceneChangeType sceneChangeType = SceneChangeType.Default)
         {
+            if (_isCurrentlyChanging)
+                return;
+
             Instance.gameObject.SetActive(true);
             Instance.logo.SetActive(false);
             Instance.cutout.gameObject.SetActive(false);
 
             var sceneLoad = SceneManager.LoadSceneAsync(sceneName);
             sceneLoad.allowSceneActivation = false;
+            _isCurrentlyChanging = true;
 
             switch (sceneChangeType)
             {
@@ -57,6 +63,7 @@ namespace UI
 
             Destroy(Instance.gameObject);
             _instance = null;
+            _isCurrentlyChanging = false;
         }
 
         public static SceneChanger Instance
