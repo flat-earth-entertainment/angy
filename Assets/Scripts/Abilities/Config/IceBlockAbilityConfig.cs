@@ -1,10 +1,11 @@
 ﻿using System;
+using Abilities.Config;
 using UnityEngine;
 
 namespace Config.Abilities
 {
     [Serializable]
-    public class IceBlockAbilityConfig
+    public class IceBlockAbilityConfig : AbilityConfig
     {
         [field: SerializeField]
         public float Drag { get; private set; }

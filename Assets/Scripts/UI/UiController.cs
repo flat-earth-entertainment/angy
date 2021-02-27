@@ -1,3 +1,6 @@
+using System;
+using Abilities;
+using Abilities.Config;
 using Config;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -23,12 +26,75 @@ namespace UI
         [SerializeField]
         private PlayersManager playersManager;
 
+        [SerializeField]
+        private AbilityUi[] abilityUis;
+
+        public void WobbleAbilityUi(PlayerView playerView, bool state)
+        {
+            if (playerView.PlayerId < abilityUis.Length)
+            {
+                abilityUis[playerView.PlayerId].Wobble = state;
+            }
+            else
+            {
+                Debug.LogWarning($"Can't find Ability UI for player with ID {playerView.PlayerId}");
+            }
+        }
+
+        private void SetAbilityIconFor(int playerId, Sprite icon)
+        {
+            if (playerId < abilityUis.Length)
+            {
+                abilityUis[playerId].SetAbilityIcon(icon);
+            }
+            else
+            {
+                Debug.LogWarning($"Can't find Ability UI for player with ID {playerId}");
+            }
+        }
+
         private void Awake()
         {
             angySlider.minValue = angySlider2.minValue = GameConfig.Instance.AngyValues.MinAngy;
             angySlider.maxValue = angySlider2.maxValue = GameConfig.Instance.AngyValues.MaxAngy;
 
             playersManager.InitializedAllPlayers += OnPlayersInitialized;
+
+            foreach (var abilityUi in abilityUis)
+            {
+                Debug.Log("should set ui for" + abilityUi.gameObject.name);
+                abilityUi.SetAbilityIcon(GameConfig.Instance.AbilityValues.NoAbilityUiSprite);
+            }
+        }
+
+        private void OnEnable()
+        {
+            PlayerView.NewAbilitySet += OnNewAbilitySet;
+        }
+
+        private void OnDisable()
+        {
+            PlayerView.NewAbilitySet -= OnNewAbilitySet;
+
+            playersManager.Players[0].AngyChanged -= OnPlayer1AngyChanged;
+            playersManager.Players[1].AngyChanged -= OnPlayer2AngyChanged;
+        }
+
+        private void OnNewAbilitySet(PlayerView player, Ability ability)
+        {
+            SetAbilityIconFor(player.PlayerId, AbilityConfig.GetConfigSpriteFor(ability));
+
+            if (player.PlayerState == PlayerState.ActiveInMotion)
+            {
+                if (ability == null)
+                {
+                    WobbleAbilityUi(player, false);
+                }
+                else
+                {
+                    WobbleAbilityUi(player, true);
+                }
+            }
         }
 
         private void OnPlayersInitialized(PlayerView[] obj)
@@ -40,12 +106,6 @@ namespace UI
 
             angySlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[0].PlayerColor;
             angySlider2.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[1].PlayerColor;
-        }
-
-        private void OnDisable()
-        {
-            playersManager.Players[0].AngyChanged -= OnPlayer1AngyChanged;
-            playersManager.Players[1].AngyChanged -= OnPlayer2AngyChanged;
         }
 
 
@@ -72,11 +132,12 @@ namespace UI
 
         public void HideAllUi()
         {
-            angyMeter.SetActive(false);
+            DisableAngyMeter();
             cameraModeWarning.SetActive(false);
+            DisableAbilityUi();
         }
 
-        public void EnableAngyMeterFor()
+        public void EnableAngyMeter()
         {
             angyMeter.SetActive(true);
         }
@@ -94,6 +155,22 @@ namespace UI
         private void OnPlayer2AngyChanged(int newAngyValue)
         {
             angySlider2.value = newAngyValue;
+        }
+
+        public void EnableAbilityUi()
+        {
+            foreach (var abilityUi in abilityUis)
+            {
+                abilityUi.Visible = true;
+            }
+        }
+
+        public void DisableAbilityUi()
+        {
+            foreach (var abilityUi in abilityUis)
+            {
+                abilityUi.Visible = false;
+            }
         }
     }
 }

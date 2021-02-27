@@ -8,12 +8,15 @@ namespace Config
     public class AbilityValues
     {
         [field: SerializeField]
+        public Sprite NoAbilityUiSprite { get; private set; }
+
+        [field: SerializeField]
         public NoGravityAbilityConfig NoGravityAbility { get; private set; }
 
         [field: SerializeField]
         public ExpandAbilityConfig ExpandAbility { get; private set; }
 
         [field: SerializeField]
-        public IceBlockAbilityConfig IceBlockAbilityConfig { get; private set; }
+        public IceBlockAbilityConfig IceBlockAbility { get; private set; }
     }
 }
