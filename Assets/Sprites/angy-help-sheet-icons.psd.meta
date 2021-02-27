@@ -1,28 +1,43 @@
 fileFormatVersion: 2
-guid: 39257efe9acaf854992790fe65b8b6b9
+guid: aede98a1633d9d7418f7cb06e3dda47b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7122200358684654184
-    second: angy-tutorial-sheet-icons_0
+      213: -611349457137205756
+    second: h-astro
   - first:
-      213: 6580066880781355341
-    second: angy-tutorial-sheet-icons_1
+      213: -1376153548191208766
+    second: h-ice
   - first:
-      213: 6592725694787953996
-    second: angy-tutorial-sheet-icons_2
+      213: 5921408961897073569
+    second: h-mush
   - first:
-      213: 3498520505956276195
-    second: angy-tutorial-sheet-icons_3
+      213: 4957721232690522533
+    second: h-l-astro
   - first:
-      213: -8756423991697114507
-    second: angy-tutorial-sheet-icons_4
+      213: -8470700146905681314
+    second: h-l-inflate
   - first:
-      213: -3657664721590428950
-    second: angy-tutorial-sheet-icons_5
+      213: -3591597838566854315
+    second: h-l-ice
   - first:
-      213: 3799135289015470654
-    second: angy-tutorial-sheet-icons_6
+      213: -2525921636867151473
+    second: h-berries
+  - first:
+      213: -10395231411468136
+    second: h-hole
+  - first:
+      213: -3634927416431551621
+    second: h-lemmings
+  - first:
+      213: 2157837186647921069
+    second: h-trajectory
+  - first:
+      213: -7025157473313741350
+    second: h-powerbar
+  - first:
+      213: -3390334787231661536
+    second: h-rotation
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -53,8 +68,8 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 2
-    aniso: 1
+    filterMode: -1
+    aniso: 2
     mipBias: -100
     wrapU: 1
     wrapV: 1
@@ -86,7 +101,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -98,7 +113,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Standalone
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -122,7 +137,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Android
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -134,7 +149,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: Windows Store Apps
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -146,7 +161,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
     buildTarget: WebGL
-    maxTextureSize: 2048
+    maxTextureSize: 8192
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -160,13 +175,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: angy-tutorial-sheet-icons_0
+      name: h-astro
       rect:
         serializedVersion: 2
-        x: 236
-        y: 301
-        width: 323
-        height: 190
+        x: 21
+        y: 790
+        width: 208
+        height: 215
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,20 +189,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8950171428cd82d90800000000000000
-      internalID: -7122200358684654184
+      spriteID: 40e75b568ec0487f0800000000000000
+      internalID: -611349457137205756
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: angy-tutorial-sheet-icons_1
+      name: h-ice
       rect:
         serializedVersion: 2
-        x: 238
-        y: 0
-        width: 291
-        height: 214
+        x: 273
+        y: 783
+        width: 200
+        height: 227
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -195,20 +210,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d49094327f7115b50800000000000000
-      internalID: 6580066880781355341
+      spriteID: 2ca6bab93abe6ece0800000000000000
+      internalID: -1376153548191208766
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: angy-tutorial-sheet-icons_2
+      name: h-mush
       rect:
         serializedVersion: 2
-        x: 729
-        y: 303
-        width: 118
-        height: 198
+        x: 519
+        y: 776
+        width: 212
+        height: 239
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -216,20 +231,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c452d63f6111e7b50800000000000000
-      internalID: 6592725694787953996
+      spriteID: 1ab80bfe3121d2250800000000000000
+      internalID: 5921408961897073569
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: angy-tutorial-sheet-icons_3
+      name: h-l-astro
       rect:
         serializedVersion: 2
-        x: 1062
-        y: 323
-        width: 182
-        height: 174
+        x: 788
+        y: 761
+        width: 177
+        height: 251
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -237,20 +252,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3e791fc3ddd3d8030800000000000000
-      internalID: 3498520505956276195
+      spriteID: 5a92ee9a13d5dc440800000000000000
+      internalID: 4957721232690522533
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: angy-tutorial-sheet-icons_4
+      name: h-l-inflate
       rect:
         serializedVersion: 2
-        x: 666
-        y: 8
-        width: 232
-        height: 205
+        x: 29
+        y: 524
+        width: 222
+        height: 219
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -258,20 +273,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57a7f28e5ceea7680800000000000000
-      internalID: -8756423991697114507
+      spriteID: e5276d89817027a80800000000000000
+      internalID: -8470700146905681314
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: angy-tutorial-sheet-icons_5
+      name: h-l-ice
       rect:
         serializedVersion: 2
-        x: 1034
-        y: 0
-        width: 245
-        height: 236
+        x: 303
+        y: 520
+        width: 167
+        height: 226
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -279,19 +294,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aeadf1a905d5d3dc0800000000000000
-      internalID: -3657664721590428950
+      spriteID: 55179208bc4182ec0800000000000000
+      internalID: -3591597838566854315
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: angy-tutorial-sheet-icons_6
+      name: h-berries
       rect:
         serializedVersion: 2
-        x: 1388
-        y: 0
-        width: 278
+        x: 527
+        y: 520
+        width: 222
         height: 234
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -300,8 +315,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e3a0b6baa6d39b430800000000000000
-      internalID: 3799135289015470654
+      spriteID: f896f0877af12fcd0800000000000000
+      internalID: -2525921636867151473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: h-hole
+      rect:
+        serializedVersion: 2
+        x: 759
+        y: 519
+        width: 241
+        height: 210
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8988c5497911bdff0800000000000000
+      internalID: -10395231411468136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: h-lemmings
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 238
+        width: 306
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7bd44ff5c42e8dc0800000000000000
+      internalID: -3634927416431551621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: h-trajectory
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 42
+        width: 308
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da117411d7d22fd10800000000000000
+      internalID: 2157837186647921069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: h-powerbar
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 42
+        width: 124
+        height: 189
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad524f7bf70a18e90800000000000000
+      internalID: -7025157473313741350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: h-rotation
+      rect:
+        serializedVersion: 2
+        x: 844
+        y: 56
+        width: 156
+        height: 161
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0224869497c13f0d0800000000000000
+      internalID: -3390334787231661536
       vertices: []
       indices: 
       edges: []
@@ -309,7 +429,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 296b2e3961472eb44bcfa1d0b168caaa
+    spriteID: 1dfb42dddaf338940be631360bb39b0d
     internalID: 0
     vertices: []
     indices: 
