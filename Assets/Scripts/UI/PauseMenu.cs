@@ -21,6 +21,11 @@ namespace UI
         [SerializeField]
         private Button mainMenuButton;
 
+        [SerializeField]
+        private GameObject helpUiPrefab;
+
+        private GameObject _helpUi;
+
         public static void Show(Action resumeButtonAction = null)
         {
             ResumeButtonClicked = resumeButtonAction;
@@ -32,6 +37,13 @@ namespace UI
             Instance.gameObject.SetActive(false);
         }
 
+        public static void HideHelp()
+        {
+            Destroy(Instance._helpUi);
+            Instance._helpUi = null;
+            Instance.gameObject.SetActive(true);
+        }
+
         private void Awake()
         {
             optionsButton.onClick.AddListener(delegate
@@ -40,7 +52,11 @@ namespace UI
                 OptionsController.BackButtonClicked = OptionsController.Hide;
             });
 
-            helpButton.onClick.AddListener(delegate { });
+            helpButton.onClick.AddListener(delegate
+            {
+                _helpUi = Instantiate(helpUiPrefab);
+                gameObject.SetActive(false);
+            });
 
             mainMenuButton.onClick.AddListener(delegate
             {
