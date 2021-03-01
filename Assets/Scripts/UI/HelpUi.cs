@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
+using UI;
 
 public class HelpUi : MonoBehaviour
 {
@@ -26,11 +27,13 @@ public class HelpUi : MonoBehaviour
         }
         if(optionPage < 0){
             // GO BACK TO PAUSE/MENU SCREEN
+            PauseMenu.HideHelp();
 
             optionPage = 0;
         }
         if(optionPage == helpScreens.Count){
             // GO BACK TO PAUSE/MENU SCREEN
+            PauseMenu.HideHelp();
 
             optionPage = helpScreens.Count - 1;
         }
