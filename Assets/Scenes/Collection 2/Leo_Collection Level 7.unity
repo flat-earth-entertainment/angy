@@ -4142,8 +4142,8 @@ Transform:
   - {fileID: 1561037749}
   - {fileID: 273006608}
   - {fileID: 611551057}
-  - {fileID: 1346873778}
   - {fileID: 402637759}
+  - {fileID: 1346873778}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6467,14 +6467,14 @@ Transform:
   - {fileID: 2000237218}
   - {fileID: 226806855}
   - {fileID: 1068223471}
+  - {fileID: 403703214}
   - {fileID: 722093244}
   - {fileID: 1621475265}
   - {fileID: 433508187}
   - {fileID: 2074238616}
   - {fileID: 241424642}
-  - {fileID: 2067357711}
-  - {fileID: 403703214}
   - {fileID: 220431776}
+  - {fileID: 2067357711}
   - {fileID: 426617075}
   - {fileID: 929354550}
   - {fileID: 73282657}
@@ -21462,6 +21462,10 @@ PrefabInstance:
     - target: {fileID: 2189155178959232823, guid: 33d29b3b813193d41a8851bb8d0dce9e, type: 3}
       propertyPath: m_IgnoreTimeScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446311973418968973, guid: 33d29b3b813193d41a8851bb8d0dce9e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2689916984371784820, guid: 33d29b3b813193d41a8851bb8d0dce9e, type: 3}
       propertyPath: m_AnchorMax.y

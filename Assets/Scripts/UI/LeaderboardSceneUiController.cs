@@ -93,6 +93,15 @@ namespace UI
                 }
             }
 #endif
+            // TEMP
+            if(Input.anyKeyDown){
+                SceneChanger.ChangeScene(SceneToLoad);
+                if (SceneToLoad == GameConfig.Instance.Scenes.MainMenuScene)
+                {
+                    CurrentGameSession.ClearSession();
+                }
+            }
+            // TEMP
         }
     }
 }
