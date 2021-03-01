@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Scenes.Map_Selection;
+using UnityEngine.SceneManagement;
 
 namespace Config
 {
@@ -39,7 +40,24 @@ namespace Config
 
         public static MapCollection MapCollection
         {
-            get => _mapCollection ??= GameConfig.Instance.MapCollections[0];
+            get
+            {
+                if (_mapCollection == null)
+                {
+                    _mapCollection = GameConfig.Instance.MapCollections[0];
+#if UNITY_EDITOR
+                    var mapCollectionOfCurrentScene = GameConfig.Instance.MapCollections.ToList()
+                        .Find(m => m.Maps.Contains(SceneManager.GetActiveScene().name));
+
+                    if (mapCollectionOfCurrentScene != default)
+                    {
+                        _mapCollection = mapCollectionOfCurrentScene;
+                    }
+#endif
+                }
+
+                return _mapCollection;
+            }
             set => _mapCollection = value;
         }
 
