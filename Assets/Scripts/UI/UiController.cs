@@ -1,4 +1,3 @@
-using System;
 using Abilities;
 using Abilities.Config;
 using Config;
@@ -23,6 +22,7 @@ namespace UI
         [SerializeField]
         private Slider angySlider2;
 
+
         [SerializeField]
         private PlayersManager playersManager;
 
@@ -41,15 +41,15 @@ namespace UI
             }
         }
 
-        private void SetAbilityIconFor(int playerId, Sprite icon)
+        private void SetAbilityIconFor(PlayerView player, Sprite icon)
         {
-            if (playerId < abilityUis.Length)
+            if (player.PlayerId < abilityUis.Length)
             {
-                abilityUis[playerId].SetAbilityIcon(icon);
+                abilityUis[player.PlayerId].SetAbilityIcon(icon, player.PlayerColor);
             }
             else
             {
-                Debug.LogWarning($"Can't find Ability UI for player with ID {playerId}");
+                Debug.LogWarning($"Can't find Ability UI for player with ID {player.PlayerId}");
             }
         }
 
@@ -59,12 +59,6 @@ namespace UI
             angySlider.maxValue = angySlider2.maxValue = GameConfig.Instance.AngyValues.MaxAngy;
 
             playersManager.InitializedAllPlayers += OnPlayersInitialized;
-
-            foreach (var abilityUi in abilityUis)
-            {
-                Debug.Log("should set ui for" + abilityUi.gameObject.name);
-                abilityUi.SetAbilityIcon(GameConfig.Instance.AbilityValues.NoAbilityUiSprite);
-            }
         }
 
         private void OnEnable()
@@ -82,7 +76,14 @@ namespace UI
 
         private void OnNewAbilitySet(PlayerView player, Ability ability)
         {
-            SetAbilityIconFor(player.PlayerId, AbilityConfig.GetConfigSpriteFor(ability));
+            if (ability == null && player.PreviousAbility != null)
+            {
+                SetAbilityIconFor(player, AbilityConfig.GetConfigSpriteFor(player.PreviousAbility));
+            }
+            else
+            {
+                SetAbilityIconFor(player, AbilityConfig.GetConfigSpriteFor(ability));
+            }
 
             if (player.PlayerState == PlayerState.ActiveInMotion)
             {
