@@ -2,7 +2,9 @@ using System;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Rewired.Integration.UnityUI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 namespace UI
@@ -36,6 +38,16 @@ namespace UI
             var sceneLoad = SceneManager.LoadSceneAsync(sceneName);
             sceneLoad.allowSceneActivation = false;
             _isCurrentlyChanging = true;
+
+            foreach (var eventSystem in FindObjectsOfType<EventSystem>())
+            {
+                eventSystem.enabled = false;
+            }
+            
+            foreach (var eventSystem in FindObjectsOfType<RewiredEventSystem>())
+            {
+                eventSystem.enabled = false;
+            }
 
             switch (sceneChangeType)
             {
