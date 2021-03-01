@@ -105,6 +105,12 @@ public class PlayerView : MonoBehaviour
         set
         {
             _ability = value;
+
+            if (value != null)
+            {
+                PreviousAbility = value;
+            }
+
             NewAbilitySet?.Invoke(this, value);
         }
     }

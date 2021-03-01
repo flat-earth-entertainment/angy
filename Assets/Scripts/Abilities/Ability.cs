@@ -19,7 +19,6 @@ namespace Abilities
 
         public void Invoke(PlayerView player)
         {
-            player.PreviousAbility = this;
             InvokeAbility(player);
         }
 
