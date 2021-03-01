@@ -112,7 +112,7 @@ public class Shooter : MonoBehaviour
                 vertSnapCooldownTimer -= Time.deltaTime;
             }
             if(Mathf.Abs(vertical) > 0){
-                if(vertRotTimeMultiplier < 0.9f){
+                if(vertRotTimeMultiplier < 0.95f){
                     vertSnapMultiplier = 1;
                 }
                 if(vertRotTimeMultiplier < 0.67f){
@@ -158,7 +158,7 @@ public class Shooter : MonoBehaviour
                 horSnapCooldownTimer -= Time.deltaTime;
             }
             if(Mathf.Abs(horizontal) > 0){
-                if(horRotTimeMultiplier < 0.9f){
+                if(horRotTimeMultiplier < 0.95f){
                     horSnapMultiplier = 1;
                 }
                 if(horRotTimeMultiplier < 0.75f){
