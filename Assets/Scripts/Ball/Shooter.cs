@@ -41,7 +41,7 @@ public class Shooter : MonoBehaviour
     private GameObject ballStorage;
     
     public bool activateShootingRetinae = true, active = true;
-    public int vertSnap = 180, horSnap = 270;
+    public float vertSnap = 180, horSnap = 270;
     // how many degrees the shooting retinae should snap. MUST add up to 360
     public int vertSnapAngle = 5, horSnapAngle = 5, greatSnapAngle = 30;
     private float snapCooldownTimer, vertSnapCooldownTimer, horSnapCooldownTimer;
@@ -54,7 +54,7 @@ public class Shooter : MonoBehaviour
     public Slider powerSlider;
     // Rotation cooldown modifier
     private float vertRotTimeMultiplier = 1, horRotTimeMultiplier = 1;
-    private int vertSnapMultiplier = 1, horSnapMultiplier = 1;
+    private float vertSnapMultiplier = 0.1f, horSnapMultiplier = 1;
     // Rotation cooldown modifier end
     // Ball Spin
     public Vector3 spinDirection = new Vector3(0,0,0);
@@ -112,6 +112,9 @@ public class Shooter : MonoBehaviour
                 vertSnapCooldownTimer -= Time.deltaTime;
             }
             if(Mathf.Abs(vertical) > 0){
+                if(vertRotTimeMultiplier < 0.9f){
+                    vertSnapMultiplier = 1;
+                }
                 if(vertRotTimeMultiplier < 0.67f){
                     vertSnapMultiplier = 2;
                 }
@@ -121,7 +124,7 @@ public class Shooter : MonoBehaviour
                 vertRotTimeMultiplier -= Time.deltaTime / 4;
             }else{
                 vertRotTimeMultiplier = 1;
-                vertSnapMultiplier = 1;
+                vertSnapMultiplier = 0.1f;
             }
 
             // Horizontal movement controls
