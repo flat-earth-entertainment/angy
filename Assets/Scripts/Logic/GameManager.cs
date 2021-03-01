@@ -124,7 +124,7 @@ namespace Logic
         {
             if (_playerInOptions != null
                 || caller.PlayerState == PlayerState.ActivePowerMode
-                || _currentTurnPlayer.PlayerState == PlayerState.ActivePowerMode)
+                || _currentTurnPlayer != null && _currentTurnPlayer.PlayerState == PlayerState.ActivePowerMode)
                 return;
 
             caller.PlayerInputs.MenuButtonPressed += OnOptionsMenuCloseRequested;
@@ -220,7 +220,7 @@ namespace Logic
                 player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
             }
 
-            player.PlayerState = PlayerState.ShouldSpawnAtSpawn;
+            player.PlayerState = PlayerState.ShouldSpawnAtLastPosition;
 
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
