@@ -259,7 +259,23 @@ namespace Logic
             CurrentGameSession.Leaderboard
                 .Add(new MapScore(SceneManager.GetActiveScene().name, points[0], points[1]));
 
-            UiController.OnContinueButtonClicked();
+            OnLevelFinished();
+        }
+
+        private static async void OnLevelFinished()
+        {
+            await SceneManager.UnloadSceneAsync("Prediction");
+
+            var currentMap = SceneManager.GetActiveScene().name;
+
+            if (!CurrentGameSession.IsLastMapInList(currentMap))
+            {
+                LeaderboardSceneUiController.SceneToLoad = CurrentGameSession.GetNextMap(currentMap);
+            }
+            else
+            {
+                LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.MainMenuScene;
+            }
 
             SceneChanger.ChangeScene(GameConfig.Instance.Scenes.LeaderboardScene, SceneChangeType.MapChange);
         }

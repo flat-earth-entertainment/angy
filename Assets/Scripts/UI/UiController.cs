@@ -109,23 +109,6 @@ namespace UI
             angySlider2.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[1].PlayerColor;
         }
 
-
-        public static async void OnContinueButtonClicked()
-        {
-            await SceneManager.UnloadSceneAsync("Prediction");
-
-            var currentMap = SceneManager.GetActiveScene().name;
-
-            if (!CurrentGameSession.IsLastMapInList(currentMap))
-            {
-                LeaderboardSceneUiController.SceneToLoad = CurrentGameSession.GetNextMap(currentMap);
-            }
-            else
-            {
-                LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.MainMenuScene;
-            }
-        }
-
         public void SetCameraModeActive(bool state)
         {
             cameraModeWarning.SetActive(state);
