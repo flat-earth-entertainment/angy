@@ -3037,6 +3037,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 68082164}
     m_Modifications:
+    - target: {fileID: 6613910806161843456, guid: 5ee1608c081e37b4d9cad11195b9c71c, type: 3}
+      propertyPath: sharedProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: 9b886931aacb1fd4096b8a869e4be2a3, type: 2}
     - target: {fileID: 6613910806161843458, guid: 5ee1608c081e37b4d9cad11195b9c71c, type: 3}
       propertyPath: m_Name
       value: Global Volume
@@ -26045,6 +26049,10 @@ PrefabInstance:
     - target: {fileID: 6321709945082870982, guid: 33d29b3b813193d41a8851bb8d0dce9e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7154886302739109001, guid: 33d29b3b813193d41a8851bb8d0dce9e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -66.1001
       objectReference: {fileID: 0}
     - target: {fileID: 7886867200257980003, guid: 33d29b3b813193d41a8851bb8d0dce9e, type: 3}
       propertyPath: m_AnchorMax.y
