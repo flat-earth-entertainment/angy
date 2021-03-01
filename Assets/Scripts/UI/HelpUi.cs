@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ using UI;
 
 public class HelpUi : MonoBehaviour
 {
+    public static Action OnClose;
     private Rewired.Player rewiredPlayer;
     public int optionPage;
     public List<GameObject> helpScreens;
@@ -27,13 +29,13 @@ public class HelpUi : MonoBehaviour
         }
         if(optionPage < 0){
             // GO BACK TO PAUSE/MENU SCREEN
-            PauseMenu.HideHelp();
+            OnClose?.Invoke();
 
             optionPage = 0;
         }
         if(optionPage == helpScreens.Count){
             // GO BACK TO PAUSE/MENU SCREEN
-            PauseMenu.HideHelp();
+            OnClose?.Invoke();
 
             optionPage = helpScreens.Count - 1;
         }

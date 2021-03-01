@@ -37,11 +37,12 @@ namespace UI
             Instance.gameObject.SetActive(false);
         }
 
-        public static void HideHelp()
+        private void HideHelp()
         {
-            Destroy(Instance._helpUi);
-            Instance._helpUi = null;
-            Instance.gameObject.SetActive(true);
+            Destroy(_helpUi);
+            _helpUi = null;
+            gameObject.SetActive(true);
+            HelpUi.OnClose = null;
         }
 
         private void Awake()
@@ -54,6 +55,7 @@ namespace UI
 
             helpButton.onClick.AddListener(delegate
             {
+                HelpUi.OnClose = HideHelp;
                 _helpUi = Instantiate(helpUiPrefab);
                 gameObject.SetActive(false);
             });
