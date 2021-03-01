@@ -32,27 +32,28 @@ namespace UI
 
         private void Awake()
         {
-            mainMenuButton.onClick.AddListener(delegate
-            {
-                SceneChanger.ChangeScene(SceneToLoad);
-                if (SceneToLoad == GameConfig.Instance.Scenes.MainMenuScene)
-                {
-                    CurrentGameSession.ClearSession();
-                }
-            });
+            mainMenuButton.onClick.AddListener(LoadNextScene);
 
             player1Highlight.SetActive(false);
             player2Highlight.SetActive(false);
         }
 
-        private void Start()
+        private static void LoadNextScene()
         {
-            int sum1, sum2;
-            sum1 = sum2 = 0;
+            SceneChanger.ChangeScene(SceneToLoad);
+            if (SceneToLoad == GameConfig.Instance.Scenes.MainMenuScene)
+            {
+                CurrentGameSession.ClearSession();
+            }
+        }
+
+        private void FillLeaderboard()
+        {
+            int sum2;
+            var sum1 = sum2 = 0;
 
             for (var i = 0; i < CurrentGameSession.Leaderboard.Count; i++)
             {
-                Debug.Log(i);
                 var mapScore = CurrentGameSession.Leaderboard[i];
                 Instantiate(mapRowPrefab, mapTableParent).GetComponent<LeaderboardMapRow>()
                     .SetRow(mapScore.Player1Score, mapScore.Player2Score, i + 1);
@@ -86,21 +87,19 @@ namespace UI
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 2; i++)
                 {
                     CurrentGameSession.Leaderboard.Add(new MapScore(i.ToString(), i * 2, i * 3));
-                    Start();
+                    FillLeaderboard();
                 }
             }
 #endif
             // TEMP
-            if(Input.anyKeyDown){
-                SceneChanger.ChangeScene(SceneToLoad);
-                if (SceneToLoad == GameConfig.Instance.Scenes.MainMenuScene)
-                {
-                    CurrentGameSession.ClearSession();
-                }
+            if (Input.anyKeyDown)
+            {
+                LoadNextScene();
             }
+
             // TEMP
         }
     }
