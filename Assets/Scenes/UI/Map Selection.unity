@@ -404,7 +404,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1489235618}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c64a789728856a41ab8f11089928be3, type: 3}
   m_Name: 
@@ -425,7 +425,7 @@ MonoBehaviour:
   useAllRewiredGamePlayers: 0
   useRewiredSystemPlayer: 0
   rewiredPlayerIds: 00000000
-  usePlayingPlayersOnly: 1
+  usePlayingPlayersOnly: 0
   playerMice: []
   moveOneElementPerAxisPress: 0
   setActionsById: 0
@@ -433,18 +433,18 @@ MonoBehaviour:
   verticalActionId: -1
   submitActionId: -1
   cancelActionId: -1
-  m_HorizontalAxis: Move Horizontal
-  m_VerticalAxis: Move Vertical Ui
-  m_SubmitButton: Confirm
-  m_CancelButton: AbilityFire
+  m_HorizontalAxis: UIHorizontal
+  m_VerticalAxis: UIVertical
+  m_SubmitButton: UISubmit
+  m_CancelButton: UICancel
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0
   m_allowMouseInput: 1
   m_allowMouseInputIfTouchSupported: 1
   m_allowTouchInput: 1
-  m_deselectIfBackgroundClicked: 0
-  m_deselectBeforeSelecting: 0
-  m_ForceModuleActive: 1
+  m_deselectIfBackgroundClicked: 1
+  m_deselectBeforeSelecting: 1
+  m_ForceModuleActive: 0
 --- !u!114 &1489235621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,13 +454,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1489235618}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b991181f58043ec814f0900013f8cac, type: 3}
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
-  _alwaysUpdate: 1
 --- !u!4 &1489235622
 Transform:
   m_ObjectHideFlags: 0
