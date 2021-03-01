@@ -8,7 +8,7 @@ public class UpdateUiSelection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(EventSystem.current.currentSelectedGameObject == null){
+        if(EventSystem.current!=null && EventSystem.current.currentSelectedGameObject == null){
             EventSystem.current.SetSelectedGameObject(FindObjectOfType<UnityEngine.UI.Button>().gameObject);
         }
     }
