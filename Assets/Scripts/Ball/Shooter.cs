@@ -54,7 +54,7 @@ public class Shooter : MonoBehaviour
     public Slider powerSlider;
     // Rotation cooldown modifier
     private float vertRotTimeMultiplier = 1, horRotTimeMultiplier = 1;
-    private float vertSnapMultiplier = 0.1f, horSnapMultiplier = 1;
+    private float vertSnapMultiplier = 0.1f, horSnapMultiplier = 0.1f;
     // Rotation cooldown modifier end
     // Ball Spin
     public Vector3 spinDirection = new Vector3(0,0,0);
@@ -158,6 +158,9 @@ public class Shooter : MonoBehaviour
                 horSnapCooldownTimer -= Time.deltaTime;
             }
             if(Mathf.Abs(horizontal) > 0){
+                if(horRotTimeMultiplier < 0.9f){
+                    horSnapMultiplier = 1;
+                }
                 if(horRotTimeMultiplier < 0.75f){
                     horSnapMultiplier = 2;
                 }
@@ -170,7 +173,7 @@ public class Shooter : MonoBehaviour
                 horRotTimeMultiplier -= Time.deltaTime / 4;
             }else{
                 horRotTimeMultiplier = 1;
-                horSnapMultiplier = 1;
+                horSnapMultiplier = 0.1f;
             }
             if(movedRet){
                 transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0);
