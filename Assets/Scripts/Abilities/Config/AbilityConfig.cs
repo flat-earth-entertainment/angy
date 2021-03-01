@@ -14,7 +14,7 @@ namespace Abilities.Config
         {
             if (ability == null)
             {
-                return GameConfig.Instance.AbilityValues.NoAbilityUiSprite;
+                return null;
             }
 
             return ability switch

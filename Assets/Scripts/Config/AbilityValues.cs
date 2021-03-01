@@ -8,9 +8,6 @@ namespace Config
     public class AbilityValues
     {
         [field: SerializeField]
-        public Sprite NoAbilityUiSprite { get; private set; }
-
-        [field: SerializeField]
         public NoGravityAbilityConfig NoGravityAbility { get; private set; }
 
         [field: SerializeField]
