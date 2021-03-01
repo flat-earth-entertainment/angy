@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Abilities;
@@ -225,7 +224,7 @@ namespace Logic
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
             {
-                _currentTurnPlayer.BecameStill -= OnCurrentPlayerBecameStill;
+                EndOfTurnActions(player);
                 MakeTurn();
             }
         }
@@ -337,6 +336,7 @@ namespace Logic
                     return;
 
                 case PlayerState.ShouldSpawnAtSpawn:
+                    _currentTurnPlayer.LastStillPosition = _spawnPoint.position;
                     await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _spawnPoint.position);
                     goto case PlayerState.ShouldMakeTurn;
 
@@ -441,11 +441,7 @@ namespace Logic
 
         private async void OnCurrentPlayerBecameStill()
         {
-            UnsubscribeFromPreStillEvents(_currentTurnPlayer);
-
-            uiController.DisableAngyMeter();
-            uiController.DisableAbilityUi();
-            uiController.WobbleAbilityUi(_currentTurnPlayer, false);
+            EndOfTurnActions(_currentTurnPlayer);
 
             //If angy became full
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
@@ -460,8 +456,22 @@ namespace Logic
                 _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
             }
 
+            await DelayAndMakeTurn();
+        }
+
+        private async UniTask DelayAndMakeTurn()
+        {
             await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.PreNextTurnDelay));
             MakeTurn();
+        }
+
+        private void EndOfTurnActions(PlayerView player)
+        {
+            UnsubscribeFromPreStillEvents(player);
+
+            uiController.DisableAngyMeter();
+            uiController.DisableAbilityUi();
+            uiController.WobbleAbilityUi(player, false);
         }
 
         private async void OnMapButtonPressed()
