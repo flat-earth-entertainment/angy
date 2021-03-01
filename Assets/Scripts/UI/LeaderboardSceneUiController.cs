@@ -36,6 +36,8 @@ namespace UI
 
             player1Highlight.SetActive(false);
             player2Highlight.SetActive(false);
+
+            FillLeaderboard();
         }
 
         private static void LoadNextScene()
@@ -52,6 +54,7 @@ namespace UI
             int sum2;
             var sum1 = sum2 = 0;
 
+            Debug.Log(CurrentGameSession.Leaderboard.Count);
             for (var i = 0; i < CurrentGameSession.Leaderboard.Count; i++)
             {
                 var mapScore = CurrentGameSession.Leaderboard[i];
@@ -90,7 +93,6 @@ namespace UI
                 for (int i = 0; i < 2; i++)
                 {
                     CurrentGameSession.Leaderboard.Add(new MapScore(i.ToString(), i * 2, i * 3));
-                    FillLeaderboard();
                 }
             }
 #endif
