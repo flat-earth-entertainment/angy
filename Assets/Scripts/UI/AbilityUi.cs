@@ -1,3 +1,4 @@
+using Config;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,7 +31,8 @@ namespace UI
                 }
                 else
                 {
-                    DOTween.Sequence().AppendInterval(0.5f * _wobbleTween.ElapsedDirectionalPercentage())
+                    DOTween.Sequence().AppendInterval(GameConfig.Instance.AbilityValues.AbilityUiConfig.WobbleInterval *
+                                                      _wobbleTween.ElapsedDirectionalPercentage())
                         .AppendCallback(delegate
                         {
                             abilityParent.transform.localScale = _initialScale;
@@ -45,8 +47,12 @@ namespace UI
 
         private void Awake()
         {
-            _wobbleTween = abilityParent.transform.DOScale(1.5f, .5f).SetLoops(-1, LoopType.Yoyo).Pause();
             _initialScale = abilityParent.transform.localScale;
+
+            _wobbleTween = abilityParent.transform
+                .DOScale(_initialScale * GameConfig.Instance.AbilityValues.AbilityUiConfig.WobbleScale,
+                    GameConfig.Instance.AbilityValues.AbilityUiConfig.WobbleInterval)
+                .SetLoops(-1, LoopType.Yoyo).Pause();
         }
 
         public void SetAbilityIcon(Sprite icon, Color backgroundColor)

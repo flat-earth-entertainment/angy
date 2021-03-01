@@ -8,6 +8,9 @@ namespace Config
     public class AbilityValues
     {
         [field: SerializeField]
+        public AbilityUiConfig AbilityUiConfig { get; private set; }
+
+        [field: SerializeField]
         public NoGravityAbilityConfig NoGravityAbility { get; private set; }
 
         [field: SerializeField]
