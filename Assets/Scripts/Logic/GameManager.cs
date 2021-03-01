@@ -429,6 +429,7 @@ namespace Logic
 
             uiController.DisableAngyMeter();
             uiController.DisableAbilityUi();
+            uiController.WobbleAbilityUi(_currentTurnPlayer, false);
 
             //If angy became full
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
