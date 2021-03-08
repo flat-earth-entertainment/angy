@@ -27,6 +27,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 394d010a2567cbe4bb4e8189f7bc55e1, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - White_Face_Tex:
+        m_Texture: {fileID: 2800000, guid: 394d010a2567cbe4bb4e8189f7bc55e1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -85,6 +89,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_16f38dc3393048cbbc99cf9c25daa11a: 2
+    - White_Face_Offset: 2
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
