@@ -64,6 +64,8 @@ public class Shooter : MonoBehaviour
     // \/ \/ \/ REMOVE, ONLY FOR TESTING \/ \/ \/
     // /\ /\ /\ REMOVE, ONLY FOR TESTING /\ /\ /\
 
+    // Max power particle
+    public GameObject maxPowerParticle;
     public void SetBallFormActive(bool state)
     {
         lemmingAnim.SetBool("isKnockback", state);
@@ -290,6 +292,11 @@ public class Shooter : MonoBehaviour
                 forcePercent -= (Time.deltaTime / 3) / currentAngy;
             }
             yield return null;
+        }
+        if(forcePercent >= 1){
+            GameObject particle = Instantiate(maxPowerParticle,transform.position,Quaternion.identity);
+            Destroy(particle, 5);
+
         }
         if(forcePercent < 0){
             forcePercent = 0;
