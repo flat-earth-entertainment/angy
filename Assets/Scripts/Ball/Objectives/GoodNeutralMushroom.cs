@@ -45,7 +45,7 @@ public class GoodNeutralMushroom : MonoBehaviour
                 mushroomDisabled = true;
             }else{
                 pointController.EnemyHit(hitId);
-                if (!GetComponentInChildren<FractureOnCollision>())
+                if (!GetComponentInChildren<FractureOnCollision>() && !GetComponentInChildren<FractureOnTrigger>())
                 {
                     transform.GetChild(0).gameObject.SetActive(false);
                 }
