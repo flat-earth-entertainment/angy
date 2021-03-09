@@ -37,7 +37,7 @@ public class GoodNeutralMushroom : MonoBehaviour
     void Trigger(Collider other){
         if(other.tag == "Lemming"){
             int hitId = other.transform.GetChild(0).GetComponent<Shooter>().playerId;
-            if (ownerId != hitId)
+            if (ownerId != hitId && point != null)
             {
                 AudioManager.PlaySfx(SfxType.PointReclaimed);
             }
