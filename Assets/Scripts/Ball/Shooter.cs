@@ -46,7 +46,7 @@ public class Shooter : MonoBehaviour
     public int vertSnapAngle = 5, horSnapAngle = 5, greatSnapAngle = 30;
     private float snapCooldownTimer, vertSnapCooldownTimer, horSnapCooldownTimer;
     public float snapCooldown = 0.2f;
-    private bool movedRet, forcePercentBool;
+    private bool movedRet, forcePercentBool, maxPower;
     [SerializeField]
     private Rigidbody rb;
     public float forcePercent = 1;
@@ -228,6 +228,9 @@ public class Shooter : MonoBehaviour
 
         // Power Goes Here //
         yield return StartCoroutine("CalculateShootForce");
+        if(maxPower){
+            yield return new WaitForSeconds(1);
+        }
         powerSlider.transform.parent.gameObject.SetActive(false);
         // Power Ends Here //
         
@@ -236,6 +239,7 @@ public class Shooter : MonoBehaviour
         CreateDust();
         DisableRetinae();
         active = false;
+        maxPower = false;
         
         // Wait 1 frame and Reset system
         yield return null;
@@ -294,6 +298,7 @@ public class Shooter : MonoBehaviour
         }
         if(forcePercent >= 1){  // Play full power particle
             GameObject.FindGameObjectWithTag("TEMPFINDSLIDER").GetComponentInChildren<Coffee.UIExtensions.UIParticle>().Play();
+            maxPower = true;
         }
         if(forcePercent < 0){
             forcePercent = 0;
