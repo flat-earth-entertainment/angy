@@ -37,10 +37,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: isTriggered
+    m_ConditionEvent: isOpened
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: isOpened
+    m_ConditionEvent: isTriggered
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -7528693706787203334}
@@ -63,10 +63,7 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions:
-  - m_ConditionMode: 2
-    m_ConditionEvent: isOpened
-    m_EventTreshold: 0
+  m_Conditions: []
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3585589279413100426}
   m_Solo: 0
@@ -91,9 +88,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 2
     m_ConditionEvent: isOpened
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: isTriggered
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3879257145122261304}
@@ -225,9 +219,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: isOpened
     m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: isTriggered
-    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4535902571730727964}
   m_Solo: 0
@@ -252,9 +243,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 1
     m_ConditionEvent: isOpened
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: isTriggered
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4535902571730727964}
@@ -308,9 +296,6 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 2
     m_ConditionEvent: isOpened
-    m_EventTreshold: 0
-  - m_ConditionMode: 2
-    m_ConditionEvent: isTriggered
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3879257145122261304}
@@ -373,10 +358,10 @@ AnimatorController:
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
-    m_DefaultBool: 1
+    m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: isTriggered
-    m_Type: 4
+    m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0

@@ -26,6 +26,8 @@ public class Teleporter : MonoBehaviour
                 other.gameObject.GetComponent<Rigidbody>().velocity = teleportTarget.GetComponentInChildren<Teleporter>().transform.forward * other.gameObject.GetComponent<Rigidbody>().velocity.magnitude;
             }
             teleportTarget.GetComponentInChildren<Teleporter>().teleportCooldown = 0.25f;
+            teleportTarget.GetComponentInChildren<Animator>().SetTrigger("isTriggered");
+            transform.parent.GetComponentInChildren<Animator>().SetTrigger("isTriggered");
         }
     }
 }
