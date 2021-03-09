@@ -37,6 +37,7 @@ public class PlayersManager : MonoBehaviour
         {
             player.PlayerId = playerId;
             player.Nickname = playerPreset.PlayerName;
+            player.PlayerGradient = playerPreset.Gradient;
             player.PlayerColor = playerPreset.PlayerColor;
             player.FresnelColor = playerPreset.FresnelColor;
             player.Knockback = GameConfig.Instance.ExplosionForceOnPlayerHit;

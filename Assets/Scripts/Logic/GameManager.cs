@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Abilities;
 using Ball;
 using Ball.Objectives;
@@ -22,7 +21,7 @@ namespace Logic
         public static PlayerView CurrentTurnPlayer => _currentTurnPlayer;
 
         [SerializeField]
-        private LineRenderer lineRenderer;
+        private TrajectoryLineController trajectoryLineController;
 
         [SerializeField]
         private UiController uiController;
@@ -68,7 +67,7 @@ namespace Logic
 
             uiController.HideAllUi();
 
-            SetTrajectoryActive(false);
+            trajectoryLineController.SetTrajectoryActive(false);
         }
 
         private async void Start()
@@ -279,10 +278,6 @@ namespace Logic
             SceneChanger.ChangeScene(GameConfig.Instance.Scenes.LeaderboardScene, SceneChangeType.MapChange);
         }
 
-        private void SetTrajectoryActive(bool state)
-        {
-            lineRenderer.enabled = state;
-        }
 
         private async void MakeTurn()
         {
@@ -318,8 +313,7 @@ namespace Logic
             //Explode and skip turn if needed
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
             {
-                _currentTurnPlayer.ExplodeHideAndResetAngy();
-                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnAtLastPosition;
+                OnMaxAngy(_currentTurnPlayer);
                 MakeTurn();
                 return;
             }
@@ -354,7 +348,8 @@ namespace Logic
 
                     _currentTurnPlayer.SetControlsActive(true);
 
-                    SetTrajectoryActive(true);
+                    trajectoryLineController.SetTrajectoryActive(true);
+                    trajectoryLineController.SetGradientColor(_currentTurnPlayer.PlayerGradient);
 
                     _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
 
@@ -411,7 +406,7 @@ namespace Logic
 
             _currentTurnPlayer.SetControlsActive(false);
 
-            SetTrajectoryActive(false);
+            trajectoryLineController.SetTrajectoryActive(false);
 
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
@@ -446,10 +441,7 @@ namespace Logic
             //If angy became full
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
             {
-                _currentTurnPlayer.PlayerState = PlayerState.ShouldSpawnCanNotMove;
-
-                //TODO: Play explosion animation
-                _currentTurnPlayer.ExplodeHideAndResetAngy();
+                OnMaxAngy(_currentTurnPlayer);
             }
             else
             {
@@ -457,6 +449,14 @@ namespace Logic
             }
 
             await DelayAndMakeTurn();
+        }
+
+        private static void OnMaxAngy(PlayerView player)
+        {
+            player.PlayerState = PlayerState.ShouldSpawnCanNotMove;
+
+            //TODO: Play explosion animation
+            player.ExplodeHideAndResetAngy();
         }
 
         private async UniTask DelayAndMakeTurn()

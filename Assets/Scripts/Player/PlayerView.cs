@@ -11,6 +11,7 @@ using Player;
 using Player.Input;
 using Rewired;
 using UnityEngine;
+using Utils;
 
 public class PlayerView : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class PlayerView : MonoBehaviour
     public static event Action<PlayerView, Ability> NewAbilitySet;
 
     public string Nickname { get; set; }
+
+    public Gradient PlayerGradient { get; set; }
 
     public Color PlayerColor
     {
@@ -76,11 +79,12 @@ public class PlayerView : MonoBehaviour
                 _angy = GameConfig.Instance.AngyValues.MaxAngy;
                 ReachedMaxAngy?.Invoke();
             }
-            else if (value != _angy)
+            else
             {
-                AngyChanged?.Invoke(value);
                 _angy = value;
             }
+
+            AngyChanged?.Invoke(value);
         }
     }
 
@@ -132,7 +136,7 @@ public class PlayerView : MonoBehaviour
         get => playerState;
         set
         {
-            Debug.Log(Nickname + "'s state was " + playerState + " and became " + value);
+            Debug.Log(Nickname.Color(PlayerColor) + "'s state was " + playerState + " and became " + value);
             playerState = value;
         }
     }
