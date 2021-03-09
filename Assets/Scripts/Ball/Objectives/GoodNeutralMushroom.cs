@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Audio;
+using DG.Tweening;
 using DinoFracture;
 using Player;
 using UnityEngine;
@@ -50,10 +51,16 @@ public class GoodNeutralMushroom : MonoBehaviour
                     transform.GetChild(0).gameObject.SetActive(false);
                 }
 
-                splatter.Play(true);
-                point = Instantiate(fruit[0], transform.position + new Vector3(0,1f,0), Quaternion.Euler(0,0,15));
-                AudioManager.PlaySfx(SfxType.MushroomHit);
-                other.transform.parent.GetComponent<PlayerView>().AlterAngy(AngyEvent.MushroomHit);
+                point = Instantiate(fruit[0], transform.position + new Vector3(0, 1f, 0),
+                    Quaternion.Euler(0, 0, 15));
+                point.SetActive(false);
+                DOTween.Sequence().AppendInterval(.5f).AppendCallback(delegate
+                {
+                    point.SetActive(true);
+                    splatter.Play(true);
+                    AudioManager.PlaySfx(SfxType.MushroomHit);
+                    other.transform.parent.GetComponent<PlayerView>().AlterAngy(AngyEvent.MushroomHit);
+                });
 
                 if(mushroomDropAbility == AbilitySelect.none){
 
