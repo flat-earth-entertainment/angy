@@ -19,6 +19,7 @@ namespace Abilities
 
         protected override async void InvokeAbility(PlayerView player)
         {
+            Active = true;
             _playerView = player;
             _playerView.PlayerInputs.AbilityButtonPressed += DisableAbility;
 
@@ -43,6 +44,7 @@ namespace Abilities
             AudioManager.Instance.UndoLowPass(.5f);
             Physics.gravity = _initialGravity;
             Finished = true;
+            Active = false;
         }
     }
 }

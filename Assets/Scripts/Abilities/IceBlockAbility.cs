@@ -16,6 +16,8 @@ namespace Abilities
 
         protected override void InvokeAbility(PlayerView player)
         {
+            Active = true;
+
             AudioManager.PlaySfx(SfxType.IceBlockActivate);
 
             _playerView = player;
@@ -45,6 +47,7 @@ namespace Abilities
             Object.Destroy(_otherIceBlockOnCollision);
 
             Finished = true;
+            Active = false;
         }
     }
 }

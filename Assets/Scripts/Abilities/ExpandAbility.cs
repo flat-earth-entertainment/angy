@@ -26,6 +26,8 @@ namespace Abilities
 
         protected override async void InvokeAbility(PlayerView player)
         {
+            Active = true;
+
             _endOfTurn = new CancellationTokenSource();
             _player = player;
             player.BecameStill += OnPlayerBecameStill;
@@ -47,10 +49,7 @@ namespace Abilities
                 .SetUpdate(UpdateType.Fixed);
 
             // Expand mass
-            _player.BallRigidbody.mass = 10;
-
-            DOTween.To(f => _player.BallRigidbody.mass = f, 1f, (float) 1e+8, 1f)
-                .SetUpdate(UpdateType.Fixed);
+            _player.BallRigidbody.mass = (float) 1e+8;
 
             await player.Ball.transform.DOScale(Scale, TimeToInflate).SetEase(Ease.OutElastic)
                 .SetUpdate(UpdateType.Fixed);
@@ -58,7 +57,7 @@ namespace Abilities
             await UniTask.Delay(TimeSpan.FromSeconds(Duration), DelayType.UnscaledDeltaTime,
                 cancellationToken: _endOfTurn.Token).SuppressCancellationThrow();
 
-            await Deflate();
+            Deflate();
         }
 
         private async UniTask Deflate()
@@ -83,6 +82,7 @@ namespace Abilities
             await _player.BallRigidbody.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(UpdateType.Fixed);
             _deflated = true;
             Finished = true;
+            Active = false;
         }
 
         private void OnPlayerBecameStill()

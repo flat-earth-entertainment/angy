@@ -425,17 +425,21 @@ namespace Logic
             player.PlayerInputs.AbilityButtonPressed -= OnAbilityButtonPressed;
         }
 
-        private void OnAbilityButtonPressed()
+        private static void OnAbilityButtonPressed()
         {
-            if (_currentTurnPlayer.Ability != null)
+            if (_currentTurnPlayer.Ability != null && !_currentTurnPlayer.Ability.WasFired)
             {
                 _currentTurnPlayer.Ability.Invoke(_currentTurnPlayer);
-                _currentTurnPlayer.Ability = null;
             }
         }
 
         private async void OnCurrentPlayerBecameStill()
         {
+            if (_currentTurnPlayer.Ability != null && _currentTurnPlayer.Ability.Active)
+            {
+                await UniTask.WaitUntil(() => _currentTurnPlayer.Ability.Finished);
+            }
+
             EndOfTurnActions(_currentTurnPlayer);
 
             //If angy became full

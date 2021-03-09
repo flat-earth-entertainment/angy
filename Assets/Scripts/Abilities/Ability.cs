@@ -5,6 +5,8 @@ namespace Abilities
     [Serializable]
     public abstract class Ability
     {
+        public bool WasFired { get; private set; }
+        public bool Active { get; protected set; }
         public bool Finished { get; protected set; }
 
         public static Ability Copy(Ability ability)
@@ -19,6 +21,7 @@ namespace Abilities
 
         public void Invoke(PlayerView player)
         {
+            WasFired = true;
             InvokeAbility(player);
         }
 
