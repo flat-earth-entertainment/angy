@@ -183,8 +183,8 @@ public class PlayerView : MonoBehaviour
         if (shooter.lemmingAnim != null && !shooter.lemmingAnim.Equals(null))
         {
             ballBehaviour.ResetRotation();
-            shooter.lemmingAnim?.SetBool("isBall", false);
-            shooter.lemmingAnim?.SetBool("isKnockback", false);
+            shooter.lemmingAnim.SetBool("isBall", false);
+            shooter.lemmingAnim.SetBool("isKnockback", false);
         }
     }
 
@@ -292,8 +292,8 @@ public class PlayerView : MonoBehaviour
             lastStillPosition = hit.point;
         }
 
-        // lastStillPosition.y += BallRigidbody.GetComponent<SphereCollider>().radius;
         LastStillPosition = lastStillPosition;
+
         BecameStill?.Invoke();
     }
 
