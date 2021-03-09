@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 6904774001845350385}
   - component: {fileID: 6904774001845350384}
   - component: {fileID: 6904774001845350387}
-  - component: {fileID: 6904774001845350386}
   - component: {fileID: 6904774001845350397}
-  m_Layer: 0
+  - component: {fileID: 8027073702903175531}
+  - component: {fileID: 1345791217732967243}
+  m_Layer: 3
   m_Name: SpeedPad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,19 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6904774001845350386
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6904774001845350396}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6904774001845350397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,3 +96,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86fe0e55b928f734fa458a5bfbbe2489, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &8027073702903175531
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6904774001845350396}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.2813517, z: 1}
+  m_Center: {x: 0, y: 0.63432413, z: 0}
+--- !u!64 &1345791217732967243
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6904774001845350396}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
