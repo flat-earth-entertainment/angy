@@ -228,6 +228,7 @@ public class Shooter : MonoBehaviour
 
         // Power Goes Here //
         yield return StartCoroutine("CalculateShootForce");
+        yield return new WaitForSeconds(1);
         powerSlider.transform.parent.gameObject.SetActive(false);
         // Power Ends Here //
         
