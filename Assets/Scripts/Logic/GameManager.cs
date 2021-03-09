@@ -325,6 +325,7 @@ namespace Logic
                     await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
 
                     _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
+                    _currentTurnPlayer.BallRigidbody.constraints = RigidbodyConstraints.None;
 
                     MakeTurn();
                     return;
