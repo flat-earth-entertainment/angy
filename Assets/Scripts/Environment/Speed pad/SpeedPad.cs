@@ -5,9 +5,9 @@ using UnityEngine;
 public class SpeedPad : MonoBehaviour
 {
     public float speed = 10;
-    private void OnCollisionEnter(Collision other) {
-        if(other.gameObject.tag == "Lemming"){
-            other.gameObject.GetComponent<Rigidbody>().velocity = transform.forward * speed;
+    private void OnTriggerEnter(Collider other) {
+        if(other.tag == "Lemming"){
+            other.GetComponent<Rigidbody>().velocity = transform.forward * speed;
         }
     }
 }
