@@ -11,6 +11,7 @@ using Player;
 using Player.Input;
 using Rewired;
 using UnityEngine;
+using Utils;
 
 public class PlayerView : MonoBehaviour
 {
@@ -133,7 +134,7 @@ public class PlayerView : MonoBehaviour
         get => playerState;
         set
         {
-            Debug.Log(Nickname + "'s state was " + playerState + " and became " + value);
+            Debug.Log(Nickname.Color(PlayerColor) + "'s state was " + playerState + " and became " + value);
             playerState = value;
         }
     }
