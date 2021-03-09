@@ -708,7 +708,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e104a0d2f075428f8e5c572c35829e10, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineRenderer: {fileID: 5875674536868409980}
+  trajectoryLineController: {fileID: 5069710674386219604}
   uiController: {fileID: 3210590612593989865}
 --- !u!114 &2189155178440821937
 MonoBehaviour:
@@ -1023,7 +1023,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2189155178959232817}
   m_LocalRotation: {x: 0.1150751, y: 0.8811196, z: -0.27781588, w: 0.36497167}
-  m_LocalPosition: {x: -36.063824, y: 22.33357, z: 30.977943}
+  m_LocalPosition: {x: -28.493822, y: 22.33357, z: 9.417944}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2189155179192095256}
@@ -1766,6 +1766,7 @@ GameObject:
   - component: {fileID: 5875674536868409983}
   - component: {fileID: 5875674536868409980}
   - component: {fileID: 5875674536868409953}
+  - component: {fileID: 5069710674386219604}
   m_Layer: 0
   m_Name: Trajectory Prediction
   m_TagString: Untagged
@@ -1923,6 +1924,19 @@ MonoBehaviour:
   obstacles: {fileID: 0}
   _LineLength: 125
   indicatorHolder: {fileID: 0}
+--- !u!114 &5069710674386219604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5875674536868409981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 047985f682c04c39945dc06f5dff6472, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 5875674536868409980}
 --- !u!1 &5907161360249717275
 GameObject:
   m_ObjectHideFlags: 0
@@ -2901,6 +2915,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 11a8896eab3f37a488bc698b2f2a5f0a, type: 3}
+--- !u!224 &4947231741408220908 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6541874316274763326, guid: 11a8896eab3f37a488bc698b2f2a5f0a, type: 3}
+  m_PrefabInstance: {fileID: 2189155179140714706}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3210590612593989865 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3670220596072794171, guid: 11a8896eab3f37a488bc698b2f2a5f0a, type: 3}
@@ -2912,11 +2931,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f5ee40a09d547d383da14823d05271b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &4947231741408220908 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 6541874316274763326, guid: 11a8896eab3f37a488bc698b2f2a5f0a, type: 3}
-  m_PrefabInstance: {fileID: 2189155179140714706}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3072998373566268788
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -27,6 +27,8 @@ public class PlayerView : MonoBehaviour
 
     public string Nickname { get; set; }
 
+    public Gradient PlayerGradient { get; set; }
+
     public Color PlayerColor
     {
         get => _playerColor;
