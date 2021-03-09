@@ -4,20 +4,10 @@ using UnityEngine;
 
 public class SpeedPad : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    private void OnTriggerEnter(Collider other) {
-        if(other.tag == "Lemming"){
-            other.GetComponent<Rigidbody>().velocity = transform.forward * 10;
+    public float speed = 10;
+    private void OnCollisionEnter(Collision other) {
+        if(other.gameObject.tag == "Lemming"){
+            other.gameObject.GetComponent<Rigidbody>().velocity = transform.forward * speed;
         }
     }
 }
