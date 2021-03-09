@@ -313,7 +313,7 @@ namespace Logic
             //Explode and skip turn if needed
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
             {
-                OnMaxAngy(_currentTurnPlayer);
+                await OnMaxAngy(_currentTurnPlayer);
                 MakeTurn();
                 return;
             }
@@ -445,7 +445,7 @@ namespace Logic
             //If angy became full
             if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
             {
-                OnMaxAngy(_currentTurnPlayer);
+                await OnMaxAngy(_currentTurnPlayer);
             }
             else
             {
@@ -455,12 +455,12 @@ namespace Logic
             await DelayAndMakeTurn();
         }
 
-        private static void OnMaxAngy(PlayerView player)
+        private static UniTask OnMaxAngy(PlayerView player)
         {
             player.PlayerState = PlayerState.ShouldSpawnCanNotMove;
 
             //TODO: Play explosion animation
-            player.ExplodeHideAndResetAngy();
+            return player.ExplodeHideAndResetAngy();
         }
 
         private async UniTask DelayAndMakeTurn()
@@ -505,6 +505,12 @@ namespace Logic
             {
                 OnPlayerConfirmedPresenceInHole(_currentTurnPlayer);
             }
+
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                _currentTurnPlayer.AlterAngy(AngyEvent.FellOutOfTheMap);
+            }
+
 #endif
         }
     }
