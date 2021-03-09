@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Abilities;
+using Audio;
 using Ball;
 using Cinemachine;
 using Config;
@@ -223,7 +224,7 @@ public class PlayerView : MonoBehaviour
         }
     }
 
-    public void ExplodeHideAndResetAngy()
+    public UniTask ExplodeHideAndResetAngy()
     {
         Angy = GameConfig.Instance.AngyValues.MinAngy;
 
@@ -231,23 +232,33 @@ public class PlayerView : MonoBehaviour
         BallRigidbody.GetComponent<Collider>().enabled = false;
         BallRigidbody.useGravity = false;
 
-        var tweensByTarget = DOTween.TweensByTarget(BallRigidbody.transform);
-        if (tweensByTarget != null && tweensByTarget.Count > 0)
-        {
-            BallRigidbody.GetComponent<Collider>().enabled = true;
-            BallRigidbody.useGravity = true;
-            Hide();
-        }
-        else
-        {
-            BallRigidbody.transform.localScale = Vector3.one;
-            BallRigidbody.transform.DOPunchScale(Vector3.one * 5, 0.5f, 0).OnComplete(delegate
+        const float expandTime = .5f;
+        const float shakeTime = 1f;
+
+        return DOTween.Sequence()
+            .Append(Ball.transform.DOShakePosition(shakeTime, .2f, 50))
+            .Join(Ball.transform.DOShakeScale(shakeTime, .2f, 50))
+            .AppendCallback(delegate { Animator.SetBool("isInflated", true); })
+            .Append(BallRigidbody.transform.DOScale(Vector3.one * 5, expandTime))
+            .Join(DOTween.To(() => ExpandPercent, f => ExpandPercent = f, 100, expandTime)
+                .SetEase(Ease.OutElastic)
+                .SetUpdate(UpdateType.Fixed))
+            .AppendCallback(delegate
             {
+                var splat = Instantiate(GameConfig.Instance.BloodSplat, Ball.transform.position,
+                    GameConfig.Instance.BloodSplat.transform.rotation);
+                Destroy(splat, 5f);
+                splat?.GetComponent<ParticleSystem>().Play();
                 BallRigidbody.GetComponent<Collider>().enabled = true;
                 BallRigidbody.useGravity = true;
+                BallRigidbody.transform.localScale = Vector3.one;
                 Hide();
-            });
-        }
+                Animator.SetBool("isInflated", false);
+                AudioManager.PlaySfx(SfxType.LemmingExplosion);
+                ExpandPercent = 0f;
+            })
+            .SetUpdate(true)
+            .SetEase(Ease.Linear).ToUniTask();
     }
 
     public void ShouldPlayerActivate(int playerId)
