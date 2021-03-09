@@ -12,6 +12,7 @@ public class TeleporterProximityCheck : MonoBehaviour
     [HideInInspector]
     public Animator anim;
     public List<PlayerView> players = new List<PlayerView>();
+    public List<GameObject> particles = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
@@ -32,8 +33,16 @@ public class TeleporterProximityCheck : MonoBehaviour
         }
         if(inRange || linkedTeleporter.inRange){
             anim.SetBool("isOpened", true);
+            foreach (GameObject item in particles)
+            {
+                item.SetActive(true);
+            }
         }else{
             anim.SetBool("isOpened", false);
+            foreach (GameObject item in particles)
+            {
+                item.SetActive(false);
+            }
         }
     }
 }
