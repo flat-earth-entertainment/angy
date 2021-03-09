@@ -298,6 +298,7 @@ public class Shooter : MonoBehaviour
         }
         if(forcePercent >= 1){  // Play full power particle
             GameObject.FindGameObjectWithTag("TEMPFINDSLIDER").GetComponentInChildren<Coffee.UIExtensions.UIParticle>().Play();
+            AudioManager.PlaySfx(SfxType.PowerMeterMax);
             maxPower = true;
         }
         if(forcePercent < 0){

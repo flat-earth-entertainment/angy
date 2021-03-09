@@ -14,6 +14,7 @@ namespace Audio
         ExpandDeactivate = 8,
         MushroomHit = 9,
         PointReclaimed = 12,
-        HoleAppeared = 10
+        HoleAppeared = 10,
+        PowerMeterMax = 14
     }
 }

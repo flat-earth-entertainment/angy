@@ -240,6 +240,16 @@ MonoBehaviour:
     - {fileID: 8300000, guid: ee1d63b67167ad84bb175d5553deb4fa, type: 3}
     limitFrequency: 0
     minimumInterval: 0
+  - <SfxType>k__BackingField: 13
+    <Clips>k__BackingField:
+    - {fileID: 8300000, guid: 8145197f71ba5464898d8340c3dc7031, type: 3}
+    limitFrequency: 0
+    minimumInterval: 0
+  - <SfxType>k__BackingField: 14
+    <Clips>k__BackingField:
+    - {fileID: 8300000, guid: 0c285bd685c95e049bb011ebc41cd50c, type: 3}
+    limitFrequency: 0
+    minimumInterval: 0
   music:
   - {fileID: 8300000, guid: bd37f9d289112dd468b9759390d4b3a4, type: 3}
   - {fileID: 8300000, guid: 2ce997c0dc1006c41b153c7fcb078082, type: 3}
@@ -250,8 +260,6 @@ MonoBehaviour:
   sfxSource: {fileID: 7689676235729611805}
   tapSource: {fileID: 672282868959172956}
   masterMixer: {fileID: 24100000, guid: 5f04db0597e7f2642a732acb10842f61, type: 2}
-  musicMixer: {fileID: 0}
-  sfxMixer: {fileID: 0}
 --- !u!1 &7689676235058604985
 GameObject:
   m_ObjectHideFlags: 0
