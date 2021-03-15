@@ -1,9 +1,7 @@
 using Abilities;
 using Abilities.Config;
 using Config;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI

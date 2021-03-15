@@ -1,4 +1,3 @@
-using System;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
