@@ -1,5 +1,6 @@
 using System;
 using Config;
+using Player;
 using UnityEngine;
 
 namespace Ball

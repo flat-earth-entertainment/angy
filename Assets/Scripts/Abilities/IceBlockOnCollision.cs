@@ -1,5 +1,6 @@
 ﻿using Audio;
 using Config;
+using Player;
 using UnityEngine;
 
 namespace Abilities

@@ -6,6 +6,7 @@ using Rewired;
 using Logic;
 using Config;
 using Audio;
+using Player;
 
 public class Shooter : MonoBehaviour
 {

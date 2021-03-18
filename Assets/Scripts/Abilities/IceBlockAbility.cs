@@ -1,6 +1,7 @@
 ﻿using System;
 using Audio;
 using Config;
+using Player;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

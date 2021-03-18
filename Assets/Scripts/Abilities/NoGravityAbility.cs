@@ -3,6 +3,7 @@ using System.Threading;
 using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
+using Player;
 using UnityEngine;
 
 namespace Abilities

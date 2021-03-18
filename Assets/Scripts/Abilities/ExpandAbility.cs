@@ -4,6 +4,7 @@ using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Player;
 using UnityEngine;
 
 namespace Abilities

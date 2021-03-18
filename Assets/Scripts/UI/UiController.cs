@@ -1,6 +1,7 @@
 using Abilities;
 using Abilities.Config;
 using Config;
+using Player;
 using UnityEngine;
 using UnityEngine.UI;
 
