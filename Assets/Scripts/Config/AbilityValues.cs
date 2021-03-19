@@ -1,5 +1,5 @@
 ﻿using System;
-using Config.Abilities;
+using Abilities.Config;
 using UnityEngine;
 
 namespace Config
@@ -18,5 +18,8 @@ namespace Config
 
         [field: SerializeField]
         public IceBlockAbilityConfig IceBlockAbility { get; private set; }
+
+        [field: SerializeField]
+        public FireDashAbilityConfig FireDashAbilityConfig { get; private set; }
     }
 }

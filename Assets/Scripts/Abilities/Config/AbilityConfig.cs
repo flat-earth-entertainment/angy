@@ -22,6 +22,7 @@ namespace Abilities.Config
                 ExpandAbility _ => GameConfig.Instance.AbilityValues.ExpandAbility.AbilityIcon,
                 IceBlockAbility _ => GameConfig.Instance.AbilityValues.IceBlockAbility.AbilityIcon,
                 NoGravityAbility _ => GameConfig.Instance.AbilityValues.NoGravityAbility.AbilityIcon,
+                FireDashAbility _ => GameConfig.Instance.AbilityValues.FireDashAbilityConfig.AbilityIcon,
                 _ => throw new ArgumentOutOfRangeException(nameof(ability))
             };
         }
