@@ -41,7 +41,7 @@ public class Shooter : MonoBehaviour
     private GameObject ballStorage;
     
     public bool activateShootingRetinae = true, active = true;
-    public float vertSnap = 180, horSnap = 270;
+    public float vertSnap = 180, horSnap = 90;
     // how many degrees the shooting retinae should snap. MUST add up to 360
     public int vertSnapAngle = 5, horSnapAngle = 5, greatSnapAngle = 30;
     private float snapCooldownTimer, vertSnapCooldownTimer, horSnapCooldownTimer;
@@ -103,7 +103,7 @@ public class Shooter : MonoBehaviour
             // Vertical movement controls
             float vertical = rewiredPlayer.GetAxis("Move Vertical");
             if(vertSnapCooldownTimer <= 0){ // delays snapping intervals
-                if(Mathf.Abs(vertical) > 0){
+                if(Mathf.Abs(vertical) > 0.66f){
                     vertSnap += PositiveOrNegative(vertical) * vertSnapMultiplier;
                     vertSnap = Mathf.Clamp(vertSnap, xMinAngle / vertSnapAngle, xMaxAngle / vertSnapAngle );
                     vertSnapCooldownTimer = snapCooldown;
@@ -112,7 +112,7 @@ public class Shooter : MonoBehaviour
             }else{
                 vertSnapCooldownTimer -= Time.deltaTime;
             }
-            if(Mathf.Abs(vertical) > 0){
+            if(Mathf.Abs(vertical) > 0.66f){
                 if(vertRotTimeMultiplier < 0.95f){
                     vertSnapMultiplier = 1;
                 }
@@ -131,7 +131,7 @@ public class Shooter : MonoBehaviour
             // Horizontal movement controls
             float horizontal = rewiredPlayer.GetAxis("Move Horizontal");
             if(horSnapCooldownTimer <= 0){  // delays snapping intervals
-                if(Mathf.Abs(horizontal) > 0){
+                if(Mathf.Abs(horizontal) > 0.66f){
                     horSnap += PositiveOrNegative(horizontal) * horSnapMultiplier;
                     horSnapCooldownTimer = snapCooldown;
                     movedRet = true;
@@ -158,18 +158,24 @@ public class Shooter : MonoBehaviour
             }else{
                 horSnapCooldownTimer -= Time.deltaTime;
             }
-            if(Mathf.Abs(horizontal) > 0){
+            if(Mathf.Abs(horizontal) > 0.66f){
                 if(horRotTimeMultiplier < 0.95f){
                     horSnapMultiplier = 1;
                 }
-                if(horRotTimeMultiplier < 0.75f){
+                if(horRotTimeMultiplier < 0.80f){
                     horSnapMultiplier = 2;
                 }
-                if(horRotTimeMultiplier < 0.5f){
+                if(horRotTimeMultiplier < 0.6f){
                     horSnapMultiplier = 3;
                 }
-                if(horRotTimeMultiplier < 0.25f){
+                if(horRotTimeMultiplier < 0.4f){
+                    horSnapMultiplier = 4;
+                }
+                if(horRotTimeMultiplier < 0.2f){
                     horSnapMultiplier = 5;
+                }
+                if(horRotTimeMultiplier < 0f){
+                    horSnapMultiplier = 7;
                 }
                 horRotTimeMultiplier -= Time.deltaTime / 4;
             }else{
