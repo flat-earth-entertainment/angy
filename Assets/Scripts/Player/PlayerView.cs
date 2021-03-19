@@ -80,6 +80,10 @@ public class PlayerView : MonoBehaviour
                 _angy = GameConfig.Instance.AngyValues.MaxAngy;
                 ReachedMaxAngy?.Invoke();
             }
+            else if (value < GameConfig.Instance.AngyValues.MinAngy)
+            {
+                _angy = GameConfig.Instance.AngyValues.MinAngy;
+            }
             else
             {
                 _angy = value;
