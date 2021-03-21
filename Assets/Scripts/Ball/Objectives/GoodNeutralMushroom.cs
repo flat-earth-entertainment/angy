@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Abilities;
 using Audio;
 using DG.Tweening;
 using DinoFracture;
 using Player;
+using UI;
 using UnityEngine;
 
 public class GoodNeutralMushroom : MonoBehaviour
@@ -17,7 +19,7 @@ public class GoodNeutralMushroom : MonoBehaviour
     private PointController pointController;
     public ParticleSystem splatter;
     public Material baseFruitMat, baseFruitTopMat;
-    public enum AbilitySelect{none,IceBlockAbility,ExpandAbility,NoGravityAbility,FireDashAbility}
+    public enum AbilitySelect{none,IceBlockAbility,ExpandAbility,NoGravityAbility,FireDashAbility,RandomAbility}
     public AbilitySelect mushroomDropAbility;
     // Owner Id 99 refers to no ownership, shouldn't be a problem unless we want 100 players.
     public int ownerId = 99, pointValue = 1;
@@ -72,6 +74,11 @@ public class GoodNeutralMushroom : MonoBehaviour
                     other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability = new Abilities.ExpandAbility();
                 }else if(mushroomDropAbility == AbilitySelect.FireDashAbility){
                     other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability = new Abilities.FireDashAbility();
+                }else if(mushroomDropAbility == AbilitySelect.RandomAbility){
+                    var newAbility = Ability.RandomAbility();
+                    var player = other.transform.GetChild(0).GetComponent<Shooter>().PlayerView;
+                    player.Ability = newAbility;
+                    FindObjectOfType<UiController>().DoSlotMachineFor(player, newAbility);
                 }
                 
             }

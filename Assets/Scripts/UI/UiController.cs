@@ -1,5 +1,6 @@
 using Abilities;
 using Abilities.Config;
+using Audio;
 using Config;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,6 +38,14 @@ namespace UI
             {
                 Debug.LogWarning($"Can't find Ability UI for player with ID {playerView.PlayerId}");
             }
+        }
+
+        public void DoSlotMachineFor(PlayerView player, Ability ability)
+        {
+            abilityUis[player.PlayerId].Visible = true;
+            abilityUis[player.PlayerId]
+                .DoSlotMachine(3.2f, AbilityConfig.GetConfigSpriteFor(ability), player.PlayerColor);
+            AudioManager.PlaySfx(SfxType.RandomActivate);
         }
 
         private void SetAbilityIconFor(PlayerView player, Sprite icon)

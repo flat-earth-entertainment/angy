@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
+using Utils;
 
 namespace Abilities
 {
@@ -17,6 +20,14 @@ namespace Abilities
             }
 
             return (Ability) Activator.CreateInstance(ability.GetType());
+        }
+
+        public static Ability RandomAbility()
+        {
+            var abilityTypes = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => typeof(Ability).IsAssignableFrom(t) && t != typeof(Ability));
+
+            return (Ability) Activator.CreateInstance(abilityTypes.RandomElement());
         }
 
         public void Invoke(PlayerView player)

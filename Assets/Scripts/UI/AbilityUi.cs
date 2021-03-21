@@ -1,7 +1,10 @@
+using Abilities;
+using Abilities.Config;
 using Config;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace UI
 {
@@ -62,6 +65,39 @@ namespace UI
 
             abilityImage.enabled = icon != null;
             backgroundImage.enabled = icon != null;
+        }
+
+        private static Sprite[] AllAbilitySprites => new[]
+        {
+            AbilityConfig.GetConfigSpriteFor(new ExpandAbility()),
+            AbilityConfig.GetConfigSpriteFor(new NoGravityAbility()),
+            AbilityConfig.GetConfigSpriteFor(new FireDashAbility()),
+            AbilityConfig.GetConfigSpriteFor(new IceBlockAbility())
+        };
+
+        public void DoSlotMachine(float slotDuration, Sprite spriteToSet, Color backgroundColor)
+        {
+            var timeScale = Time.timeScale;
+            Time.timeScale = 0f;
+            SetAbilityIcon(AllAbilitySprites.RandomElement(), backgroundColor);
+
+            var initialPosition = abilityImage.rectTransform.position;
+            abilityImage.rectTransform.position = initialPosition + Vector3.up * 200;
+
+            DOTween.Sequence()
+                .Append(abilityImage.rectTransform
+                    .DOMoveY(abilityImage.rectTransform.position.y - 400, slotDuration / 8f)
+                    .SetLoops((int) slotDuration * 2)
+                    .OnStepComplete(delegate { SetAbilityIcon(AllAbilitySprites.RandomElement(), backgroundColor); })
+                    .OnComplete(delegate
+                    {
+                        abilityImage.rectTransform.position = initialPosition + Vector3.up * 200;
+                        SetAbilityIcon(spriteToSet, backgroundColor);
+                    })
+                )
+                .Append(abilityImage.rectTransform.DOMoveY(initialPosition.y, slotDuration / 8f))
+                .OnComplete(delegate { Time.timeScale = timeScale; })
+                .SetUpdate(true);
         }
     }
 }

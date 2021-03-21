@@ -12,6 +12,7 @@ namespace Audio
         IceBlockDeactivate = 6,
         ExpandActivate = 7,
         ExpandDeactivate = 8,
+        RandomActivate = 15,
         MushroomHit = 9,
         PointReclaimed = 12,
         HoleAppeared = 10,
