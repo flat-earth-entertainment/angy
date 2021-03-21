@@ -25,8 +25,6 @@ namespace Abilities
                     Quaternion.identity)
                 .GetComponent<FireDashMonoBehaviour>();
 
-            UnityEditor.Selection.activeObject = fireDash.gameObject;
-
             fireDash.Initialize(player.PlayerInputs);
 
             await UniTask.Delay(
