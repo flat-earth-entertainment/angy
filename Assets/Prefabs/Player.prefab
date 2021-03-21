@@ -96,6 +96,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerView: {fileID: 4206041225563901588}
+--- !u!114 &8147309645726428112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4629074905832054383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aea9d0fd82ad410c9d142d57b6ca56a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ground:
+    serializedVersion: 2
+    m_Bits: 72
+  player: {fileID: 4206041225563901588}
 --- !u!1 &8414885059241875502
 GameObject:
   m_ObjectHideFlags: 0

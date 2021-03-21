@@ -7,6 +7,7 @@ using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Environment;
 using Player;
 using UI;
 using UnityEngine;
@@ -92,6 +93,8 @@ namespace Logic
             GoodNeutralMushroom.HoleSpawned += OnHoleAppeared;
 
             PlayerView.OptionsMenuRequested += OnPauseMenuOpenRequested;
+
+            KillingTrigger.HitKillTrigger += OnPlayerHitKillTrigger;
         }
 
         private void OnDisable()
@@ -105,6 +108,7 @@ namespace Logic
             GoodNeutralMushroom.HoleSpawned -= OnHoleAppeared;
 
             PlayerView.OptionsMenuRequested -= OnPauseMenuOpenRequested;
+            KillingTrigger.HitKillTrigger -= OnPlayerHitKillTrigger;
 
             Time.timeScale = GameConfig.Instance.TimeScale;
         }
@@ -228,6 +232,27 @@ namespace Logic
             }
         }
 
+        private void OnPlayerHitKillTrigger(PlayerView player)
+        {
+            player.Hide();
+
+            player.AlterAngy(AngyEvent.FellOutOfTheMap);
+
+            if (player.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+            {
+                player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
+            }
+
+            player.PlayerState = PlayerState.ShouldSpawnAtLastStandablePosition;
+
+            //Unsubscribe as the current player should fall only as a result of shooting
+            if (player == _currentTurnPlayer)
+            {
+                EndOfTurnActions(player);
+                MakeTurn();
+            }
+        }
+
         private Tween _enteredHoleTimer;
 
         private void OnPlayerEnteredHole(PlayerView player)
@@ -337,6 +362,10 @@ namespace Logic
 
                 case PlayerState.ShouldSpawnAtLastPosition:
                     await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
+                    goto case PlayerState.ShouldMakeTurn;
+
+                case PlayerState.ShouldSpawnAtLastStandablePosition:
+                    await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStandablePosition);
                     goto case PlayerState.ShouldMakeTurn;
 
                 case PlayerState.ShouldMakeTurn:
