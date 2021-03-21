@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4585025521711169937}
   - component: {fileID: 4206041225563901588}
+  - component: {fileID: 5560386918644359306}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -54,6 +55,22 @@ MonoBehaviour:
   shooter: {fileID: 8148711711352872623}
   ballBehaviour: {fileID: 3544505496180173070}
   outOfBoundsCheck: {fileID: 3214668965113160429}
+--- !u!114 &5560386918644359306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588541474785268593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6800ee1d0104182b48da953c8f3b53a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 4206041225563901588}
+  lemming: {fileID: 492513687683201413}
+  distance: 10
+  cinemachineVirtualCamera: {fileID: 2568511267011732018}
 --- !u!114 &3357687179883922486
 MonoBehaviour:
   m_ObjectHideFlags: 0
