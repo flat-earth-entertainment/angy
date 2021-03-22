@@ -24,8 +24,8 @@ namespace Config
         [field: SerializeField, BoxGroup("Angy")]
         public AngyValues AngyValues { get; private set; }
 
-        [field: SerializeField, BoxGroup("General")]
-        public float OutOfBoundsReactionTime { get; private set; }
+        [field: SerializeField, BoxGroup("Angy")]
+        public float SliderSpeed { get; private set; }
 
         [field: SerializeField, BoxGroup("General")]
         public float ExplosionForceOnPlayerHit { get; private set; }

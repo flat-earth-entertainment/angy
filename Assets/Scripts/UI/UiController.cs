@@ -21,12 +21,14 @@ namespace UI
         [SerializeField]
         private Slider angySlider2;
 
-
         [SerializeField]
         private PlayersManager playersManager;
 
         [SerializeField]
         private AbilityUi[] abilityUis;
+
+        private float _angy1Value;
+        private float _angy2Value;
 
         public void WobbleAbilityUi(PlayerView playerView, bool state)
         {
@@ -94,14 +96,7 @@ namespace UI
 
             if (player.PlayerState == PlayerState.ActiveInMotion)
             {
-                if (ability == null)
-                {
-                    WobbleAbilityUi(player, false);
-                }
-                else
-                {
-                    WobbleAbilityUi(player, true);
-                }
+                WobbleAbilityUi(player, ability != null);
             }
         }
 
@@ -140,12 +135,33 @@ namespace UI
 
         private void OnPlayer1AngyChanged(int newAngyValue)
         {
-            angySlider.value = newAngyValue;
+            // angySlider.value = newAngyValue;
+            _angy1Value = newAngyValue;
         }
 
         private void OnPlayer2AngyChanged(int newAngyValue)
         {
-            angySlider2.value = newAngyValue;
+            // angySlider2.value = newAngyValue;
+            _angy2Value = newAngyValue;
+        }
+
+        private void Update()
+        {
+            LerpSlider(angySlider, _angy1Value);
+            LerpSlider(angySlider2, _angy2Value);
+        }
+
+        private void LerpSlider(Slider slider, float value)
+        {
+            if (slider.value < value)
+            {
+                slider.value += GameConfig.Instance.SliderSpeed * Time.unscaledDeltaTime;
+            }
+
+            if (slider.value > value)
+            {
+                slider.value -= GameConfig.Instance.SliderSpeed * Time.unscaledDeltaTime;
+            }
         }
 
         public void EnableAbilityUi()
