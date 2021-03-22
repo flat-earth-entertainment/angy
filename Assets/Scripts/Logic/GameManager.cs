@@ -279,8 +279,8 @@ namespace Logic
             var winner = _playersManager.Players.First(p => p.PlayerId == winnerId);
 
             CurrentGameSession.NextRoundRewiredPlayerId = winner.RewiredPlayer.id;
-            CurrentGameSession.Leaderboard
-                .Add(new MapScore(SceneManager.GetActiveScene().name, points[0], points[1]));
+            CurrentGameSession.CollectionScores
+                .SetMapScore(SceneManager.GetActiveScene().name, new MapScore(points[0], points[1]));
 
             OnLevelFinished();
         }

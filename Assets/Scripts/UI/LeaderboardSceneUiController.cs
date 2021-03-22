@@ -54,10 +54,9 @@ namespace UI
             int sum2;
             var sum1 = sum2 = 0;
 
-            Debug.Log(CurrentGameSession.Leaderboard.Count);
-            for (var i = 0; i < CurrentGameSession.Leaderboard.Count; i++)
+            for (var i = 0; i < CurrentGameSession.CollectionScores.Scores.Length; i++)
             {
-                var mapScore = CurrentGameSession.Leaderboard[i];
+                var mapScore = CurrentGameSession.CollectionScores.Scores[i];
                 Instantiate(mapRowPrefab, mapTableParent).GetComponent<LeaderboardMapRow>()
                     .SetRow(mapScore.Player1Score, mapScore.Player2Score, i + 1);
                 sum1 += mapScore.Player1Score;
@@ -87,15 +86,6 @@ namespace UI
 
         private void Update()
         {
-#if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                for (int i = 0; i < 2; i++)
-                {
-                    CurrentGameSession.Leaderboard.Add(new MapScore(i.ToString(), i * 2, i * 3));
-                }
-            }
-#endif
             // TEMP
             if (Input.anyKeyDown)
             {
