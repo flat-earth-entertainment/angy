@@ -107,7 +107,9 @@ public class SpikeTrap : MonoBehaviour
         lemming.GetComponent<Rigidbody>().velocity = 
             lemming.GetComponent<Rigidbody>().velocity.normalized * knockbackForce;
         // Applies blood
-        Instantiate(blood, lemming.transform.position, Quaternion.identity);
+        GameObject bld = Instantiate(blood, lemming.transform.position, Quaternion.identity);
+        bld.GetComponent<ParticleSystem>().Play();
+        Destroy(bld, 8f);
         // Apply sound
 
         // Apply Angy
