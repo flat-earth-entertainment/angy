@@ -20,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FlameRed
-  m_Shader: {fileID: -6465566751694194690, guid: 4ee0f864f7650584dbd685cd5c9d5765, type: 3}
+  m_Name: FlameMushroom
+  m_Shader: {fileID: -6465566751694194690, guid: 546e01de9f6d0be489a1ac0ceff88f8b, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -34,6 +34,10 @@ Material:
     m_TexEnvs:
     - Cubemap_09fdd681143947e7876e311cce69d49f:
         m_Texture: {fileID: 8900000, guid: adc1c917d8b79a64991e312ef38b8a3b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_f1bd4c2f37e64413816dbbefa5b77007:
+        m_Texture: {fileID: 2800000, guid: 57e1884618e4ee1408b656f426e886d8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -93,7 +97,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_37bb3c5b2461409982304662d472277b: 1.97
+    - Vector1_37bb3c5b2461409982304662d472277b: 3.52
     - Vector1_9692e06c43ff41ce910ef49e95a31ce8: 27.04
     - Vector1_eaa148b43e944027a28bcdb33718e80b: 1.7
     - _AlphaClip: 0
@@ -123,8 +127,8 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_082371b3586345d1b4381f5c1dedbdf5: {r: 31.999996, g: 0.57373327, b: 0, a: 0}
-    - Color_c01b158aa3674087b843319d8d5496be: {r: 0, g: 0, b: 0, a: 0}
+    - Color_082371b3586345d1b4381f5c1dedbdf5: {r: 31.999996, g: 3.0874546, b: 0, a: 0}
+    - Color_c01b158aa3674087b843319d8d5496be: {r: 1, g: 1, b: 1, a: 0}
     - Vector2_2f585fedc5b1458ca0d3b76abfdd09e2: {r: 0, g: 0.54, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
