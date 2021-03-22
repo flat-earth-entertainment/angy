@@ -1,12 +1,96 @@
+using System;
 using Abilities;
 using Abilities.Config;
 using Audio;
 using Config;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
+    [Serializable]
+    public class AngyUi
+    {
+        [SerializeField]
+        private Slider angySlider;
+
+        [SerializeField]
+        private ParticleSystem particle1;
+
+        [SerializeField]
+        private ParticleSystem particle2;
+
+        private Tween _sliderSmoothingTween;
+        private Sequence _particleSequence;
+
+        private ParticleSystem.MainModule _particle1Main;
+        private ParticleSystem.MainModule _particle2Main;
+
+        public void Initialize(float minValue, float maxValue)
+        {
+            particle1.Stop(true);
+            angySlider.minValue = minValue;
+            angySlider.maxValue = maxValue;
+
+            _particle1Main = particle1.main;
+            _particle2Main = particle2.main;
+        }
+
+        public void OnAngyChanged(int newValue)
+        {
+            if (_sliderSmoothingTween != null)
+            {
+                _sliderSmoothingTween.Kill();
+                _sliderSmoothingTween = null;
+            }
+
+            _sliderSmoothingTween = DOTween.To(() => angySlider.value, v => angySlider.value = v, newValue,
+                GameConfig.Instance.SliderMoveInterval).SetUpdate(true);
+
+
+            if (newValue > angySlider.value)
+            {
+                var particle1MainStartSpeed = _particle1Main.startSpeed;
+                particle1MainStartSpeed.constant = Mathf.Abs(particle1MainStartSpeed.constant);
+                _particle1Main.startSpeed = particle1MainStartSpeed;
+
+                var particle2MainStartSpeed = _particle2Main.startSpeed;
+                particle2MainStartSpeed.constant = Mathf.Abs(particle2MainStartSpeed.constant);
+                _particle2Main.startSpeed = particle2MainStartSpeed;
+            }
+
+            if (newValue < angySlider.value)
+            {
+                var particle1MainStartSpeed = _particle1Main.startSpeed;
+                particle1MainStartSpeed.constant = -Mathf.Abs(particle1MainStartSpeed.constant);
+                _particle1Main.startSpeed = particle1MainStartSpeed;
+
+                var particle2MainStartSpeed = _particle2Main.startSpeed;
+                particle2MainStartSpeed.constant = -Mathf.Abs(particle2MainStartSpeed.constant);
+                _particle2Main.startSpeed = particle2MainStartSpeed;
+            }
+
+            if (_particleSequence != null)
+            {
+                _particleSequence.Kill();
+                _particleSequence = null;
+            }
+
+            particle1.Play(true);
+            _particle1Main.loop = true;
+            _particle2Main.loop = true;
+            _particleSequence = DOTween.Sequence()
+                .AppendInterval(GameConfig.Instance.SliderMoveInterval)
+                .AppendCallback(delegate
+                {
+                    _particle1Main.loop = false;
+                    _particle2Main.loop = false;
+                })
+                .SetUpdate(true);
+        }
+    }
+
     public class UiController : MonoBehaviour
     {
         [SerializeField]
@@ -16,10 +100,10 @@ namespace UI
         private GameObject angyMeter;
 
         [SerializeField]
-        private Slider angySlider;
+        private AngyUi angyUi1;
 
         [SerializeField]
-        private Slider angySlider2;
+        private AngyUi angyUi2;
 
         [SerializeField]
         private PlayersManager playersManager;
@@ -64,8 +148,8 @@ namespace UI
 
         private void Awake()
         {
-            angySlider.minValue = angySlider2.minValue = GameConfig.Instance.AngyValues.MinAngy;
-            angySlider.maxValue = angySlider2.maxValue = GameConfig.Instance.AngyValues.MaxAngy;
+            angyUi1.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
+            angyUi2.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
 
             playersManager.InitializedAllPlayers += OnPlayersInitialized;
         }
@@ -78,9 +162,6 @@ namespace UI
         private void OnDisable()
         {
             PlayerView.NewAbilitySet -= OnNewAbilitySet;
-
-            playersManager.Players[0].AngyChanged -= OnPlayer1AngyChanged;
-            playersManager.Players[1].AngyChanged -= OnPlayer2AngyChanged;
         }
 
         private void OnNewAbilitySet(PlayerView player, Ability ability)
@@ -104,11 +185,8 @@ namespace UI
         {
             playersManager.InitializedAllPlayers -= OnPlayersInitialized;
 
-            obj[0].AngyChanged += OnPlayer1AngyChanged;
-            obj[1].AngyChanged += OnPlayer2AngyChanged;
-
-            angySlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[0].PlayerColor;
-            angySlider2.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[1].PlayerColor;
+            obj[0].AngyChanged += angyUi1.OnAngyChanged;
+            obj[1].AngyChanged += angyUi2.OnAngyChanged;
         }
 
         public void SetCameraModeActive(bool state)
@@ -133,36 +211,6 @@ namespace UI
             angyMeter.SetActive(false);
         }
 
-        private void OnPlayer1AngyChanged(int newAngyValue)
-        {
-            // angySlider.value = newAngyValue;
-            _angy1Value = newAngyValue;
-        }
-
-        private void OnPlayer2AngyChanged(int newAngyValue)
-        {
-            // angySlider2.value = newAngyValue;
-            _angy2Value = newAngyValue;
-        }
-
-        private void Update()
-        {
-            LerpSlider(angySlider, _angy1Value);
-            LerpSlider(angySlider2, _angy2Value);
-        }
-
-        private void LerpSlider(Slider slider, float value)
-        {
-            if (slider.value < value)
-            {
-                slider.value += GameConfig.Instance.SliderSpeed * Time.unscaledDeltaTime;
-            }
-
-            if (slider.value > value)
-            {
-                slider.value -= GameConfig.Instance.SliderSpeed * Time.unscaledDeltaTime;
-            }
-        }
 
         public void EnableAbilityUi()
         {
