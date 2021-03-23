@@ -1,5 +1,20 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &7718642881643456291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 207919821132815367}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 328aca16ffaf3b04e902c6a99b0a09f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ForceThreshold: 0
+  ForceFalloffRadius: 1
+  AdjustForKinematic: 1
 --- !u!1 &907629821062882270
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,25 +135,10 @@ MonoBehaviour:
   splatter: {fileID: 7999726196509138784}
   baseFruitMat: {fileID: 2100000, guid: 5999a05c16598754da3cd2f29bbb7988, type: 2}
   baseFruitTopMat: {fileID: 2100000, guid: dbeec7de45dacd942b88e4b3c1fc3553, type: 2}
-  mushroomDropAbility: 0
+  mushroomDropAbility: 5
   ownerId: 99
   pointValue: 1
   mushroomDisabled: 0
---- !u!114 &7718642881643456291
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 207919821132815367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 328aca16ffaf3b04e902c6a99b0a09f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ForceThreshold: 0
-  ForceFalloffRadius: 1
-  AdjustForKinematic: 1
 --- !u!1001 &2963910786338696046
 PrefabInstance:
   m_ObjectHideFlags: 0

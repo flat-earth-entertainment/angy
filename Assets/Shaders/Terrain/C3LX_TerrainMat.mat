@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: C1L1_TerrainMat
+  m_Name: C3LX_TerrainMat
   m_Shader: {fileID: -6465566751694194690, guid: 6787fa2a72449c540a9b9541abc9f3fd, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -72,6 +72,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_419a0b8d4db94c19a54f3a74f434ef4b_Texture_1:
+        m_Texture: {fileID: 2800000, guid: 9c98105c0c32dda48853aec41e7cc27b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_47c5bf8393944e3ebe9048e32d44fa4c_Texture_1:
         m_Texture: {fileID: 2800000, guid: ec09be68675bcee428375cc3cf8685c5, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -111,6 +115,8 @@ Material:
     m_Floats:
     - Boolean_086a850d98ad4e52b0e47cc26941667d: 0
     - Vector1_684b6f7d893e4c38be1a7e3c5eaa55af: 5
+    - Vector1_c32dc650081041e38f21b238e4ad0f58: 5
+    - Vector1_ede30ed512d541708039bf1d1a23bf79: 0
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -139,8 +145,8 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - Color_598b1867445642a2b0e795b0e0996cd6: {r: 0.43346378, g: 0.9137255, b: 0.39215678, a: 0}
-    - Color_f3fc0120544f414fb4eef135b7b38cf2: {r: 1, g: 0.9228836, b: 0.7311321, a: 0}
-    - Vector3_9f997e36ed0e4e2989d8556abb94e6c2: {r: 2.19, g: 5.03, b: 1.14, a: 0}
+    - Color_f3fc0120544f414fb4eef135b7b38cf2: {r: 0.48235294, g: 0.48235294, b: 0.48235294, a: 0}
+    - Vector3_9f997e36ed0e4e2989d8556abb94e6c2: {r: 1.25, g: 1.72, b: 2.92, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
