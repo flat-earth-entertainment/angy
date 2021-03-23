@@ -29,5 +29,8 @@ namespace Abilities.Config
 
         [field: SerializeField]
         public float RotationTime { get; private set; }
+
+        [field: SerializeField]
+        public Material FireMaterial { get; private set; }
     }
 }

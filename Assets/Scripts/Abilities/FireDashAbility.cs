@@ -1,4 +1,4 @@
-using System;
+using System.Linq;
 using System.Threading;
 using Abilities.Config;
 using Config;
@@ -15,6 +15,9 @@ namespace Abilities
         private PlayerView _player;
         private CancellationTokenSource _cancellationTokenSource;
         private Transform _fireDashClock;
+        private Material _originalBodyMaterial;
+        private GameObject _trail;
+        private bool _pressedLaunch;
 
         protected override async void InvokeAbility(PlayerView player)
         {
@@ -55,7 +58,7 @@ namespace Abilities
 
             await _rotateTween.ToUniTask(cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow();
 
-            Launch(false);
+            Launch(_pressedLaunch);
         }
 
         private void Launch(bool pressedButton)
@@ -69,6 +72,14 @@ namespace Abilities
 
             Object.Destroy(_fireDashClock.gameObject);
             Time.timeScale = GameConfig.Instance.TimeScale;
+
+            var playerPreset = GameConfig.Instance.PlayerPresets.First(p => p.PlayerColor == _player.PlayerColor);
+            _trail = Object.Instantiate(playerPreset.Trail, _player.Ball.transform);
+
+            _originalBodyMaterial = _player.Materials[0];
+            _player.SetBodyMaterial(playerPreset.FireMaterial);
+
+            _player.BecameStill += OnBecameStill;
 
             switch (GameConfig.Instance.AbilityValues.FireDashAbilityConfig.LaunchButton)
             {
@@ -84,14 +95,21 @@ namespace Abilities
             Finished = true;
         }
 
+        private void OnBecameStill()
+        {
+            _player.BecameStill -= OnBecameStill;
+            _player.SetBodyMaterial(_originalBodyMaterial);
+            Object.Destroy(_trail);
+        }
+
         private void OnLaunchPressed()
         {
+            _cancellationTokenSource.Cancel();
+
             _rotateTween.Kill();
             _rotateTween = null;
 
-            _cancellationTokenSource.Cancel();
-
-            Launch(true);
+            _pressedLaunch = true;
         }
     }
 }

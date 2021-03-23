@@ -67,6 +67,8 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
+    <Trail>k__BackingField: {fileID: 8027649694013185574, guid: 34107a78b81155043a1c79feae485000, type: 3}
+    <FireMaterial>k__BackingField: {fileID: 2100000, guid: 8b944248772a3a04bb63638c9594bea9, type: 2}
   - <PlayerName>k__BackingField: Player 2
     <PlayerColor>k__BackingField: {r: 0.1462264, g: 0.62760055, b: 1, a: 1}
     <FresnelColor>k__BackingField: {r: 0, g: 0.99111605, b: 1, a: 0}
@@ -99,6 +101,8 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
+    <Trail>k__BackingField: {fileID: 4222712478730028556, guid: cd271c6c54a6e90408b6dd2685a60ac2, type: 3}
+    <FireMaterial>k__BackingField: {fileID: 2100000, guid: 80b284609336d45448dda005f3fb5d23, type: 2}
   <MapCollections>k__BackingField:
   - <Name>k__BackingField: Mushville
     <Maps>k__BackingField:
@@ -152,6 +156,7 @@ MonoBehaviour:
       <EnterTime>k__BackingField: 0.5
       <PushForce>k__BackingField: 15
       <RotationTime>k__BackingField: 3
+      <FireMaterial>k__BackingField: {fileID: 2100000, guid: 80b284609336d45448dda005f3fb5d23, type: 2}
   <AudioManager>k__BackingField: {fileID: 7689676233967931748, guid: d6b009cc01f9c814ab09694e214de2ec, type: 3}
   <OptionsController>k__BackingField: {fileID: 8288987480925424286, guid: be14329585aa82945ac0926d71f08382, type: 3}
   <Scenes>k__BackingField:
