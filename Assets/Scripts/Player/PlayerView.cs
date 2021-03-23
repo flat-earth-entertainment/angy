@@ -105,6 +105,8 @@ public class PlayerView : MonoBehaviour
 
 
     public Vector3 LastStillPosition { get; set; }
+
+    [ShowNativeProperty]
     public Vector3 LastStandablePosition { get; set; }
 
     public Rewired.Player RewiredPlayer => ReInput.players.GetPlayer(PlayerId);
