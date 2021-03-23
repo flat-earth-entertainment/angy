@@ -25,10 +25,13 @@ namespace Abilities
             _cancellationTokenSource = new CancellationTokenSource();
             Time.timeScale = 0;
 
+            var flatVelocityVector = player.BallRigidbody.velocity;
+            flatVelocityVector.y = 0;
+
             _fireDashClock = Object.Instantiate(
                     GameConfig.Instance.AbilityValues.FireDashAbilityConfig.FireDashControlsPrefab,
                     player.Ball.transform.position,
-                    Quaternion.Euler(0, player.Animator.transform.parent.transform.rotation.eulerAngles.y, 0))
+                    Quaternion.FromToRotation(Vector3.forward, flatVelocityVector))
                 .transform;
 
             await DOTween.To(() => Time.timeScale, t => Time.timeScale = t, 0,
@@ -52,7 +55,6 @@ namespace Abilities
 
             await _rotateTween.ToUniTask(cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow();
 
-            Debug.Log("did not press");
             Launch(false);
         }
 
