@@ -330,6 +330,7 @@ public class Shooter : MonoBehaviour
     }
 
     public void predict(){
+        transform.parent.rotation = Quaternion.Euler(0,0,0);
         transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0);
         PredictionManager.instance.predict(ballPrefab, firePoint.transform.position, calculateForce());
         lemming.transform.rotation = Quaternion.Euler(0, (horSnap * horSnapAngle) + 180, 0);

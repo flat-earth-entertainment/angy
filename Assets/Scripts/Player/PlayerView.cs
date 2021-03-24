@@ -183,6 +183,7 @@ public class PlayerView : MonoBehaviour
 
     public void Predict()
     {
+        shooter.Invoke("predict", 0.1f);
         shooter.predict();
     }
 
