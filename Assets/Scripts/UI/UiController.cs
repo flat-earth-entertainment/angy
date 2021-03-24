@@ -111,9 +111,6 @@ namespace UI
         [SerializeField]
         private AbilityUi[] abilityUis;
 
-        private float _angy1Value;
-        private float _angy2Value;
-
         public void WobbleAbilityUi(PlayerView playerView, bool state)
         {
             if (playerView.PlayerId < abilityUis.Length)
