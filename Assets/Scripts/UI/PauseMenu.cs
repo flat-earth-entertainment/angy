@@ -1,6 +1,7 @@
 using System;
 using Config;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
@@ -11,6 +12,9 @@ namespace UI
 
         [SerializeField]
         private Button resumeButton;
+
+        [SerializeField]
+        private Button restartButton;
 
         [SerializeField]
         private Button optionsButton;
@@ -67,6 +71,11 @@ namespace UI
             });
 
             resumeButton.onClick.AddListener(delegate { ResumeButtonClicked?.Invoke(); });
+
+            restartButton.onClick.AddListener(delegate
+            {
+                SceneChanger.ChangeScene(SceneManager.GetActiveScene().name);
+            });
         }
 
         public static PauseMenu Instance
