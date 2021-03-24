@@ -105,7 +105,7 @@ public class SpikeTrap : MonoBehaviour
     void Hit(GameObject lemming){
         // applies Knockback
         lemming.GetComponent<Rigidbody>().velocity = 
-            lemming.GetComponent<Rigidbody>().velocity.normalized * knockbackForce;
+            (lemming.GetComponent<Rigidbody>().velocity.normalized + Vector3.up).normalized * knockbackForce;
         // Applies blood
         GameObject bld = Instantiate(blood, lemming.transform.position - new Vector3(0,-0.5f,0), Quaternion.Euler(90,0,0));
         bld.GetComponent<ParticleSystem>().Play();
