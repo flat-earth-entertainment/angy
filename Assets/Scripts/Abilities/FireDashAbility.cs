@@ -24,6 +24,7 @@ namespace Abilities
             Active = true;
 
             _player = player;
+            PlayerView.NewAbilitySet += OnAbilityOverride;
 
             _cancellationTokenSource = new CancellationTokenSource();
             Time.timeScale = 0;
@@ -59,6 +60,18 @@ namespace Abilities
             await _rotateTween.ToUniTask(cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow();
 
             Launch(_pressedLaunch);
+        }
+
+        private void OnAbilityOverride(PlayerView player, Ability ability)
+        {
+            PlayerView.NewAbilitySet -= OnAbilityOverride;
+
+            if (_player == player && ability != this)
+            {
+                Object.Destroy(_trail);
+                _trail = null;
+                _player.SetBodyMaterial(_originalBodyMaterial);
+            }
         }
 
         private void Launch(bool pressedButton)
@@ -99,7 +112,11 @@ namespace Abilities
         {
             _player.BecameStill -= OnBecameStill;
             _player.SetBodyMaterial(_originalBodyMaterial);
-            Object.Destroy(_trail);
+
+            if (_trail != null)
+            {
+                Object.Destroy(_trail);
+            }
         }
 
         private void OnLaunchPressed()
