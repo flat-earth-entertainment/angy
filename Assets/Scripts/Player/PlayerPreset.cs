@@ -17,5 +17,11 @@ namespace Player
 
         [field: SerializeField]
         public Gradient Gradient { get; private set; }
+
+        [field: SerializeField]
+        public GameObject Trail { get; private set; }
+
+        [field: SerializeField]
+        public Material FireMaterial { get; private set; }
     }
 }
