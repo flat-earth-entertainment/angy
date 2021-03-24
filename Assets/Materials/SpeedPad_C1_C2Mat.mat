@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SpeedPadMat
+  m_Name: SpeedPad_C1_C2Mat
   m_Shader: {fileID: -6465566751694194690, guid: 907e1169224651d438928c7a1c94590d, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -93,6 +93,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_1d437e2e1512455f836899cd58f55e31: 1.4
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -120,6 +121,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
+    - Color_06908a8c15bc42b6880a6d69094aa7ca: {r: 0.8962264, g: 0.40161088, b: 0.40161088, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}

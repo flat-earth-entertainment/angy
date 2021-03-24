@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 8458237701104926935}
   - component: {fileID: 1162593543293412040}
   - component: {fileID: 1572127077043460657}
-  m_Layer: 0
+  - component: {fileID: 1393851862516059659}
+  m_Layer: 3
   m_Name: Proto_Ramp_X_2x05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -81,3 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1393851862516059659
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3610905707718331226}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 7711209942030915242, guid: 277db2f37a6ab04439f1c3b802d1c522, type: 3}
