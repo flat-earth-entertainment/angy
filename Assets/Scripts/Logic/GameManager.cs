@@ -385,6 +385,7 @@ namespace Logic
                     trajectoryLineController.SetGradientColor(_currentTurnPlayer.PlayerGradient);
 
                     _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
+                    uiController.CameraModeHelperActive = true;
 
                     SubscribeToPreShotEvents(_currentTurnPlayer);
 
@@ -440,6 +441,8 @@ namespace Logic
             _currentTurnPlayer.SetControlsActive(false);
 
             trajectoryLineController.SetTrajectoryActive(false);
+
+            uiController.CameraModeHelperActive = false;
 
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
@@ -509,6 +512,7 @@ namespace Logic
             uiController.DisableAngyMeter();
             uiController.DisableAbilityUi();
             uiController.WobbleAbilityUi(player, false);
+            uiController.CameraModeHelperActive = false;
         }
 
         private async void OnMapButtonPressed()
