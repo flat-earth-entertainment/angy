@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Scenes.Map_Selection;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Config
@@ -73,14 +74,20 @@ namespace Config
 
         public static int? NextRoundRewiredPlayerId { get; set; }
 
+        public static Material WinnerMaterial { get; set; }
+        public static Material LoserMaterial { get; set; }
+
         private static MapCollectionScores _mapCollectionScores;
 
         private static MapCollection _mapCollection;
 
         public static void ClearSession()
         {
+            WinnerMaterial = null;
+            LoserMaterial = null;
             _mapCollection = null;
             _mapCollectionScores = null;
+            NextRoundRewiredPlayerId = null;
         }
 
         public static string GetNextMap(string currentMap)

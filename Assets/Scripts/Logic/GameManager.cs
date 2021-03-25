@@ -278,6 +278,9 @@ namespace Logic
             var winnerId = points.IndexOf(winnerPoints);
             var winner = _playersManager.Players.First(p => p.PlayerId == winnerId);
 
+            CurrentGameSession.WinnerMaterial = winner.Materials[0];
+            CurrentGameSession.LoserMaterial = _playersManager.Players.First(p => p != winner).Materials[0];
+
             CurrentGameSession.NextRoundRewiredPlayerId = winner.RewiredPlayer.id;
             CurrentGameSession.CollectionScores
                 .SetMapScore(SceneManager.GetActiveScene().name, new MapScore(points[0], points[1]));
@@ -297,7 +300,7 @@ namespace Logic
             }
             else
             {
-                LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.MainMenuScene;
+                LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.VictoryScene;
             }
 
             SceneChanger.ChangeScene(GameConfig.Instance.Scenes.LeaderboardScene, SceneChangeType.MapChange);
