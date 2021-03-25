@@ -93,6 +93,7 @@ public class Shooter : MonoBehaviour
 
         lemmingAnim = lemming.GetComponentInChildren<Animator>();
         
+        FindObjectOfType<LemmingInitialDirection>().RotateLemming(this);
     }
 
 
