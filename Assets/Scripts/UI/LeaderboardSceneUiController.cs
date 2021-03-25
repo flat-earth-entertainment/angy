@@ -59,8 +59,9 @@ namespace UI
                 var mapScore = CurrentGameSession.CollectionScores.Scores[i];
                 Instantiate(mapRowPrefab, mapTableParent).GetComponent<LeaderboardMapRow>()
                     .SetRow(mapScore.Player1Score, mapScore.Player2Score, i + 1);
-                sum1 += mapScore.Player1Score;
-                sum2 += mapScore.Player2Score;
+
+                if (mapScore.Player1Score != null) sum1 += mapScore.Player1Score.Value;
+                if (mapScore.Player2Score != null) sum2 += mapScore.Player2Score.Value;
             }
 
             totalPlayer1.text = sum1.ToString();
