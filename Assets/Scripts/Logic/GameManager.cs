@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Abilities;
+using Audio;
 using Ball;
 using Ball.Objectives;
 using Cinemachine;
@@ -214,6 +215,8 @@ namespace Logic
             Debug.Log($"{player.Nickname} went out of bounds");
 
             player.Hide();
+
+            AudioManager.PlaySfx(SfxType.LemmingLaunch);
 
             player.AlterAngy(AngyEvent.FellOutOfTheMap);
 
