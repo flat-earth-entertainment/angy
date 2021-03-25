@@ -461,11 +461,13 @@ namespace Logic
             player.PlayerInputs.AbilityButtonPressed -= OnAbilityButtonPressed;
         }
 
-        private static void OnAbilityButtonPressed()
+        private void OnAbilityButtonPressed()
         {
             if (_currentTurnPlayer.Ability != null && !_currentTurnPlayer.Ability.WasFired)
             {
                 _currentTurnPlayer.Ability.Invoke(_currentTurnPlayer);
+
+                uiController.WobbleAbilityUi(_currentTurnPlayer, false);
             }
         }
 
