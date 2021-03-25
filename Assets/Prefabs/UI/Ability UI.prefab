@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.7843138, g: 0.7843138, b: 0.7843138, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.5176471}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -371,8 +371,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294919705
-  m_fontColor: {r: 0.0990566, g: 0.27636763, b: 1, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -609,9 +609,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 939295888842227585, guid: 141363d0ee6c13440b40dfa068fd6853, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2734385296025820882, guid: 141363d0ee6c13440b40dfa068fd6853, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5026046467392343941, guid: 141363d0ee6c13440b40dfa068fd6853, type: 3}
       propertyPath: m_Name
       value: Gamepad Button Icon
+      objectReference: {fileID: 0}
+    - target: {fileID: 5681212337072085471, guid: 141363d0ee6c13440b40dfa068fd6853, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5736593982826190237, guid: 141363d0ee6c13440b40dfa068fd6853, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6237926150851238845, guid: 141363d0ee6c13440b40dfa068fd6853, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6878181639719576074, guid: 141363d0ee6c13440b40dfa068fd6853, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7894897353546487406, guid: 141363d0ee6c13440b40dfa068fd6853, type: 3}
       propertyPath: m_IsActive
