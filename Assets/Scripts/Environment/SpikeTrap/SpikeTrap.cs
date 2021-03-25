@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Audio;
 using UnityEngine;
 
 public class SpikeTrap : MonoBehaviour
@@ -40,6 +41,7 @@ public class SpikeTrap : MonoBehaviour
         }
     }
     IEnumerator Activate(){ // Handles the blendshape animation of the spikes
+        AudioManager.PlaySfx(SfxType.SpikeTrapPrepare);
         enumActive = true;
         while (true)
         {   // Extends the spike slightly to show that they have been TRIGGURRRED
@@ -62,6 +64,9 @@ public class SpikeTrap : MonoBehaviour
             }
             yield return null;
         }
+
+        AudioManager.PlaySfx(SfxType.SpikeTrap);
+
         while (true)
         {   // Extends the spikes to the max
             enumTimer += Time.deltaTime * 10;

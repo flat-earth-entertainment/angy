@@ -29,5 +29,18 @@ namespace Audio
         //Used in the inspector
         // ReSharper disable once UnusedMember.Global
         UiSelect = 21,
+
+        TeleporterOpen = 22,
+        TeleporterClose = 23,
+        SpeedPadTouch = 24,
+
+        //Used in the inspector
+        // ReSharper disable once UnusedMember.Global
+        HammerHitGround = 25,
+
+        //Used in the inspector
+        // ReSharper disable once UnusedMember.Global
+        HammerHitPlayer = 26,
+        TeleporterEngage = 27
     }
 }

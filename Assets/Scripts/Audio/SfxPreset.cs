@@ -19,6 +19,9 @@ namespace Audio
         [SerializeField]
         private float minimumInterval;
 
+        [field: SerializeField, Range(0, 1)]
+        public float Volume { get; private set; } = 1f;
+
         private float _frequencyTimer;
         private float _previousTime;
 

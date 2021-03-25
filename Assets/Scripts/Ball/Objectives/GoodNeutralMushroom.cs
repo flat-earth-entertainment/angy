@@ -53,6 +53,9 @@ public class GoodNeutralMushroom : MonoBehaviour
                     transform.GetChild(0).gameObject.SetActive(false);
                 }
 
+                AudioManager.PlaySfx(SfxType.MushroomHit);
+
+
                 point = Instantiate(fruit[0], transform.position + new Vector3(0, 1f, 0),
                     Quaternion.Euler(0, 0, 15));
                 point.SetActive(false);
@@ -60,7 +63,6 @@ public class GoodNeutralMushroom : MonoBehaviour
                 {
                     point.SetActive(true);
                     splatter.Play(true);
-                    AudioManager.PlaySfx(SfxType.MushroomHit);
                     other.transform.parent.GetComponent<PlayerView>().AlterAngy(AngyEvent.MushroomHit);
                 });
 

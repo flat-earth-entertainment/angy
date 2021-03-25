@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b11865ac86784b35aedeb5d6b1da447e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundToPlayOnHit: 13
+  soundToPlayOnHit: 26
 --- !u!114 &2017770301672560901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +251,7 @@ Transform:
   - {fileID: 7181528031151354205}
   m_Father: {fileID: 4938218633675124340}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -0.00000028796683, y: 179.9996, z: 89.782684}
+  m_LocalEulerAnglesHint: {x: -0.00039649528, y: 0.000015258789, z: 0.00010681123}
 --- !u!65 &698541233808487154
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -481,6 +481,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4938218633675124340}
   - component: {fileID: 4828609577373571340}
+  - component: {fileID: 224219327895680648}
   m_Layer: 0
   m_Name: Tenderizer
   m_TagString: Untagged
@@ -504,6 +505,7 @@ Transform:
   - {fileID: 4828609577156869364}
   - {fileID: 4828609577105496413}
   - {fileID: 584278590917333279}
+  - {fileID: 169417238316675084}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
@@ -526,6 +528,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &224219327895680648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5747651964454040782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ebc2e4a53a418d8f57d84842c8ffd9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfxType: 25
+  interval: 1.7
 --- !u!1 &6400975040389806844
 GameObject:
   m_ObjectHideFlags: 0
@@ -570,3 +586,46 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 11.456894, y: 4.5903873, z: 3.3420203}
   m_Center: {x: 0, y: 1.2252598, z: 0}
+--- !u!1 &6551171664399287612
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 169417238316675084}
+  - component: {fileID: 7633235532647211702}
+  m_Layer: 0
+  m_Name: SoundEmitter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &169417238316675084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6551171664399287612}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4938218633675124340}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7633235532647211702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6551171664399287612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d86d2e0e34489c9eb52500d14cb515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

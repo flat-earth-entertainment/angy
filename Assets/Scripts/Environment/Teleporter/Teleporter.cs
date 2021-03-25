@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Audio;
 
 public class Teleporter : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class Teleporter : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "Lemming" && teleportCooldown <= 0){
+            AudioManager.PlaySfx(SfxType.TeleporterEngage);
             if(TargetMode.single == teleportTargetType){
                 other.transform.position = teleportTarget.GetComponentInChildren<Teleporter>().transform.position;
                 if(directional){

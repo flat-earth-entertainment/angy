@@ -115,7 +115,7 @@ namespace Audio
                             return;
                     }
 
-                    Instance.sfxSource.PlayOneShot(clip);
+                    Instance.sfxSource.PlayOneShot(clip, sfxPreset.Volume);
                 }
             }
         }
