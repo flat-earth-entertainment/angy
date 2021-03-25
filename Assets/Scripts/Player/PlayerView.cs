@@ -116,6 +116,7 @@ public class PlayerView : MonoBehaviour
         get => _ability;
         set
         {
+            Ability?.Wrap();
             _ability = value;
 
             if (value != null)

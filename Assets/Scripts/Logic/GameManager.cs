@@ -513,6 +513,8 @@ namespace Logic
             uiController.DisableAbilityUi();
             uiController.WobbleAbilityUi(player, false);
             uiController.CameraModeHelperActive = false;
+
+            _currentTurnPlayer.Ability?.Wrap();
         }
 
         private async void OnMapButtonPressed()

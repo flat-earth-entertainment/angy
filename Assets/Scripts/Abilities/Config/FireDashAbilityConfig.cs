@@ -6,14 +6,11 @@ namespace Abilities.Config
     [Serializable]
     public class FireDashAbilityConfig : AbilityConfig
     {
-        public enum LaunchButtonEnum
-        {
-            Shoot,
-            Ability
-        }
+        [field: SerializeField, Range(0, 1)]
+        public float CracklingVolume { get; private set; }
 
         [field: SerializeField]
-        public LaunchButtonEnum LaunchButton { get; private set; }
+        public AudioClip CracklingClip { get; private set; }
 
         [field: SerializeField]
         public bool LaunchAfterNoInput { get; private set; }
@@ -29,8 +26,5 @@ namespace Abilities.Config
 
         [field: SerializeField]
         public float RotationTime { get; private set; }
-
-        [field: SerializeField]
-        public Material FireMaterial { get; private set; }
     }
 }

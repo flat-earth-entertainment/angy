@@ -8,6 +8,7 @@ namespace Abilities
     [Serializable]
     public abstract class Ability
     {
+        public bool IsFinalized { get; protected set; }
         public bool WasFired { get; private set; }
         public bool Active { get; protected set; }
         public bool Finished { get; protected set; }
@@ -34,6 +35,18 @@ namespace Abilities
         {
             WasFired = true;
             InvokeAbility(player);
+        }
+
+        public void Wrap()
+        {
+            if (WasFired && !IsFinalized)
+            {
+                WrapInternal();
+            }
+        }
+
+        protected virtual void WrapInternal()
+        {
         }
 
         protected abstract void InvokeAbility(PlayerView player);

@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading;
 using Abilities.Config;
+using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -18,6 +19,7 @@ namespace Abilities
         private Material _originalBodyMaterial;
         private GameObject _trail;
         private bool _pressedLaunch;
+        private AudioSource _cracklingSource;
 
         protected override async void InvokeAbility(PlayerView player)
         {
@@ -41,15 +43,8 @@ namespace Abilities
             await DOTween.To(() => Time.timeScale, t => Time.timeScale = t, 0,
                 GameConfig.Instance.AbilityValues.FireDashAbilityConfig.EnterTime).SetUpdate(true);
 
-            switch (GameConfig.Instance.AbilityValues.FireDashAbilityConfig.LaunchButton)
-            {
-                case FireDashAbilityConfig.LaunchButtonEnum.Shoot:
-                    player.PlayerInputs.FireButtonPressed += OnLaunchPressed;
-                    break;
-                case FireDashAbilityConfig.LaunchButtonEnum.Ability:
-                    player.PlayerInputs.AbilityButtonPressed += OnLaunchPressed;
-                    break;
-            }
+            player.PlayerInputs.FireButtonPressed += OnLaunchPressed;
+            player.PlayerInputs.AbilityButtonPressed += OnLaunchPressed;
 
             _rotateTween = _fireDashClock.DORotate(new Vector3(0, 360, 0),
                     GameConfig.Instance.AbilityValues.FireDashAbilityConfig.RotationTime)
@@ -68,9 +63,7 @@ namespace Abilities
 
             if (_player == player && ability != this)
             {
-                Object.Destroy(_trail);
-                _trail = null;
-                _player.SetBodyMaterial(_originalBodyMaterial);
+                WrapInternal();
             }
         }
 
@@ -83,6 +76,13 @@ namespace Abilities
                                                  GameConfig.Instance.AbilityValues.FireDashAbilityConfig.PushForce;
             }
 
+            AudioManager.PlaySfx(SfxType.FireDashActivate);
+            _cracklingSource = _player.gameObject.AddComponent<AudioSource>();
+            _cracklingSource.clip = GameConfig.Instance.AbilityValues.FireDashAbilityConfig.CracklingClip;
+            _cracklingSource.volume = GameConfig.Instance.AbilityValues.FireDashAbilityConfig.CracklingVolume;
+            _cracklingSource.Play();
+            _cracklingSource.loop = true;
+
             Object.Destroy(_fireDashClock.gameObject);
             Time.timeScale = GameConfig.Instance.TimeScale;
 
@@ -92,31 +92,30 @@ namespace Abilities
             _originalBodyMaterial = _player.Materials[0];
             _player.SetBodyMaterial(playerPreset.FireMaterial);
 
-            _player.BecameStill += OnBecameStill;
+            _player.BecameStill += WrapInternal;
 
-            switch (GameConfig.Instance.AbilityValues.FireDashAbilityConfig.LaunchButton)
-            {
-                case FireDashAbilityConfig.LaunchButtonEnum.Shoot:
-                    _player.PlayerInputs.FireButtonPressed -= OnLaunchPressed;
-                    break;
-                case FireDashAbilityConfig.LaunchButtonEnum.Ability:
-                    _player.PlayerInputs.AbilityButtonPressed -= OnLaunchPressed;
-                    break;
-            }
+            _player.PlayerInputs.FireButtonPressed -= OnLaunchPressed;
+            _player.PlayerInputs.AbilityButtonPressed -= OnLaunchPressed;
 
             Active = false;
             Finished = true;
         }
 
-        private void OnBecameStill()
+        protected override void WrapInternal()
         {
-            _player.BecameStill -= OnBecameStill;
+            Debug.Log(_player == null || _player.Equals(null));
+            _player.BecameStill -= WrapInternal;
+
             _player.SetBodyMaterial(_originalBodyMaterial);
+
+            Object.Destroy(_cracklingSource);
 
             if (_trail != null)
             {
                 Object.Destroy(_trail);
             }
+
+            IsFinalized = true;
         }
 
         private void OnLaunchPressed()
