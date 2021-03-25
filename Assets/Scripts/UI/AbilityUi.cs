@@ -19,6 +19,9 @@ namespace UI
         [SerializeField]
         private Image abilityImage;
 
+        [SerializeField]
+        private GameObject buttonHelper;
+
         public bool Visible
         {
             set => abilityParent.SetActive(value);
@@ -31,6 +34,7 @@ namespace UI
                 if (value)
                 {
                     _wobbleTween.Play();
+                    buttonHelper.SetActive(true);
                 }
                 else
                 {
@@ -40,6 +44,7 @@ namespace UI
                         {
                             abilityParent.transform.localScale = _initialScale;
                             _wobbleTween.Pause();
+                            buttonHelper.SetActive(false);
                         });
                 }
             }
@@ -56,6 +61,8 @@ namespace UI
                 .DOScale(_initialScale * GameConfig.Instance.AbilityValues.AbilityUiConfig.WobbleScale,
                     GameConfig.Instance.AbilityValues.AbilityUiConfig.WobbleInterval)
                 .SetLoops(-1, LoopType.Yoyo).Pause();
+
+            Wobble = false;
         }
 
         public void SetAbilityIcon(Sprite icon, Color backgroundColor)
