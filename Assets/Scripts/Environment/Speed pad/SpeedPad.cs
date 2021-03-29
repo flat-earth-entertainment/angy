@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Audio;
 using UnityEngine;
 
 public class SpeedPad : MonoBehaviour
@@ -8,6 +9,7 @@ public class SpeedPad : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if(other.tag == "Lemming"){
             other.GetComponent<Rigidbody>().velocity = transform.forward * speed;
+            AudioManager.PlaySfx(SfxType.SpeedPadTouch);
         }
     }
 }

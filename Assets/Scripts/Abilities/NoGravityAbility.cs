@@ -22,7 +22,7 @@ namespace Abilities
         {
             Active = true;
             _playerView = player;
-            _playerView.PlayerInputs.AbilityButtonPressed += DisableAbility;
+            _playerView.PlayerInputs.AbilityButtonPressed += WrapInternal;
 
             _cancellationTokenSource = new CancellationTokenSource();
 
@@ -34,18 +34,19 @@ namespace Abilities
             await UniTask.Delay(TimeSpan.FromSeconds(DurationTime), DelayType.UnscaledDeltaTime,
                 cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow();
 
-            DisableAbility();
+            WrapInternal();
         }
 
-        private void DisableAbility()
+        protected override void WrapInternal()
         {
             _cancellationTokenSource.Cancel();
             _playerView.SetBodyMaterial(_originalMaterial);
-            _playerView.PlayerInputs.AbilityButtonPressed -= DisableAbility;
+            _playerView.PlayerInputs.AbilityButtonPressed -= WrapInternal;
             AudioManager.Instance.UndoLowPass(.5f);
             Physics.gravity = _initialGravity;
             Finished = true;
             Active = false;
+            IsFinalized = true;
         }
     }
 }

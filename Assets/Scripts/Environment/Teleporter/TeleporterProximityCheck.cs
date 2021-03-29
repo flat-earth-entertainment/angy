@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Player;
+using Audio;
 using UnityEngine;
 
 public class TeleporterProximityCheck : MonoBehaviour

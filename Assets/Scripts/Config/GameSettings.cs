@@ -22,7 +22,7 @@ namespace Config
 
         public static float GetFloat(Settings setting)
         {
-            return PlayerPrefs.GetFloat(setting.ToString());
+            return PlayerPrefs.GetFloat(setting.ToString(), 1);
         }
     }
 }

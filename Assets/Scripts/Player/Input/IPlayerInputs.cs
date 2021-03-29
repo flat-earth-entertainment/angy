@@ -8,5 +8,6 @@ namespace Player.Input
         public event Action MapViewButtonPressed;
         public event Action MenuButtonPressed;
         public event Action FireButtonPressed;
+        public event Action<float> HorizontalAxisInput;
     }
 }

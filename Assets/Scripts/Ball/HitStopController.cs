@@ -1,3 +1,4 @@
+using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -36,6 +37,7 @@ namespace Ball
                 return;
 
             Destroy(Instantiate(GameConfig.Instance.HitStop.ImpactParticle, hitPoint, Quaternion.identity), 1f);
+            AudioManager.PlaySfx(SfxType.HitStopEngaged);
 
             var hitStopValues = GameConfig.Instance.HitStop;
             FindObjectOfType<VirtualCamerasController>().ShakeFor(hitStopValues.ZoomOutTime);
@@ -50,9 +52,11 @@ namespace Ball
             }
 
             DOTween.Sequence()
+                .AppendCallback(delegate { AudioManager.Instance.DoLowPass(hitStopValues.ZoomInTime); })
                 .Append(DOTween.To(() => Time.timeScale, t => Time.timeScale = t, hitStopValues.TimeScale,
                     hitStopValues.ZoomInTime))
                 .AppendInterval(hitStopValues.StayTime)
+                .AppendCallback(delegate { AudioManager.Instance.UndoLowPass(hitStopValues.ZoomOutTime); })
                 .Append(DOTween.To(() => Time.timeScale, t => Time.timeScale = t, GameConfig.Instance.TimeScale,
                     hitStopValues.ZoomOutTime))
                 .SetUpdate(true)

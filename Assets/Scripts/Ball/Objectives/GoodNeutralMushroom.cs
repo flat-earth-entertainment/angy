@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Abilities;
 using Audio;
 using DG.Tweening;
 using DinoFracture;
 using Player;
+using UI;
 using UnityEngine;
 
 public class GoodNeutralMushroom : MonoBehaviour
@@ -17,7 +19,7 @@ public class GoodNeutralMushroom : MonoBehaviour
     private PointController pointController;
     public ParticleSystem splatter;
     public Material baseFruitMat, baseFruitTopMat;
-    public enum AbilitySelect{none,IceBlockAbility,ExpandAbility,NoGravityAbility}
+    public enum AbilitySelect{none,IceBlockAbility,ExpandAbility,NoGravityAbility,FireDashAbility,RandomAbility}
     public AbilitySelect mushroomDropAbility;
     // Owner Id 99 refers to no ownership, shouldn't be a problem unless we want 100 players.
     public int ownerId = 99, pointValue = 1;
@@ -51,6 +53,9 @@ public class GoodNeutralMushroom : MonoBehaviour
                     transform.GetChild(0).gameObject.SetActive(false);
                 }
 
+                AudioManager.PlaySfx(SfxType.MushroomHit);
+
+
                 point = Instantiate(fruit[0], transform.position + new Vector3(0, 1f, 0),
                     Quaternion.Euler(0, 0, 15));
                 point.SetActive(false);
@@ -58,7 +63,6 @@ public class GoodNeutralMushroom : MonoBehaviour
                 {
                     point.SetActive(true);
                     splatter.Play(true);
-                    AudioManager.PlaySfx(SfxType.MushroomHit);
                     other.transform.parent.GetComponent<PlayerView>().AlterAngy(AngyEvent.MushroomHit);
                 });
 
@@ -70,6 +74,13 @@ public class GoodNeutralMushroom : MonoBehaviour
                     other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability = new Abilities.NoGravityAbility();
                 }else if(mushroomDropAbility == AbilitySelect.ExpandAbility){
                     other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability = new Abilities.ExpandAbility();
+                }else if(mushroomDropAbility == AbilitySelect.FireDashAbility){
+                    other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability = new Abilities.FireDashAbility();
+                }else if(mushroomDropAbility == AbilitySelect.RandomAbility){
+                    var newAbility = Ability.RandomAbility();
+                    var player = other.transform.GetChild(0).GetComponent<Shooter>().PlayerView;
+                    player.Ability = newAbility;
+                    FindObjectOfType<UiController>().DoSlotMachineFor(player, newAbility);
                 }
                 
             }
@@ -91,7 +102,7 @@ public class GoodNeutralMushroom : MonoBehaviour
     public void SpawnGoal(){
         pointValue++;
         RaycastHit hit;
-        if(Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 10f, LayerMask.GetMask("IgnoredMap"))){
+        if(Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 50f, LayerMask.GetMask("IgnoredMap"))){
             GameObject hitObject = hit.collider.gameObject;
             print($"HIT {hitObject.name} {LayerMask.LayerToName(hitObject.layer)}");
             var hole = Instantiate(goal, hitObject.transform.position, Quaternion.identity);

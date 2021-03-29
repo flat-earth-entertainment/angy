@@ -1,12 +1,14 @@
 using System;
 using System.Linq;
 using Abilities;
+using Audio;
 using Ball;
 using Ball.Objectives;
 using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Environment;
 using Player;
 using UI;
 using UnityEngine;
@@ -92,6 +94,8 @@ namespace Logic
             GoodNeutralMushroom.HoleSpawned += OnHoleAppeared;
 
             PlayerView.OptionsMenuRequested += OnPauseMenuOpenRequested;
+
+            KillingTrigger.HitKillTrigger += OnPlayerHitKillTrigger;
         }
 
         private void OnDisable()
@@ -105,6 +109,7 @@ namespace Logic
             GoodNeutralMushroom.HoleSpawned -= OnHoleAppeared;
 
             PlayerView.OptionsMenuRequested -= OnPauseMenuOpenRequested;
+            KillingTrigger.HitKillTrigger -= OnPlayerHitKillTrigger;
 
             Time.timeScale = GameConfig.Instance.TimeScale;
         }
@@ -211,6 +216,8 @@ namespace Logic
 
             player.Hide();
 
+            AudioManager.PlaySfx(SfxType.LemmingLaunch);
+
             player.AlterAngy(AngyEvent.FellOutOfTheMap);
 
             if (player.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
@@ -219,6 +226,27 @@ namespace Logic
             }
 
             player.PlayerState = PlayerState.ShouldSpawnAtLastPosition;
+
+            //Unsubscribe as the current player should fall only as a result of shooting
+            if (player == _currentTurnPlayer)
+            {
+                EndOfTurnActions(player);
+                MakeTurn();
+            }
+        }
+
+        private void OnPlayerHitKillTrigger(PlayerView player)
+        {
+            player.Hide();
+
+            player.AlterAngy(AngyEvent.FellOutOfTheMap);
+
+            if (player.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+            {
+                player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
+            }
+
+            player.PlayerState = PlayerState.ShouldSpawnAtLastStandablePosition;
 
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
@@ -253,9 +281,12 @@ namespace Logic
             var winnerId = points.IndexOf(winnerPoints);
             var winner = _playersManager.Players.First(p => p.PlayerId == winnerId);
 
+            CurrentGameSession.WinnerMaterial = winner.Materials[0];
+            CurrentGameSession.LoserMaterial = _playersManager.Players.First(p => p != winner).Materials[0];
+
             CurrentGameSession.NextRoundRewiredPlayerId = winner.RewiredPlayer.id;
-            CurrentGameSession.Leaderboard
-                .Add(new MapScore(SceneManager.GetActiveScene().name, points[0], points[1]));
+            CurrentGameSession.CollectionScores
+                .SetMapScore(SceneManager.GetActiveScene().name, new MapScore(points[0], points[1]));
 
             OnLevelFinished();
         }
@@ -272,7 +303,7 @@ namespace Logic
             }
             else
             {
-                LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.MainMenuScene;
+                LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.VictoryScene;
             }
 
             SceneChanger.ChangeScene(GameConfig.Instance.Scenes.LeaderboardScene, SceneChangeType.MapChange);
@@ -339,6 +370,10 @@ namespace Logic
                     await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
                     goto case PlayerState.ShouldMakeTurn;
 
+                case PlayerState.ShouldSpawnAtLastStandablePosition:
+                    await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStandablePosition);
+                    goto case PlayerState.ShouldMakeTurn;
+
                 case PlayerState.ShouldMakeTurn:
                     uiController.EnableAngyMeter();
                     uiController.EnableAbilityUi();
@@ -353,6 +388,7 @@ namespace Logic
                     trajectoryLineController.SetGradientColor(_currentTurnPlayer.PlayerGradient);
 
                     _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
+                    uiController.CameraModeHelperActive = true;
 
                     SubscribeToPreShotEvents(_currentTurnPlayer);
 
@@ -409,6 +445,8 @@ namespace Logic
 
             trajectoryLineController.SetTrajectoryActive(false);
 
+            uiController.CameraModeHelperActive = false;
+
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
             _currentTurnPlayer.PlayerState = PlayerState.ActiveInMotion;
@@ -426,11 +464,13 @@ namespace Logic
             player.PlayerInputs.AbilityButtonPressed -= OnAbilityButtonPressed;
         }
 
-        private static void OnAbilityButtonPressed()
+        private void OnAbilityButtonPressed()
         {
             if (_currentTurnPlayer.Ability != null && !_currentTurnPlayer.Ability.WasFired)
             {
                 _currentTurnPlayer.Ability.Invoke(_currentTurnPlayer);
+
+                uiController.WobbleAbilityUi(_currentTurnPlayer, false);
             }
         }
 
@@ -477,6 +517,9 @@ namespace Logic
             uiController.DisableAngyMeter();
             uiController.DisableAbilityUi();
             uiController.WobbleAbilityUi(player, false);
+            uiController.CameraModeHelperActive = false;
+
+            _currentTurnPlayer.Ability?.Wrap();
         }
 
         private async void OnMapButtonPressed()

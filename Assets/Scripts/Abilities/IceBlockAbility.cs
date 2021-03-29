@@ -23,7 +23,7 @@ namespace Abilities
 
             _playerView = player;
 
-            _playerView.BecameStill += OnBecameStill;
+            _playerView.BecameStill += WrapInternal;
 
             _initialDrag = player.Drag;
             _playerView.Drag = GameConfig.Instance.AbilityValues.IceBlockAbility.Drag;
@@ -35,11 +35,11 @@ namespace Abilities
             player.SetBodyMaterial(GameConfig.Instance.AbilityValues.IceBlockAbility.IceMaterial);
         }
 
-        public void OnBecameStill()
+        protected override void WrapInternal()
         {
             AudioManager.PlaySfx(SfxType.IceBlockDeactivate);
 
-            _playerView.BecameStill -= OnBecameStill;
+            _playerView.BecameStill -= WrapInternal;
 
             _playerView.Drag = _initialDrag;
 
@@ -49,6 +49,8 @@ namespace Abilities
 
             Finished = true;
             Active = false;
+
+            IsFinalized = true;
         }
     }
 }

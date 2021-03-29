@@ -1,8 +1,7 @@
 ﻿using System;
-using Abilities.Config;
 using UnityEngine;
 
-namespace Config.Abilities
+namespace Abilities.Config
 {
     [Serializable]
     public class NoGravityAbilityConfig : AbilityConfig

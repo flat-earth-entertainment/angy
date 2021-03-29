@@ -31,7 +31,7 @@ namespace Abilities
 
             _endOfTurn = new CancellationTokenSource();
             _player = player;
-            player.BecameStill += OnPlayerBecameStill;
+            player.BecameStill += WrapInternal;
 
             _initialScale = player.Ball.transform.localScale;
 
@@ -86,9 +86,9 @@ namespace Abilities
             Active = false;
         }
 
-        private void OnPlayerBecameStill()
+        protected override void WrapInternal()
         {
-            _player.BecameStill -= OnPlayerBecameStill;
+            _player.BecameStill -= WrapInternal;
 
             if (!_deflated)
             {
@@ -97,6 +97,8 @@ namespace Abilities
                 Deflate();
 #pragma warning restore CS4014
             }
+
+            IsFinalized = true;
         }
     }
 }

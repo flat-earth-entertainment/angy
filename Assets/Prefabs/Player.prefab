@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4585025521711169937}
   - component: {fileID: 4206041225563901588}
+  - component: {fileID: 5560386918644359306}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -52,8 +53,24 @@ MonoBehaviour:
   playerState: 0
   skinnedMeshRenderer: {fileID: 3996367952303146709}
   shooter: {fileID: 8148711711352872623}
-  ballBehaviour: {fileID: 7588597462155280183}
+  ballBehaviour: {fileID: 3544505496180173070}
   outOfBoundsCheck: {fileID: 3214668965113160429}
+--- !u!114 &5560386918644359306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588541474785268593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6800ee1d0104182b48da953c8f3b53a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 4206041225563901588}
+  lemming: {fileID: 492513687683201413}
+  distance: 10
+  cinemachineVirtualCamera: {fileID: 2568511267011732018}
 --- !u!114 &3357687179883922486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,6 +96,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerView: {fileID: 4206041225563901588}
+--- !u!114 &8147309645726428112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4629074905832054383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aea9d0fd82ad410c9d142d57b6ca56a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ground:
+    serializedVersion: 2
+    m_Bits: 72
+  player: {fileID: 4206041225563901588}
 --- !u!1 &8414885059241875502
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,6 +316,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4585025521711169937}
     m_Modifications:
+    - target: {fileID: 3204507087894806329, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4514702531311316250, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
       propertyPath: isPlayer
       value: 1
@@ -360,9 +397,9 @@ Rigidbody:
   m_CorrespondingSourceObject: {fileID: 6734545923583936602, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
   m_PrefabInstance: {fileID: 2109987895271872055}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7588597462155280183 stripped
+--- !u!114 &3544505496180173070 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8365493346235312384, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3204507087894806329, guid: 5e184e7960b90d2469bfb4309373e2ee, type: 3}
   m_PrefabInstance: {fileID: 2109987895271872055}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4629074905832054383}
@@ -394,21 +431,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4629074905832054381}
     - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
+      propertyPath: horSnap
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
       propertyPath: lemming
       value: 
       objectReference: {fileID: 8414885059241875502}
     - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
       propertyPath: ballStorage
       value: 
       objectReference: {fileID: 4629074905832054383}
-    - target: {fileID: 1314000643423763625, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
-      propertyPath: maxPowerParticle
-      value: 
-      objectReference: {fileID: 1735872587330137235, guid: 48f2e81449b409649be7eb3e7e31a494, type: 3}
     - target: {fileID: 1314000643423763626, guid: 0cef251cbaae56d4b8cb96c6f195a1a7, type: 3}
       propertyPath: m_Name
       value: Shooter
@@ -481,7 +518,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 7145610341654241798}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e402cd68c3f0bc24e9fb2ceec9a32bff, type: 3}
   m_Name: 

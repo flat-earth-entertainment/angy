@@ -16,7 +16,6 @@ MonoBehaviour:
   <LevelOverviewTime>k__BackingField: 2
   <PlayerPrefab>k__BackingField: {fileID: 3588541474785268593, guid: f67f3b7dddb365443aed0228a2528e31, type: 3}
   <FlyToNextPlayerTime>k__BackingField: 1
-  <AfterHoleEnteredZoomTime>k__BackingField: 0
   <AngyValues>k__BackingField:
     <MinAngy>k__BackingField: 0
     <MaxAngy>k__BackingField: 100
@@ -27,11 +26,8 @@ MonoBehaviour:
     <PlayerHitSomeone>k__BackingField: 5
     <PlayerGotHit>k__BackingField: 20
     <MushroomHit>k__BackingField: 15
-  <OutOfBoundsReactionTime>k__BackingField: 2
+  <SliderMoveInterval>k__BackingField: 1.5
   <ExplosionForceOnPlayerHit>k__BackingField: 100
-  <GroundMask>k__BackingField:
-    serializedVersion: 2
-    m_Bits: 72
   <CameraPanningSpeed>k__BackingField: 5
   <Tags>k__BackingField:
     <SpawnPointTag>k__BackingField: Spawn Point
@@ -71,6 +67,8 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
+    <Trail>k__BackingField: {fileID: 8027649694013185574, guid: 34107a78b81155043a1c79feae485000, type: 3}
+    <FireMaterial>k__BackingField: {fileID: 2100000, guid: 8b944248772a3a04bb63638c9594bea9, type: 2}
   - <PlayerName>k__BackingField: Player 2
     <PlayerColor>k__BackingField: {r: 0.1462264, g: 0.62760055, b: 1, a: 1}
     <FresnelColor>k__BackingField: {r: 0, g: 0.99111605, b: 1, a: 0}
@@ -103,6 +101,8 @@ MonoBehaviour:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
+    <Trail>k__BackingField: {fileID: 4222712478730028556, guid: cd271c6c54a6e90408b6dd2685a60ac2, type: 3}
+    <FireMaterial>k__BackingField: {fileID: 2100000, guid: 80b284609336d45448dda005f3fb5d23, type: 2}
   <MapCollections>k__BackingField:
   - <Name>k__BackingField: Mushville
     <Maps>k__BackingField:
@@ -122,6 +122,15 @@ MonoBehaviour:
     - Leo_Collection Level 6
     - Leo_Collection Level 7
     <PreviewImage>k__BackingField: {fileID: 21300000, guid: 2e86995faa7bd354eb54e7b09370d8dd, type: 3}
+  - <Name>k__BackingField: Despero
+    <Maps>k__BackingField:
+    - Collection 3 F 1
+    - Collection 3 Huang 4
+    - Collection 3 F 2
+    - Collection 3 Huang 3
+    - Collection 3 Huang 1
+    - Collection 3 Huang 2
+    <PreviewImage>k__BackingField: {fileID: 21300000, guid: 0d81a319f26e8094cad3ff8bb4e04971, type: 3}
   <PreNextTurnDelay>k__BackingField: 0.5
   <TimeScale>k__BackingField: 2
   <HoleOrbitTime>k__BackingField: 2
@@ -144,11 +153,23 @@ MonoBehaviour:
       <AbilityIcon>k__BackingField: {fileID: 21300000, guid: 4a8bf60689cfb804f92dcd93f67d0f88, type: 3}
       <Drag>k__BackingField: 0
       <IceMaterial>k__BackingField: {fileID: 2100000, guid: 169571caa133831449ffb8044c2d3e4d, type: 2}
+    <FireDashAbilityConfig>k__BackingField:
+      <AbilityIcon>k__BackingField: {fileID: 21300000, guid: 829a6b8b647e1774c9117562a12a464f, type: 3}
+      <CracklingVolume>k__BackingField: 1
+      <CracklingClip>k__BackingField: {fileID: 8300000, guid: ff4a63f0e95472041bd6b4b99990b719, type: 3}
+      <LaunchButton>k__BackingField: 1
+      <LaunchAfterNoInput>k__BackingField: 1
+      <FireDashControlsPrefab>k__BackingField: {fileID: 6139655532215055486, guid: 63072c15c8ae9aa4b83af4399144da96, type: 3}
+      <EnterTime>k__BackingField: 0.5
+      <PushForce>k__BackingField: 15
+      <RotationTime>k__BackingField: 3
+      <FireMaterial>k__BackingField: {fileID: 2100000, guid: 80b284609336d45448dda005f3fb5d23, type: 2}
   <AudioManager>k__BackingField: {fileID: 7689676233967931748, guid: d6b009cc01f9c814ab09694e214de2ec, type: 3}
   <OptionsController>k__BackingField: {fileID: 8288987480925424286, guid: be14329585aa82945ac0926d71f08382, type: 3}
   <Scenes>k__BackingField:
     <LeaderboardScene>k__BackingField: Leaderboard
     <MainMenuScene>k__BackingField: Main Menu
+    <VictoryScene>k__BackingField: Victory Scene
   <HitStop>k__BackingField:
     <ZoomInTime>k__BackingField: 0.1
     <TimeScale>k__BackingField: 0.2
@@ -159,7 +180,7 @@ MonoBehaviour:
     <ImpactParticle>k__BackingField: {fileID: 3273460793233704282, guid: e901c4a9ab30cfe488eacf1ca2934081, type: 3}
   <SceneChanger>k__BackingField: {fileID: 7119197193791502093, guid: eed0c450f073f5049b1f7e038fb48c5b, type: 3}
   <PauseMenu>k__BackingField: {fileID: 1386606730141544733, guid: c95befa7b798941459eb895aef7deb79, type: 3}
-  <BloodSplat>k__BackingField: {fileID: 1004705884427416798, guid: e7d452e82b8a8b5439e8d72a15a01c76, type: 3}
+  <BloodSplat>k__BackingField: {fileID: 1004705884427416798, guid: fcfb091f03d4f5749a2b009dea16591a, type: 3}
   <WidePMode>k__BackingField:
     <Key>k__BackingField: 112
     <InTime>k__BackingField: 1

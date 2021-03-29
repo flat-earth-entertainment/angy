@@ -1,19 +1,40 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using Scenes.Map_Selection;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Config
 {
+    public class MapCollectionScores
+    {
+        public MapScore[] Scores { get; }
+
+        private readonly MapCollection _mapCollection;
+
+        public MapCollectionScores(MapCollection mapCollection)
+        {
+            _mapCollection = mapCollection;
+            Scores = new MapScore[mapCollection.Maps.Length];
+        }
+
+        public void SetMapScore(string mapSceneName, MapScore mapScore)
+        {
+            if (_mapCollection.Maps.Contains(mapSceneName))
+            {
+                var mapIndex = Array.IndexOf(_mapCollection.Maps, mapSceneName);
+                Scores[mapIndex] = mapScore;
+            }
+        }
+    }
+
     public readonly struct MapScore
     {
-        public readonly string Name;
-        public readonly int Player1Score;
-        public readonly int Player2Score;
+        public readonly int? Player1Score;
+        public readonly int? Player2Score;
 
-        public MapScore(string name, int player1Score, int player2Score)
+        public MapScore(int player1Score, int player2Score)
         {
-            Name = name;
             Player1Score = player1Score;
             Player2Score = player2Score;
         }
@@ -21,22 +42,8 @@ namespace Config
 
     public static class CurrentGameSession
     {
-        public static readonly List<MapScore> Leaderboard = new List<MapScore>();
-        public static int? NextRoundRewiredPlayerId { get; set; }
-
-        private static MapCollection _mapCollection;
-
-        public static void ClearSession()
-        {
-            _mapCollection = null;
-            Leaderboard.Clear();
-        }
-
-        public static string GetNextMap(string currentMap)
-        {
-            var maps = MapCollection.Maps;
-            return maps[(maps.ToList().IndexOf(currentMap) + 1) % maps.Length];
-        }
+        public static MapCollectionScores CollectionScores =>
+            _mapCollectionScores ??= new MapCollectionScores(MapCollection);
 
         public static MapCollection MapCollection
         {
@@ -58,7 +65,35 @@ namespace Config
 
                 return _mapCollection;
             }
-            set => _mapCollection = value;
+            set
+            {
+                _mapCollection = value;
+                _mapCollectionScores = new MapCollectionScores(value);
+            }
+        }
+
+        public static int? NextRoundRewiredPlayerId { get; set; }
+
+        public static Material WinnerMaterial { get; set; }
+        public static Material LoserMaterial { get; set; }
+
+        private static MapCollectionScores _mapCollectionScores;
+
+        private static MapCollection _mapCollection;
+
+        public static void ClearSession()
+        {
+            WinnerMaterial = null;
+            LoserMaterial = null;
+            _mapCollection = null;
+            _mapCollectionScores = null;
+            NextRoundRewiredPlayerId = null;
+        }
+
+        public static string GetNextMap(string currentMap)
+        {
+            var maps = MapCollection.Maps;
+            return maps[(maps.ToList().IndexOf(currentMap) + 1) % maps.Length];
         }
 
         public static bool IsLastMapInList(string currentMap)

@@ -21,20 +21,14 @@ namespace Config
         [field: SerializeField, BoxGroup("General")]
         public float FlyToNextPlayerTime { get; private set; }
 
-        [field: SerializeField, BoxGroup("General")]
-        public float AfterHoleEnteredZoomTime { get; private set; }
-
         [field: SerializeField, BoxGroup("Angy")]
         public AngyValues AngyValues { get; private set; }
 
-        [field: SerializeField, BoxGroup("General")]
-        public float OutOfBoundsReactionTime { get; private set; }
+        [field: SerializeField, BoxGroup("Angy")]
+        public float SliderMoveInterval { get; private set; }
 
         [field: SerializeField, BoxGroup("General")]
         public float ExplosionForceOnPlayerHit { get; private set; }
-
-        [field: SerializeField, BoxGroup("Technical")]
-        public LayerMask GroundMask { get; private set; }
 
         [field: SerializeField, BoxGroup("General")]
         public float CameraPanningSpeed { get; private set; }

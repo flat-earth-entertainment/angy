@@ -19,23 +19,11 @@ public class HelpUi : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(rewiredPlayer.GetButtonDown("Confirm")){
-            optionPage++;
-        }
-        if(rewiredPlayer.GetButtonDown("AbilityFire")){
-            optionPage--;
-        }
-        if(optionPage < 0){
-            // GO BACK TO PAUSE/MENU SCREEN
-            OnClose?.Invoke();
-
-            optionPage = 0;
-        }
+    }
+    public void Next(){
+        optionPage++;
         if(optionPage == helpScreens.Count){
-            // GO BACK TO PAUSE/MENU SCREEN
-            OnClose?.Invoke();
-
-            optionPage = helpScreens.Count - 1;
+            optionPage = 0;
         }
         for (int i = 0; i < helpScreens.Count; i++)
         {
@@ -45,5 +33,9 @@ public class HelpUi : MonoBehaviour
                 helpScreens[i].SetActive(false);
             }
         }
+    }
+    public void Back(){
+        OnClose?.Invoke();
+        optionPage = 0;
     }
 }

@@ -12,5 +12,8 @@ namespace Config
 
         [field: SerializeField, Scene]
         public string MainMenuScene { get; private set; }
+
+        [field: SerializeField, Scene]
+        public string VictoryScene { get; private set; }
     }
 }

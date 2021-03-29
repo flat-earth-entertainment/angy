@@ -339,6 +339,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1298604306655155611, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4032952904556756839, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
       propertyPath: m_text
       value: "\u25CF Special mushroom gives abilities which you can use to get an
@@ -350,11 +354,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4032952904777294889, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4032952904835809198, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4032952905642766577, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
       propertyPath: m_Pivot.x
@@ -444,42 +448,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: How To Play Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 7531101109265099075, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8230319449389237452, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8677192494320787156, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8728070402941457046, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
---- !u!1 &183219406981893699 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4032952905642766581, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
-  m_PrefabInstance: {fileID: 183219406981893698}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &183219406981893700 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4032952904596991824, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
-  m_PrefabInstance: {fileID: 183219406981893698}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &183219406981893701 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4032952904835809198, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
-  m_PrefabInstance: {fileID: 183219406981893698}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &183219406981893702 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4032952904777294889, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
-  m_PrefabInstance: {fileID: 183219406981893698}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &183219406981893703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 183219406981893699}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a326157846a336d4eb8bb32c30e2fbc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  optionPage: 0
-  helpScreens:
-  - {fileID: 183219406981893702}
-  - {fileID: 183219406981893701}
-  - {fileID: 183219406981893700}

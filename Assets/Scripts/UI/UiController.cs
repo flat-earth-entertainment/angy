@@ -1,32 +1,40 @@
 using Abilities;
 using Abilities.Config;
+using Audio;
 using Config;
 using Player;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI
 {
     public class UiController : MonoBehaviour
     {
+        public bool CameraModeHelperActive
+        {
+            set => cameraModeHelper.SetActive(value);
+        }
+
         [SerializeField]
         private GameObject cameraModeWarning;
+
+        [SerializeField]
+        private GameObject cameraModeHelper;
 
         [SerializeField]
         private GameObject angyMeter;
 
         [SerializeField]
-        private Slider angySlider;
+        private AngyUi angyUi1;
 
         [SerializeField]
-        private Slider angySlider2;
-
+        private AngyUi angyUi2;
 
         [SerializeField]
         private PlayersManager playersManager;
 
         [SerializeField]
         private AbilityUi[] abilityUis;
+
 
         public void WobbleAbilityUi(PlayerView playerView, bool state)
         {
@@ -38,6 +46,14 @@ namespace UI
             {
                 Debug.LogWarning($"Can't find Ability UI for player with ID {playerView.PlayerId}");
             }
+        }
+
+        public void DoSlotMachineFor(PlayerView player, Ability ability)
+        {
+            abilityUis[player.PlayerId].Visible = true;
+            abilityUis[player.PlayerId]
+                .DoSlotMachine(3.2f, AbilityConfig.GetConfigSpriteFor(ability), player.PlayerColor);
+            AudioManager.PlaySfx(SfxType.RandomActivate);
         }
 
         private void SetAbilityIconFor(PlayerView player, Sprite icon)
@@ -54,8 +70,8 @@ namespace UI
 
         private void Awake()
         {
-            angySlider.minValue = angySlider2.minValue = GameConfig.Instance.AngyValues.MinAngy;
-            angySlider.maxValue = angySlider2.maxValue = GameConfig.Instance.AngyValues.MaxAngy;
+            angyUi1.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
+            angyUi2.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
 
             playersManager.InitializedAllPlayers += OnPlayersInitialized;
         }
@@ -68,9 +84,6 @@ namespace UI
         private void OnDisable()
         {
             PlayerView.NewAbilitySet -= OnNewAbilitySet;
-
-            playersManager.Players[0].AngyChanged -= OnPlayer1AngyChanged;
-            playersManager.Players[1].AngyChanged -= OnPlayer2AngyChanged;
         }
 
         private void OnNewAbilitySet(PlayerView player, Ability ability)
@@ -86,14 +99,7 @@ namespace UI
 
             if (player.PlayerState == PlayerState.ActiveInMotion)
             {
-                if (ability == null)
-                {
-                    WobbleAbilityUi(player, false);
-                }
-                else
-                {
-                    WobbleAbilityUi(player, true);
-                }
+                WobbleAbilityUi(player, ability != null);
             }
         }
 
@@ -101,11 +107,8 @@ namespace UI
         {
             playersManager.InitializedAllPlayers -= OnPlayersInitialized;
 
-            obj[0].AngyChanged += OnPlayer1AngyChanged;
-            obj[1].AngyChanged += OnPlayer2AngyChanged;
-
-            angySlider.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[0].PlayerColor;
-            angySlider2.transform.GetChild(1).GetChild(0).GetComponent<Image>().color = obj[1].PlayerColor;
+            obj[0].AngyChanged += angyUi1.OnAngyChanged;
+            obj[1].AngyChanged += angyUi2.OnAngyChanged;
         }
 
         public void SetCameraModeActive(bool state)
@@ -118,6 +121,7 @@ namespace UI
             DisableAngyMeter();
             cameraModeWarning.SetActive(false);
             DisableAbilityUi();
+            CameraModeHelperActive = false;
         }
 
         public void EnableAngyMeter()
@@ -130,15 +134,6 @@ namespace UI
             angyMeter.SetActive(false);
         }
 
-        private void OnPlayer1AngyChanged(int newAngyValue)
-        {
-            angySlider.value = newAngyValue;
-        }
-
-        private void OnPlayer2AngyChanged(int newAngyValue)
-        {
-            angySlider2.value = newAngyValue;
-        }
 
         public void EnableAbilityUi()
         {

@@ -10,6 +10,7 @@ namespace Player.Input
         public event Action MapViewButtonPressed;
         public event Action MenuButtonPressed;
         public event Action FireButtonPressed;
+        public event Action<float> HorizontalAxisInput;
 
         private Rewired.Player _thisPlayer;
 
@@ -53,6 +54,8 @@ namespace Player.Input
             {
                 FireButtonPressed?.Invoke();
             }
+
+            HorizontalAxisInput?.Invoke(_thisPlayer.GetAxis("Move Horizontal"));
         }
     }
 }

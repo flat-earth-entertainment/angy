@@ -77,7 +77,7 @@ namespace UI
             _isCurrentlyChanging = false;
         }
 
-        public static SceneChanger Instance
+        private static SceneChanger Instance
         {
             get
             {
