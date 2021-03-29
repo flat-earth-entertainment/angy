@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9191622066610572819}
   - component: {fileID: 5073628336442610551}
   m_Layer: 0
-  m_Name: Proto_Mushroom_Good
+  m_Name: Mushroom_Good_Neutral
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -138,7 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ForceThreshold: 0
   ForceFalloffRadius: 1
-  AdjustForKinematic: 1
+  AdjustForKinematic: 0
 --- !u!1001 &1193009055487689247
 PrefabInstance:
   m_ObjectHideFlags: 0
