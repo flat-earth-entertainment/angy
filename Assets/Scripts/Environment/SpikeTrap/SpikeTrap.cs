@@ -73,9 +73,14 @@ public class SpikeTrap : MonoBehaviour
             spike.SetBlendShapeWeight(0, Mathf.Lerp(100, 0, enumTimer));
             if(enumTimer >= 1){
                 // Applies damage to players
-                foreach (GameObject item in players)
-                {
-                    Hit(item);
+                int plcount = players.Count;
+                if(plcount > 0){
+                    for (int i = 0; i < plcount; i++)
+                    {
+                        if(players[i] != null){
+                            Hit(players[i]);
+                        }
+                    }
                 }
                 // Apply full extention sound
 
@@ -108,16 +113,21 @@ public class SpikeTrap : MonoBehaviour
         }
     }
     void Hit(GameObject lemming){
-        // applies Knockback
-        lemming.GetComponent<Rigidbody>().velocity = 
-            (lemming.GetComponent<Rigidbody>().velocity.normalized + Vector3.up).normalized * knockbackForce;
-        // Applies blood
-        GameObject bld = Instantiate(blood, lemming.transform.position - new Vector3(0,-0.5f,0), Quaternion.Euler(90,0,0));
-        bld.GetComponent<ParticleSystem>().Play();
-        Destroy(bld, 8f);
-        // Apply sound
+        if(lemming.activeSelf){ // Check if the player is active
 
-        // Apply Angy
+            // applies Knockback
+            lemming.GetComponent<Rigidbody>().velocity = 
+                (lemming.GetComponent<Rigidbody>().velocity.normalized + Vector3.up).normalized * knockbackForce;
+            // Applies blood
+            GameObject bld = Instantiate(blood, lemming.transform.position - new Vector3(0,-0.5f,0), Quaternion.Euler(90,0,0));
+            bld.GetComponent<ParticleSystem>().Play();
+            Destroy(bld, 8f);
+            // Apply sound
+
+            // Apply Angy
+        }else{  // If player is not active, remove them
+            players.Remove(lemming);
+        }
         
     }
 }
