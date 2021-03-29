@@ -1,41 +1,40 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Rewired;
 
-public class HelpUi : MonoBehaviour
+namespace UI
 {
-    public static Action OnClose;
-    private Rewired.Player rewiredPlayer;
-    public int optionPage;
-    public List<GameObject> helpScreens;
-
-    // Start is called before the first frame update
-    void Start()
+    public class HelpUi : MonoBehaviour
     {
-        rewiredPlayer = ReInput.players.GetPlayer(0);
-    }
+        public static Action OnClose;
+        public int optionPage;
+        public List<GameObject> helpScreens;
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-    public void Next(){
-        optionPage++;
-        if(optionPage == helpScreens.Count){
-            optionPage = 0;
-        }
-        for (int i = 0; i < helpScreens.Count; i++)
+        public void Next()
         {
-            if(i == optionPage){
-                helpScreens[i].SetActive(true);
-            }else{
-                helpScreens[i].SetActive(false);
+            optionPage++;
+            if (optionPage == helpScreens.Count)
+            {
+                optionPage = 0;
+            }
+
+            for (var i = 0; i < helpScreens.Count; i++)
+            {
+                if (i == optionPage)
+                {
+                    helpScreens[i].SetActive(true);
+                }
+                else
+                {
+                    helpScreens[i].SetActive(false);
+                }
             }
         }
-    }
-    public void Back(){
-        OnClose?.Invoke();
-        optionPage = 0;
+
+        public void Back()
+        {
+            OnClose?.Invoke();
+            optionPage = 0;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading;
 using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
+using Player;
 using UnityEngine;
 
 namespace Abilities
@@ -10,12 +11,10 @@ namespace Abilities
     [Serializable]
     public class NoGravityAbility : Ability
     {
-        public float DurationTime => GameConfig.Instance.AbilityValues.NoGravityAbility.DurationTime;
-
-        private PlayerView _playerView;
-        private Vector3 _initialGravity;
         private CancellationTokenSource _cancellationTokenSource;
+        private Vector3 _initialGravity;
         private Material _originalMaterial;
+        private PlayerView _playerView;
 
         protected override async void InvokeAbility(PlayerView player)
         {
@@ -30,7 +29,8 @@ namespace Abilities
             _initialGravity = Physics.gravity;
             Physics.gravity = Vector3.zero;
             AudioManager.Instance.DoLowPass(.5f);
-            await UniTask.Delay(TimeSpan.FromSeconds(DurationTime), DelayType.UnscaledDeltaTime,
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.AbilityValues.NoGravityAbility.DurationTime),
+                DelayType.UnscaledDeltaTime,
                 cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow();
 
             WrapInternal();

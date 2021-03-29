@@ -1,67 +1,69 @@
-﻿using System;
-using System.Collections;
+﻿using DinoFracture;
 using UnityEngine;
 
-namespace DinoFracture
+namespace MeshPhysics
 {
     /// <summary>
-    /// This component will cause a fracture to happen at the point of impact.
+    ///     This component will cause a fracture to happen at the point of impact.
     /// </summary>
-    [RequireComponent(typeof (FractureGeometry))]
+    [RequireComponent(typeof(FractureGeometry))]
     public class FractureOnTrigger : MonoBehaviour
     {
         /// <summary>
-        /// The minimum amount of force required to fracture this object.
-        /// Set to 0 to have any amount of force cause the fracture.
+        ///     The minimum amount of force required to fracture this object.
+        ///     Set to 0 to have any amount of force cause the fracture.
         /// </summary>
-        public float ForceThreshold;
+        public float forceThreshold;
 
         /// <summary>
-        /// Falloff radius for transferring the force of the impact
-        /// to the resulting pieces.  Any piece outside of this falloff
-        /// from the point of impact will have no additional impulse
-        /// set on it.
+        ///     Falloff radius for transferring the force of the impact
+        ///     to the resulting pieces.  Any piece outside of this falloff
+        ///     from the point of impact will have no additional impulse
+        ///     set on it.
         /// </summary>
-        public float ForceFalloffRadius = 1.0f;
+        public float forceFalloffRadius = 1.0f;
 
         /// <summary>
-        /// If true and this is a kinematic body, an impulse will be
-        /// applied to the colliding body to counter the effects of'
-        /// hitting a kinematic body.  If false and this is a kinematic
-        /// body, the colliding body will bounce off as if this were an
-        /// unmovable wall.
+        ///     If true and this is a kinematic body, an impulse will be
+        ///     applied to the colliding body to counter the effects of'
+        ///     hitting a kinematic body.  If false and this is a kinematic
+        ///     body, the colliding body will bounce off as if this were an
+        ///     unmovable wall.
         /// </summary>
-        public bool AdjustForKinematic = true;
+        public bool adjustForKinematic = true;
 
-        private Vector3 _impactVelocity;
+        private Rigidbody _impactBody;
         private float _impactMass;
         private Vector3 _impactPoint;
-        private Rigidbody _impactBody;
-        
+
+        private Vector3 _impactVelocity;
+
         private void OnTriggerEnter(Collider other)
         {
-            if(other.tag == "Lemming"){
+            if (other.CompareTag("Lemming"))
+            {
                 _impactBody = other.GetComponent<Rigidbody>();
-                _impactMass = (other.GetComponent<Rigidbody>() != null) ? other.GetComponent<Rigidbody>().mass : 1.0f;
+                _impactMass = other.GetComponent<Rigidbody>() != null ? other.GetComponent<Rigidbody>().mass : 1.0f;
                 _impactVelocity = other.GetComponent<Rigidbody>().velocity;
 
-                Rigidbody rb = GetComponent<Rigidbody>();
+                var rb = GetComponent<Rigidbody>();
                 if (rb != null)
                 {
                     // Always have the impact velocity point in our moving direction
                     _impactVelocity *= Mathf.Sign(Vector3.Dot(rb.velocity, _impactVelocity));
                 }
 
-                float mag = _impactVelocity.magnitude;
-                Vector3 force = 0.5f * _impactMass * _impactVelocity * mag;
+                var mag = _impactVelocity.magnitude;
+                var force = 0.5f * _impactMass * _impactVelocity * mag;
 
-                if ((ForceThreshold * ForceThreshold) <=
+                if (forceThreshold * forceThreshold <=
                     force.sqrMagnitude)
                 {
                     // Finds point between two vectors
-                    _impactPoint = transform.position + (0.5f * Vector3.Normalize(other.transform.position - transform.position));
+                    _impactPoint = transform.position +
+                                   0.5f * Vector3.Normalize(other.transform.position - transform.position);
 
-                    Vector3 localPoint = transform.worldToLocalMatrix.MultiplyPoint(_impactPoint);
+                    var localPoint = transform.worldToLocalMatrix.MultiplyPoint(_impactPoint);
 
                     GetComponent<FractureGeometry>().Fracture(localPoint);
                 }
@@ -72,36 +74,36 @@ namespace DinoFracture
         {
             if (args.OriginalObject.gameObject == gameObject)
             {
-                float radiusSq = ForceFalloffRadius * ForceFalloffRadius;
+                var radiusSq = forceFalloffRadius * forceFalloffRadius;
 
-                for (int i = 0; i < args.FracturePiecesRootObject.transform.childCount; i++)
+                for (var i = 0; i < args.FracturePiecesRootObject.transform.childCount; i++)
                 {
-                    Transform piece = args.FracturePiecesRootObject.transform.GetChild(i);
+                    var piece = args.FracturePiecesRootObject.transform.GetChild(i);
 
-                    Rigidbody rb = piece.GetComponent<Rigidbody>();
+                    var rb = piece.GetComponent<Rigidbody>();
                     if (rb != null)
                     {
-                        Vector3 force = _impactMass * _impactVelocity / (rb.mass + _impactMass);
+                        var force = _impactMass * _impactVelocity / (rb.mass + _impactMass);
 
-                        if (ForceFalloffRadius > 0.0f)
+                        if (forceFalloffRadius > 0.0f)
                         {
-                            float distSq = (piece.position - _impactPoint).sqrMagnitude;
-                            force *= Mathf.Clamp01(1.0f - distSq / (radiusSq));
+                            var distSq = (piece.position - _impactPoint).sqrMagnitude;
+                            force *= Mathf.Clamp01(1.0f - distSq / radiusSq);
                         }
 
                         rb.AddForceAtPosition(force * rb.mass, _impactPoint, ForceMode.Impulse);
                     }
                 }
 
-                if (AdjustForKinematic)
+                if (adjustForKinematic)
                 {
                     // If the fractured body is kinematic, the collision for the colliding body will
                     // be as if it hit an unmovable wall.  Try to correct for that by adding the same
                     // force to colliding body.
-                    Rigidbody thisBody = GetComponent<Rigidbody>();
+                    var thisBody = GetComponent<Rigidbody>();
                     if (thisBody != null && thisBody.isKinematic && _impactBody != null)
                     {
-                        Vector3 force = thisBody.mass * _impactVelocity / (thisBody.mass + _impactMass);
+                        var force = thisBody.mass * _impactVelocity / (thisBody.mass + _impactMass);
                         _impactBody.AddForceAtPosition(force * _impactMass, _impactPoint, ForceMode.Impulse);
                     }
                 }

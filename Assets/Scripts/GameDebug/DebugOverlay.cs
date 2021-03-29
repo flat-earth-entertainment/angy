@@ -3,7 +3,7 @@ using Logic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Debugs
+namespace GameDebug
 {
     public class DebugOverlay : MonoBehaviour
     {
@@ -39,13 +39,6 @@ namespace Debugs
             });
         }
 
-        private void SetButtonInteractable(bool state)
-        {
-            expandAbility.interactable = state;
-            noGravityAbility.interactable = state;
-            iceBlockAbility.interactable = state;
-        }
-
         private void Update()
         {
             SetButtonInteractable(GameManager.CurrentTurnPlayer != null);
@@ -54,6 +47,13 @@ namespace Debugs
             {
                 _debugCanvas.enabled = !_debugCanvas.enabled;
             }
+        }
+
+        private void SetButtonInteractable(bool state)
+        {
+            expandAbility.interactable = state;
+            noGravityAbility.interactable = state;
+            iceBlockAbility.interactable = state;
         }
     }
 }

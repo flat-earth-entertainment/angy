@@ -6,8 +6,8 @@ namespace UI
 {
     public class CutoutMask : Image
     {
-        private Material _material;
         private static readonly int StencilComp = Shader.PropertyToID("_StencilComp");
+        private Material _material;
 
         public override Material materialForRendering
         {

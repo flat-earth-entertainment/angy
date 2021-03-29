@@ -2,17 +2,13 @@ using Abilities;
 using Abilities.Config;
 using Audio;
 using Config;
+using Player;
 using UnityEngine;
 
 namespace UI
 {
     public class UiController : MonoBehaviour
     {
-        public bool CameraModeHelperActive
-        {
-            set => cameraModeHelper.SetActive(value);
-        }
-
         [SerializeField]
         private GameObject cameraModeWarning;
 
@@ -33,6 +29,29 @@ namespace UI
 
         [SerializeField]
         private AbilityUi[] abilityUis;
+
+        public bool CameraModeHelperActive
+        {
+            set => cameraModeHelper.SetActive(value);
+        }
+
+        private void Awake()
+        {
+            angyUi1.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
+            angyUi2.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
+
+            playersManager.InitializedAllPlayers += OnPlayersInitialized;
+        }
+
+        private void OnEnable()
+        {
+            PlayerView.NewAbilitySet += OnNewAbilitySet;
+        }
+
+        private void OnDisable()
+        {
+            PlayerView.NewAbilitySet -= OnNewAbilitySet;
+        }
 
 
         public void WobbleAbilityUi(PlayerView playerView, bool state)
@@ -65,24 +84,6 @@ namespace UI
             {
                 Debug.LogWarning($"Can't find Ability UI for player with ID {player.PlayerId}");
             }
-        }
-
-        private void Awake()
-        {
-            angyUi1.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
-            angyUi2.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
-
-            playersManager.InitializedAllPlayers += OnPlayersInitialized;
-        }
-
-        private void OnEnable()
-        {
-            PlayerView.NewAbilitySet += OnNewAbilitySet;
-        }
-
-        private void OnDisable()
-        {
-            PlayerView.NewAbilitySet -= OnNewAbilitySet;
         }
 
         private void OnNewAbilitySet(PlayerView player, Ability ability)

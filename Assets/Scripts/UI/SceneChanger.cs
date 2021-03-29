@@ -10,6 +10,10 @@ namespace UI
 {
     public class SceneChanger : MonoBehaviour
     {
+        private static bool _isCurrentlyChanging;
+
+        private static SceneChanger _instance;
+
         [SerializeField]
         private GameObject logo;
 
@@ -22,7 +26,28 @@ namespace UI
         [SerializeField]
         private float transitionTime;
 
-        private static bool _isCurrentlyChanging;
+        private static SceneChanger Instance
+        {
+            get
+            {
+                if (_instance == null || _instance.Equals(null))
+                {
+                    _instance = FindObjectOfType<SceneChanger>();
+
+                    if (_instance == null || _instance.Equals(null))
+                    {
+                        _instance = Instantiate(GameConfig.Instance.SceneChanger).GetComponent<SceneChanger>();
+
+                        if (_instance == null || _instance.Equals(null))
+                        {
+                            Debug.LogError("Cannot instantiate Scene Manager! Check the Game Config or call Gabe!");
+                        }
+                    }
+                }
+
+                return _instance;
+            }
+        }
 
         public static async void ChangeScene(string sceneName,
             SceneChangeType sceneChangeType = SceneChangeType.Default)
@@ -42,7 +67,7 @@ namespace UI
             {
                 eventSystem.enabled = false;
             }
-            
+
             foreach (var eventSystem in FindObjectsOfType<RewiredEventSystem>())
             {
                 eventSystem.enabled = false;
@@ -76,31 +101,6 @@ namespace UI
             _instance = null;
             _isCurrentlyChanging = false;
         }
-
-        private static SceneChanger Instance
-        {
-            get
-            {
-                if (_instance == null || _instance.Equals(null))
-                {
-                    _instance = FindObjectOfType<SceneChanger>();
-
-                    if (_instance == null || _instance.Equals(null))
-                    {
-                        _instance = Instantiate(GameConfig.Instance.SceneChanger).GetComponent<SceneChanger>();
-
-                        if (_instance == null || _instance.Equals(null))
-                        {
-                            Debug.LogError("Cannot instantiate Scene Manager! Check the Game Config or call Gabe!");
-                        }
-                    }
-                }
-
-                return _instance;
-            }
-        }
-
-        private static SceneChanger _instance;
     }
 
     public enum SceneChangeType

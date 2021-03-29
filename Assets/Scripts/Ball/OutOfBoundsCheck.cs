@@ -1,5 +1,4 @@
 using System;
-using Config;
 using UnityEngine;
 using Utils;
 
@@ -8,7 +7,6 @@ namespace Ball
     public class OutOfBoundsCheck : MonoBehaviour
     {
         private static float _heightThreshold;
-        public event Action WentOutOfBounds;
 
 
         private void Awake()
@@ -23,5 +21,7 @@ namespace Ball
                 WentOutOfBounds?.Invoke();
             }
         }
+
+        public event Action WentOutOfBounds;
     }
 }

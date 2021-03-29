@@ -1,24 +1,27 @@
 using UnityEngine;
 
-public class BoneLookAt : MonoBehaviour
+namespace Testing
 {
-    public Transform headTransform;
-    public Transform target;
-
-    private Quaternion _initialRotation;
-
-    private void OnDisable()
+    public class BoneLookAt : MonoBehaviour
     {
-        headTransform.localRotation = _initialRotation;
-    }
+        public Transform headTransform;
+        public Transform target;
 
-    private void Start()
-    {
-        _initialRotation = headTransform.localRotation;
-    }
+        private Quaternion _initialRotation;
 
-    private void LateUpdate()
-    {
-        headTransform.LookAt(target);
+        private void Start()
+        {
+            _initialRotation = headTransform.localRotation;
+        }
+
+        private void LateUpdate()
+        {
+            headTransform.LookAt(target);
+        }
+
+        private void OnDisable()
+        {
+            headTransform.localRotation = _initialRotation;
+        }
     }
 }

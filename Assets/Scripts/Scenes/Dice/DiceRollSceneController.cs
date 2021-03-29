@@ -34,11 +34,12 @@ namespace Scenes.Dice
         [SerializeField]
         private GameObject player1First;
 
-        private float _timer;
-        private bool _player1Rolled;
-        private bool _shouldChangeFaces;
-        private int _player1Value;
         private bool _allPlayersRolled;
+        private bool _player1Rolled;
+        private int _player1Value;
+        private bool _shouldChangeFaces;
+
+        private float _timer;
 
         private void Awake()
         {

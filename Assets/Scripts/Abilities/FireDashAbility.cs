@@ -1,25 +1,24 @@
 using System.Linq;
 using System.Threading;
-using Abilities.Config;
 using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Player;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Abilities
 {
     public class FireDashAbility : Ability
     {
-        private Tween _rotateTween;
-        private PlayerView _player;
         private CancellationTokenSource _cancellationTokenSource;
+        private AudioSource _cracklingSource;
         private Transform _fireDashClock;
         private Material _originalBodyMaterial;
-        private GameObject _trail;
+        private PlayerView _player;
         private bool _pressedLaunch;
-        private AudioSource _cracklingSource;
+        private Tween _rotateTween;
+        private GameObject _trail;
 
         protected override async void InvokeAbility(PlayerView player)
         {

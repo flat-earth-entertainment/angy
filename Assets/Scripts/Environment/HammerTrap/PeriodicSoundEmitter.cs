@@ -1,4 +1,3 @@
-using System;
 using Audio;
 using DG.Tweening;
 using UnityEngine;

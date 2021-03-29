@@ -12,12 +12,26 @@ namespace Logic
     {
         private const int Inactive = 0;
         private const int Active = 10;
+        private CinemachineVirtualCamera _activeCamera;
 
         private HashSet<CinemachineVirtualCamera> _cameras = new HashSet<CinemachineVirtualCamera>();
 
         private CinemachineBrain _cinemachineBrain;
         private float _defaultTransitionTime;
-        private CinemachineVirtualCamera _activeCamera;
+
+        private void Awake()
+        {
+            _cinemachineBrain = FindObjectOfType<CinemachineBrain>();
+            _defaultTransitionTime = _cinemachineBrain.m_DefaultBlend.m_Time;
+        }
+
+        private void Start()
+        {
+            foreach (var virtualCamera in FindObjectsOfType<CinemachineVirtualCamera>())
+            {
+                _cameras.Add(virtualCamera);
+            }
+        }
 
         public async void ShakeFor(float zoomStayTime)
         {
@@ -34,7 +48,7 @@ namespace Logic
             cameraNoise.m_NoiseProfile = null;
         }
 
-        public UniTask DOZoom(CinemachineVirtualCamera cinemachineVirtualCamera, float fovValue, float duration)
+        public UniTask DoZoom(CinemachineVirtualCamera cinemachineVirtualCamera, float fovValue, float duration)
         {
             DOTween.To(f => cinemachineVirtualCamera.m_Lens.FieldOfView = f,
                 40f, fovValue, duration).SetUpdate(true);
@@ -52,20 +66,6 @@ namespace Logic
 
             SetActiveCamera(virtualCamera, blendTime);
             return UniTask.Delay(TimeSpan.FromSeconds(blendTime.Value), DelayType.UnscaledDeltaTime);
-        }
-
-        private void Awake()
-        {
-            _cinemachineBrain = FindObjectOfType<CinemachineBrain>();
-            _defaultTransitionTime = _cinemachineBrain.m_DefaultBlend.m_Time;
-        }
-
-        private void Start()
-        {
-            foreach (var virtualCamera in FindObjectsOfType<CinemachineVirtualCamera>())
-            {
-                _cameras.Add(virtualCamera);
-            }
         }
 
         public void SetActiveCamera(CinemachineVirtualCamera newActiveCamera, float? transitionTime = null)

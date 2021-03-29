@@ -1,13 +1,11 @@
 using System;
+using Player;
 using UnityEngine;
 
 namespace Ball.Objectives
 {
     public class Hole : MonoBehaviour
     {
-        public static event Action<PlayerView> PlayerEnteredHole;
-        public static event Action<PlayerView> PlayerLeftHole;
-
         private void OnTriggerEnter(Collider other)
         {
             if (other.transform.childCount >= 1)
@@ -29,5 +27,8 @@ namespace Ball.Objectives
                 }
             }
         }
+
+        public static event Action<PlayerView> PlayerEnteredHole;
+        public static event Action<PlayerView> PlayerLeftHole;
     }
 }

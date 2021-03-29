@@ -18,11 +18,10 @@ namespace UI
         [SerializeField]
         private ParticleSystem particle2;
 
-        private Tween _sliderSmoothingTween;
-        private Sequence _particleSequence;
-
         private ParticleSystem.MainModule _particle1Main;
         private ParticleSystem.MainModule _particle2Main;
+        private Sequence _particleSequence;
+        private Tween _sliderSmoothingTween;
 
         public void Initialize(float minValue, float maxValue)
         {

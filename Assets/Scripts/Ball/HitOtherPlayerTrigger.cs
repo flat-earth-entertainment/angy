@@ -1,13 +1,12 @@
 using System;
 using Config;
+using Player;
 using UnityEngine;
 
 namespace Ball
 {
     public class HitOtherPlayerTrigger : MonoBehaviour
     {
-        public static event Action<PlayerView, PlayerView> PlayerHit;
-
         private void OnCollisionEnter(Collision other)
         {
             if (other.transform.CompareTag("Lemming"))
@@ -27,5 +26,7 @@ namespace Ball
                 }
             }
         }
+
+        public static event Action<PlayerView, PlayerView> PlayerHit;
     }
 }

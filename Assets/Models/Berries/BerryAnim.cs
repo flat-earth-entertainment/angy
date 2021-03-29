@@ -1,33 +1,27 @@
-using UnityEngine;
 using DG.Tweening;
+using UnityEngine;
 
-public class BerryAnim : MonoBehaviour
+namespace Models.Berries
 {
-    public float rotSpeed = 50;
-    public float duration = 3f;
-    public int vibrato = 10;
-    public float elasticity = 0.5f;
-    public Vector3 punchScale = new Vector3(1,1,1);
-
-    private float _startTime;
-    private float _journeyLength;
-    
-    // Start is called before the first frame update
-    void Start()
+    public class BerryAnim : MonoBehaviour
     {
-        _startTime = Time.time;
-        
-    }
+        public float rotSpeed = 50;
+        public float duration = 3f;
+        public int vibrato = 10;
+        public float elasticity = 0.5f;
+        public Vector3 punchScale = new Vector3(1, 1, 1);
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.Rotate(new Vector3(0, rotSpeed * Time.deltaTime, 0), Space.World);
-    }
-    public void BerryHit(){
-        if(!DOTween.IsTweening(transform)){
-            transform.DOPunchScale(punchScale, duration, vibrato, elasticity);
+        private void Update()
+        {
+            transform.Rotate(new Vector3(0, rotSpeed * Time.deltaTime, 0), Space.World);
         }
 
+        public void BerryHit()
+        {
+            if (!DOTween.IsTweening(transform))
+            {
+                transform.DOPunchScale(punchScale, duration, vibrato, elasticity);
+            }
+        }
     }
 }

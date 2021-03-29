@@ -1,5 +1,7 @@
 ﻿using Audio;
+using Ball;
 using Config;
+using Player;
 using UnityEngine;
 
 namespace Abilities
@@ -7,10 +9,10 @@ namespace Abilities
     public class IceBlockOnCollision : MonoBehaviour
     {
         private float _initialDrag;
-        private PlayerView _otherPlayerView;
-        private IceBlockOnCollision _otherIceBlockOnCollision;
-        private Material _originalBodyMaterial;
         private Material[] _materials;
+        private Material _originalBodyMaterial;
+        private IceBlockOnCollision _otherIceBlockOnCollision;
+        private PlayerView _otherPlayerView;
 
         private void OnCollisionEnter(Collision other)
         {

@@ -1,4 +1,5 @@
-﻿using NaughtyAttributes;
+﻿using Config;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace UI

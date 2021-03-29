@@ -1,43 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MushroomMood : MonoBehaviour
+namespace Ball.Objectives
 {
-    private int playerInTriggerCount;
-    private Animator anim;
-    private Material mat;
-    // Start is called before the first frame update
-    void Start()
+    public class MushroomMood : MonoBehaviour
     {
-        anim = GetComponent<Animator>();
-    }
+        private Animator _anim;
+        private int _playerInTriggerCount;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    private void OnTriggerEnter(Collider other) {
-        if(other.tag == "Lemming"){
-            playerInTriggerCount++;
-            UpdateMood();
+        private void Start()
+        {
+            _anim = GetComponent<Animator>();
         }
-    }
-    private void OnTriggerExit(Collider other) {
-        if(other.tag == "Lemming"){
-            playerInTriggerCount--;
-            UpdateMood();
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Lemming"))
+            {
+                _playerInTriggerCount++;
+                UpdateMood();
+            }
         }
-        
-    }
-    void UpdateMood(){
-        if(playerInTriggerCount > 0){
-            anim.SetBool("isTerrifyed", true);
-            transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[0].SetFloat("MushroomFace", 1);
-        }else{
-            anim.SetBool("isTerrifyed", false);
-            transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[0].SetFloat("MushroomFace", 0);
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Lemming"))
+            {
+                _playerInTriggerCount--;
+                UpdateMood();
+            }
+        }
+
+        private void UpdateMood()
+        {
+            if (_playerInTriggerCount > 0)
+            {
+                _anim.SetBool("isTerrifyed", true);
+                transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[0].SetFloat("MushroomFace", 1);
+            }
+            else
+            {
+                _anim.SetBool("isTerrifyed", false);
+                transform.GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[0].SetFloat("MushroomFace", 0);
+            }
         }
     }
 }

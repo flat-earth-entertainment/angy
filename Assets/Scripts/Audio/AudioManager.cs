@@ -15,6 +15,7 @@ namespace Audio
         [UnityEditor.InitializeOnEnterPlayMode]
         private static void SelfInstantiate()
         {
+            // ReSharper disable once AccessToStaticMemberViaDerivedType
             UnityEditor.SceneManagement.EditorSceneManager.sceneLoaded += delegate
             {
                 if (AudioManager.Instance)
@@ -27,6 +28,8 @@ namespace Audio
 
     public class AudioManager : MonoBehaviour
     {
+        private static AudioManager _instance;
+
         [SerializeField]
         private SfxPreset[] sfxPresets;
 
@@ -51,51 +54,65 @@ namespace Audio
         [SerializeField]
         private AudioMixer masterMixer;
 
-        private readonly Dictionary<GameSettings.Settings, MixerBand> MixerBands =
+        private readonly Dictionary<GameSettings.Settings, MixerBand> _mixerBands =
             new Dictionary<GameSettings.Settings, MixerBand>();
 
-        private class MixerBand
+        public static AudioManager Instance
         {
-            private const float MinVolumeValueZeroOne = 0.0001f;
-            private readonly float _maxVolumeValueZeroOne;
-
-            private string BandName { get; }
-
-            private AudioMixer Mixer { get; }
-
-            public MixerBand(string bandName, AudioMixer mixer)
+            get
             {
-                BandName = bandName;
-                Mixer = mixer;
-                mixer.GetFloat(bandName, out _maxVolumeValueZeroOne);
-                _maxVolumeValueZeroOne = DbToZeroOne(_maxVolumeValueZeroOne);
+                if (_instance == null || _instance.Equals(null))
+                {
+                    _instance = FindObjectOfType<AudioManager>();
+
+                    if (_instance == null || _instance.Equals(null))
+                    {
+                        _instance = Instantiate(GameConfig.Instance.AudioManager).GetComponent<AudioManager>();
+
+                        if (_instance == null || _instance.Equals(null))
+                        {
+                            Debug.LogError("Cannot instantiate Audio Manager! Check the Game Config or call Gabe!");
+                        }
+                    }
+                }
+
+                return _instance;
+            }
+        }
+
+        private void Awake()
+        {
+            if (_instance != null)
+            {
+                Destroy(gameObject);
+                return;
             }
 
-            public void SetVolume(float volume)
-            {
-                volume = ZeroOneToDb(LinearRemap(volume, 0, 1,
-                    MinVolumeValueZeroOne, _maxVolumeValueZeroOne));
+            DontDestroyOnLoad(gameObject);
 
-                Mixer?.SetFloat(BandName, volume);
-            }
+            _mixerBands.Add(GameSettings.Settings.MasterVolume, new MixerBand("MasterVolume", masterMixer));
+            _mixerBands.Add(GameSettings.Settings.MusicVolume, new MixerBand("MusicVolume", masterMixer));
+            _mixerBands.Add(GameSettings.Settings.SfxVolume, new MixerBand("SfxVolume", masterMixer));
 
-            private static float DbToZeroOne(float db)
+            foreach (var mixerBand in _mixerBands)
             {
-                return Mathf.Pow(10, db / 20);
+                mixerBand.Value.SetVolume(GameSettings.GetFloat(mixerBand.Key));
             }
+        }
 
-            private static float ZeroOneToDb(float value)
-            {
-                return Mathf.Log10(value) * 20;
-            }
+        private void Start()
+        {
+            PlayNextMusic();
+        }
 
-            private static float LinearRemap(float value,
-                float valueRangeMin, float valueRangeMax,
-                float newRangeMin, float newRangeMax)
-            {
-                return (value - valueRangeMin) / (valueRangeMax - valueRangeMin) * (newRangeMax - newRangeMin) +
-                       newRangeMin;
-            }
+        private void OnEnable()
+        {
+            GameSettings.FloatChanged += OnVolumeChanged;
+        }
+
+        private void OnDisable()
+        {
+            GameSettings.FloatChanged -= OnVolumeChanged;
         }
 
         public static void PlaySfx(SfxType sfxType)
@@ -143,70 +160,54 @@ namespace Audio
 
         private static void OnVolumeChanged(GameSettings.Settings setting, float newValue)
         {
-            if (Instance.MixerBands.ContainsKey(setting))
+            if (Instance._mixerBands.ContainsKey(setting))
             {
-                Instance.MixerBands[setting].SetVolume(newValue);
+                Instance._mixerBands[setting].SetVolume(newValue);
             }
         }
 
-        private void OnEnable()
+        private class MixerBand
         {
-            GameSettings.FloatChanged += OnVolumeChanged;
-        }
+            private const float MinVolumeValueZeroOne = 0.0001f;
+            private readonly float _maxVolumeValueZeroOne;
 
-        private void OnDisable()
-        {
-            GameSettings.FloatChanged -= OnVolumeChanged;
-        }
-
-        private void Start()
-        {
-            PlayNextMusic();
-        }
-
-        private void Awake()
-        {
-            if (_instance != null)
+            public MixerBand(string bandName, AudioMixer mixer)
             {
-                Destroy(gameObject);
-                return;
+                BandName = bandName;
+                Mixer = mixer;
+                mixer.GetFloat(bandName, out _maxVolumeValueZeroOne);
+                _maxVolumeValueZeroOne = DbToZeroOne(_maxVolumeValueZeroOne);
             }
 
-            DontDestroyOnLoad(gameObject);
+            private string BandName { get; }
 
-            MixerBands.Add(GameSettings.Settings.MasterVolume, new MixerBand("MasterVolume", masterMixer));
-            MixerBands.Add(GameSettings.Settings.MusicVolume, new MixerBand("MusicVolume", masterMixer));
-            MixerBands.Add(GameSettings.Settings.SfxVolume, new MixerBand("SfxVolume", masterMixer));
+            private AudioMixer Mixer { get; }
 
-            foreach (var mixerBand in MixerBands)
+            public void SetVolume(float volume)
             {
-                mixerBand.Value.SetVolume(GameSettings.GetFloat(mixerBand.Key));
+                volume = ZeroOneToDb(LinearRemap(volume, 0, 1,
+                    MinVolumeValueZeroOne, _maxVolumeValueZeroOne));
+
+                Mixer?.SetFloat(BandName, volume);
+            }
+
+            private static float DbToZeroOne(float db)
+            {
+                return Mathf.Pow(10, db / 20);
+            }
+
+            private static float ZeroOneToDb(float value)
+            {
+                return Mathf.Log10(value) * 20;
+            }
+
+            private static float LinearRemap(float value,
+                float valueRangeMin, float valueRangeMax,
+                float newRangeMin, float newRangeMax)
+            {
+                return (value - valueRangeMin) / (valueRangeMax - valueRangeMin) * (newRangeMax - newRangeMin) +
+                       newRangeMin;
             }
         }
-
-        public static AudioManager Instance
-        {
-            get
-            {
-                if (_instance == null || _instance.Equals(null))
-                {
-                    _instance = FindObjectOfType<AudioManager>();
-
-                    if (_instance == null || _instance.Equals(null))
-                    {
-                        _instance = Instantiate(GameConfig.Instance.AudioManager).GetComponent<AudioManager>();
-
-                        if (_instance == null || _instance.Equals(null))
-                        {
-                            Debug.LogError("Cannot instantiate Audio Manager! Check the Game Config or call Gabe!");
-                        }
-                    }
-                }
-
-                return _instance;
-            }
-        }
-
-        private static AudioManager _instance;
     }
 }

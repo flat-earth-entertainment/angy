@@ -1,14 +1,15 @@
 using System;
-using Config;
+using UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace UI
+namespace Config
 {
     public class OptionsController : MonoBehaviour
     {
         public static Action BackButtonClicked;
+
+        private static OptionsController _instance;
 
         [SerializeField]
         private Button backButton;
@@ -27,39 +28,6 @@ namespace UI
 
         [SerializeField]
         private Button mainMenuButton;
-
-        public static void Show(bool showMainMenu = true)
-        {
-            Instance.gameObject.SetActive(true);
-            Instance.mainMenuGameObject.SetActive(showMainMenu);
-        }
-
-        public static void Hide()
-        {
-            Instance.gameObject.SetActive(false);
-        }
-
-        private void Awake()
-        {
-            backButton.onClick.AddListener(delegate { BackButtonClicked?.Invoke(); });
-
-            mainMenuButton.onClick.AddListener(delegate
-            {
-                SceneChanger.ChangeScene(GameConfig.Instance.Scenes.MainMenuScene);
-                CurrentGameSession.ClearSession();
-            });
-
-            InitializeAndBindSlider(GameSettings.Settings.MasterVolume, masterVolume);
-            InitializeAndBindSlider(GameSettings.Settings.MusicVolume, musicVolume);
-            InitializeAndBindSlider(GameSettings.Settings.SfxVolume, sfxVolume);
-        }
-
-        private static void InitializeAndBindSlider(GameSettings.Settings band, Slider slider)
-        {
-            slider.value = GameSettings.GetFloat(band);
-
-            slider.onValueChanged.AddListener(delegate(float newValue) { GameSettings.SetFloat(band, newValue); });
-        }
 
         public static OptionsController Instance
         {
@@ -85,6 +53,37 @@ namespace UI
             }
         }
 
-        private static OptionsController _instance;
+        private void Awake()
+        {
+            backButton.onClick.AddListener(delegate { BackButtonClicked?.Invoke(); });
+
+            mainMenuButton.onClick.AddListener(delegate
+            {
+                SceneChanger.ChangeScene(GameConfig.Instance.Scenes.MainMenuScene);
+                CurrentGameSession.ClearSession();
+            });
+
+            InitializeAndBindSlider(GameSettings.Settings.MasterVolume, masterVolume);
+            InitializeAndBindSlider(GameSettings.Settings.MusicVolume, musicVolume);
+            InitializeAndBindSlider(GameSettings.Settings.SfxVolume, sfxVolume);
+        }
+
+        public static void Show(bool showMainMenu = true)
+        {
+            Instance.gameObject.SetActive(true);
+            Instance.mainMenuGameObject.SetActive(showMainMenu);
+        }
+
+        public static void Hide()
+        {
+            Instance.gameObject.SetActive(false);
+        }
+
+        private static void InitializeAndBindSlider(GameSettings.Settings band, Slider slider)
+        {
+            slider.value = GameSettings.GetFloat(band);
+
+            slider.onValueChanged.AddListener(delegate(float newValue) { GameSettings.SetFloat(band, newValue); });
+        }
     }
 }

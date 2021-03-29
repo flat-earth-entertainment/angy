@@ -7,9 +7,6 @@ namespace Player
 {
     public class PanController : MonoBehaviour
     {
-        [field: SerializeField]
-        public CinemachineVirtualCamera PanningCamera { get; private set; }
-
         [SerializeField]
         private Vector3 bottomLeftBound;
 
@@ -18,17 +15,8 @@ namespace Player
 
         private Rewired.Player _player;
 
-        public void EnableControls(PlayerView player)
-        {
-            _player = ReInput.players.GetPlayer(player.PlayerId);
-            enabled = true;
-        }
-
-        public void DisableControls()
-        {
-            _player = null;
-            enabled = false;
-        }
+        [field: SerializeField]
+        public CinemachineVirtualCamera PanningCamera { get; private set; }
 
         private void Update()
         {
@@ -52,6 +40,18 @@ namespace Player
             }
 
             transform.position += transform.forward * vertical + transform.right * horizontal;
+        }
+
+        public void EnableControls(PlayerView player)
+        {
+            _player = ReInput.players.GetPlayer(player.PlayerId);
+            enabled = true;
+        }
+
+        public void DisableControls()
+        {
+            _player = null;
+            enabled = false;
         }
     }
 }

@@ -10,6 +10,8 @@ namespace UI
     {
         public static Action ResumeButtonClicked;
 
+        private static PauseMenu _instance;
+
         [SerializeField]
         private Button resumeButton;
 
@@ -30,23 +32,28 @@ namespace UI
 
         private GameObject _helpUi;
 
-        public static void Show(Action resumeButtonAction = null)
+        public static PauseMenu Instance
         {
-            ResumeButtonClicked = resumeButtonAction;
-            Instance.gameObject.SetActive(true);
-        }
+            get
+            {
+                if (_instance == null || _instance.Equals(null))
+                {
+                    _instance = FindObjectOfType<PauseMenu>();
 
-        public static void Hide()
-        {
-            Instance.gameObject.SetActive(false);
-        }
+                    if (_instance == null || _instance.Equals(null))
+                    {
+                        _instance = Instantiate(GameConfig.Instance.PauseMenu)
+                            .GetComponent<PauseMenu>();
 
-        private void HideHelp()
-        {
-            Destroy(_helpUi);
-            _helpUi = null;
-            gameObject.SetActive(true);
-            HelpUi.OnClose = null;
+                        if (_instance == null || _instance.Equals(null))
+                        {
+                            Debug.LogError("Cannot instantiate Options! Check the Game Config or call Gabe!");
+                        }
+                    }
+                }
+
+                return _instance;
+            }
         }
 
         private void Awake()
@@ -78,30 +85,23 @@ namespace UI
             });
         }
 
-        public static PauseMenu Instance
+        public static void Show(Action resumeButtonAction = null)
         {
-            get
-            {
-                if (_instance == null || _instance.Equals(null))
-                {
-                    _instance = FindObjectOfType<PauseMenu>();
-
-                    if (_instance == null || _instance.Equals(null))
-                    {
-                        _instance = Instantiate(GameConfig.Instance.PauseMenu)
-                            .GetComponent<PauseMenu>();
-
-                        if (_instance == null || _instance.Equals(null))
-                        {
-                            Debug.LogError("Cannot instantiate Options! Check the Game Config or call Gabe!");
-                        }
-                    }
-                }
-
-                return _instance;
-            }
+            ResumeButtonClicked = resumeButtonAction;
+            Instance.gameObject.SetActive(true);
         }
 
-        private static PauseMenu _instance;
+        public static void Hide()
+        {
+            Instance.gameObject.SetActive(false);
+        }
+
+        private void HideHelp()
+        {
+            Destroy(_helpUi);
+            _helpUi = null;
+            gameObject.SetActive(true);
+            HelpUi.OnClose = null;
+        }
     }
 }

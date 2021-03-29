@@ -7,8 +7,6 @@ namespace Scenes.Map_Selection
 {
     public class MapPreviewView : MonoBehaviour
     {
-        public static event Action<MapCollection> MapPreviewSelected;
-
         [SerializeField]
         private TextMeshProUGUI nameText;
 
@@ -25,6 +23,8 @@ namespace Scenes.Map_Selection
         {
             selectButton.onClick.AddListener(delegate { MapPreviewSelected?.Invoke(_mapCollection); });
         }
+
+        public static event Action<MapCollection> MapPreviewSelected;
 
         public void Setup(MapCollection mapCollection)
         {

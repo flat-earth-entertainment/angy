@@ -1,4 +1,5 @@
 using Audio;
+using Ball.Objectives;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -24,7 +25,7 @@ namespace Ball
 
         private void OnTriggerEnter(Collider other)
         {
-            GoodNeutralMushroom mush = other.GetComponent<GoodNeutralMushroom>();
+            var mush = other.GetComponent<GoodNeutralMushroom>();
             if (mush && !mush.mushroomDisabled)
             {
                 HitStop(Vector3.Lerp(other.transform.position, transform.position, 0.5f));
