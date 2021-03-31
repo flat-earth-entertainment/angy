@@ -70,7 +70,7 @@ namespace UI
         {
             abilityUis[player.PlayerId].Visible = true;
             abilityUis[player.PlayerId]
-                .DoSlotMachine(3.2f, AbilityConfig.GetConfigSpriteFor(ability), player.PlayerColor);
+                .DoSlotMachine(3.2f, AbilityConfig.GetConfigSpriteFor(ability), player.PlayerPreset.PlayerColor);
             AudioManager.PlaySfx(SfxType.RandomActivate);
         }
 
@@ -78,7 +78,7 @@ namespace UI
         {
             if (player.PlayerId < abilityUis.Length)
             {
-                abilityUis[player.PlayerId].SetAbilityIcon(icon, player.PlayerColor);
+                abilityUis[player.PlayerId].SetAbilityIcon(icon, player.PlayerPreset.PlayerColor);
             }
             else
             {

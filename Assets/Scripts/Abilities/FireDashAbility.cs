@@ -85,11 +85,10 @@ namespace Abilities
             Object.Destroy(_fireDashClock.gameObject);
             Time.timeScale = GameConfig.Instance.TimeScale;
 
-            var playerPreset = GameConfig.Instance.PlayerPresets.First(p => p.PlayerColor == _player.PlayerColor);
-            _trail = Object.Instantiate(playerPreset.Trail, _player.Ball.transform);
+            _trail = Object.Instantiate(_player.PlayerPreset.Trail, _player.Ball.transform);
 
             _originalBodyMaterial = _player.Materials[0];
-            _player.SetBodyMaterial(playerPreset.FireMaterial);
+            _player.SetBodyMaterial(_player.PlayerPreset.FireMaterial);
 
             _player.BecameStill += WrapInternal;
 

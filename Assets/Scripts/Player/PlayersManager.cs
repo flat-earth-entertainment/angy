@@ -37,10 +37,7 @@ namespace Player
             if (newPlayerObject.TryGetComponent(out PlayerView player))
             {
                 player.PlayerId = playerId;
-                player.Nickname = playerPreset.PlayerName;
-                player.PlayerGradient = playerPreset.Gradient;
-                player.PlayerColor = playerPreset.PlayerColor;
-                player.FresnelColor = playerPreset.FresnelColor;
+                player.PlayerPreset = playerPreset;
                 player.Knockback = GameConfig.Instance.ExplosionForceOnPlayerHit;
                 player.PlayerState = PlayerState.ShouldSpawnAtSpawn;
                 player.PlayerInputs = RewiredPlayerInputs.AttachToPlayer(player);
@@ -61,7 +58,8 @@ namespace Player
             {
                 if (CurrentGameSession.NextRoundRewiredPlayerId != null)
                 {
-                    var foundPlayer = _players.Find(p => p.RewiredPlayer.id == CurrentGameSession.NextRoundRewiredPlayerId);
+                    var foundPlayer =
+                        _players.Find(p => p.RewiredPlayer.id == CurrentGameSession.NextRoundRewiredPlayerId);
                     return foundPlayer;
                 }
 

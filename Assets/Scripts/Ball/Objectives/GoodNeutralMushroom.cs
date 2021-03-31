@@ -136,7 +136,7 @@ namespace Ball.Objectives
                         item.materials = new[] {baseFruitMat};
 
                         item.materials[0].SetColor("BerryColor",
-                            other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
+                            other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerPreset.PlayerColor);
                         item.gameObject.GetComponent<BerryAnim>().BerryHit();
                     }
                 }
@@ -144,7 +144,7 @@ namespace Ball.Objectives
                 {
                     _point.GetComponent<BerryAnim>().BerryHit();
                     _point.GetComponent<Renderer>().materials[0].SetColor("BerryColor",
-                        other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerColor);
+                        other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerPreset.PlayerColor);
                 }
             }
         }

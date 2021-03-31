@@ -33,29 +33,50 @@ namespace Player
         [SerializeField]
         private OutOfBoundsCheck outOfBoundsCheck;
 
+        [field: SerializeField]
+        public GameObject Ball { get; private set; }
+
+        [field: SerializeField]
+        public Animator Animator { get; private set; }
+
+        [field: SerializeField]
+        public CinemachineVirtualCamera BallCamera { get; private set; }
+
+        [field: SerializeField]
+        public Rigidbody BallRigidbody { get; private set; }
+
         private Ability _ability;
         private int _angy;
-        private Color _playerColor;
-
         private int _playerId;
+        private PlayerPreset _playerPreset;
 
-        public string Nickname { get; set; }
-
-        public Gradient PlayerGradient { get; set; }
-
-        public Color PlayerColor
+        public PlayerPreset PlayerPreset
         {
-            get => _playerColor;
+            get => _playerPreset;
             set
             {
-                _playerColor = value;
-
-                var oldMaterials = Materials;
-
-                oldMaterials[0].SetColor("Color_Primary", value);
-
-                Materials = oldMaterials;
+                _playerPreset = value;
+                SetFresnelColor(_playerPreset.FresnelColor);
+                SetPlayerColor(_playerPreset.PlayerColor);
             }
+        }
+
+        private void SetFresnelColor(Color color)
+        {
+            var bodyMaterial = Materials[0];
+
+            bodyMaterial.SetColor("Fresnel_Color1", color);
+
+            SetBodyMaterial(bodyMaterial);
+        }
+
+        public void SetPlayerColor(Color color)
+        {
+            var oldMaterials = Materials;
+
+            oldMaterials[0].SetColor("Color_Primary", color);
+
+            Materials = oldMaterials;
         }
 
         public float ExpandPercent
@@ -64,23 +85,12 @@ namespace Player
             set => skinnedMeshRenderer.SetBlendShapeWeight(0, value);
         }
 
-        public Color FresnelColor
-        {
-            set
-            {
-                var bodyMaterial = Materials[0];
-
-                bodyMaterial.SetColor("Fresnel_Color1", value);
-
-                SetBodyMaterial(bodyMaterial);
-            }
-        }
-
         public Material[] Materials
         {
             get => shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials
                 .Select(s => new Material(s)).ToArray();
-            set => shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials = value;
+            set => shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials =
+                value;
         }
 
         public int Angy
@@ -158,22 +168,12 @@ namespace Player
             get => playerState;
             set
             {
-                Debug.Log(Nickname.Color(PlayerColor) + "'s state was " + playerState + " and became " + value);
+                Debug.Log(PlayerPreset.PlayerName.Color(PlayerPreset.PlayerColor) + "'s state was " + playerState +
+                          " and became " + value);
                 playerState = value;
             }
         }
 
-        [field: SerializeField]
-        public GameObject Ball { get; private set; }
-
-        [field: SerializeField]
-        public Animator Animator { get; private set; }
-
-        [field: SerializeField]
-        public CinemachineVirtualCamera BallCamera { get; private set; }
-
-        [field: SerializeField]
-        public Rigidbody BallRigidbody { get; private set; }
 
         private void Awake()
         {
@@ -309,7 +309,8 @@ namespace Player
         private void OnBallBecameStill()
         {
             var lastStillPosition = BallRigidbody.position;
-            if (Physics.Raycast(BallRigidbody.position, Vector3.down, out var hit, 10f, LayerMask.GetMask("IgnoredMap")))
+            if (Physics.Raycast(BallRigidbody.position, Vector3.down, out var hit, 10f,
+                LayerMask.GetMask("IgnoredMap")))
             {
                 lastStillPosition = hit.point;
             }
