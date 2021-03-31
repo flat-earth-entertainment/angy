@@ -1,24 +1,25 @@
-using UnityEngine;
 using Rewired;
+using UnityEngine;
 
-public class Rotator : MonoBehaviour
+namespace Ball
 {
-    private int playerId = 1;
-    private Rewired.Player rewiredPlayer;
-    private float rotationSpeed;
-
-    // Start is called before the first frame update
-    void Start()
+    public class Rotator : MonoBehaviour
     {
-        playerId = transform.GetChild(0).GetComponent<Shooter>().playerId;
-        rotationSpeed = transform.GetChild(0).GetComponent<Shooter>().rotationSpeed;
-        rewiredPlayer = ReInput.players.GetPlayer(playerId);
-    }
+        private int _playerId = 1;
+        private Rewired.Player _rewiredPlayer;
+        private float _rotationSpeed;
 
-    // Update is called once per frame
-    void Update()
-    {
-        float Horizontal = rewiredPlayer.GetAxis("Move Horizontal");
-        transform.Rotate(new Vector3(0,Horizontal * rotationSpeed * Time.deltaTime,0));
+        private void Start()
+        {
+            _playerId = transform.GetChild(0).GetComponent<Shooter>().playerId;
+            _rotationSpeed = transform.GetChild(0).GetComponent<Shooter>().rotationSpeed;
+            _rewiredPlayer = ReInput.players.GetPlayer(_playerId);
+        }
+
+        private void Update()
+        {
+            var horizontal = _rewiredPlayer.GetAxis("Move Horizontal");
+            transform.Rotate(new Vector3(0, horizontal * _rotationSpeed * Time.deltaTime, 0));
+        }
     }
 }

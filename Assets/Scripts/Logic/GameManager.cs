@@ -212,7 +212,7 @@ namespace Logic
 
         private void OnPlayerWentOutOfBounds(PlayerView player)
         {
-            Debug.Log($"{player.Nickname} went out of bounds");
+            Debug.Log($"{player.PlayerPreset.PlayerName} went out of bounds");
 
             player.Hide();
 
@@ -385,7 +385,7 @@ namespace Logic
                     _currentTurnPlayer.SetControlsActive(true);
 
                     trajectoryLineController.SetTrajectoryActive(true);
-                    trajectoryLineController.SetGradientColor(_currentTurnPlayer.PlayerGradient);
+                    trajectoryLineController.SetGradientColor(_currentTurnPlayer.PlayerPreset.Gradient);
 
                     _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
                     uiController.CameraModeHelperActive = true;

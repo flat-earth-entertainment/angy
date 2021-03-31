@@ -12,18 +12,14 @@ namespace Abilities
     [Serializable]
     public class ExpandAbility : Ability
     {
-        public float TimeToInflate => GameConfig.Instance.AbilityValues.ExpandAbility.TimeToInflate;
-
-        public float TimeToDeflate => GameConfig.Instance.AbilityValues.ExpandAbility.TimeToDeflate;
-
-        public float Duration => GameConfig.Instance.AbilityValues.ExpandAbility.Duration;
-
-        public float Scale => GameConfig.Instance.AbilityValues.ExpandAbility.Scale;
-
         private CancellationTokenSource _endOfTurn;
-        private PlayerView _player;
         private Vector3 _initialScale;
-        private bool _deflated;
+        private PlayerView _player;
+
+        private float TimeToInflate => GameConfig.Instance.AbilityValues.ExpandAbility.TimeToInflate;
+        private float TimeToDeflate => GameConfig.Instance.AbilityValues.ExpandAbility.TimeToDeflate;
+        private float Duration => GameConfig.Instance.AbilityValues.ExpandAbility.Duration;
+        private float Scale => GameConfig.Instance.AbilityValues.ExpandAbility.Scale;
 
         protected override async void InvokeAbility(PlayerView player)
         {
@@ -81,7 +77,6 @@ namespace Abilities
                 .SetUpdate(UpdateType.Fixed);
 
             await _player.BallRigidbody.transform.DOScale(_initialScale, TimeToDeflate).SetUpdate(UpdateType.Fixed);
-            _deflated = true;
             Finished = true;
             Active = false;
         }
@@ -90,7 +85,7 @@ namespace Abilities
         {
             _player.BecameStill -= WrapInternal;
 
-            if (!_deflated)
+            if (!Finished)
             {
                 _endOfTurn.Cancel();
 #pragma warning disable CS4014

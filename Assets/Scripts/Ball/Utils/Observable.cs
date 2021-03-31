@@ -1,29 +1,37 @@
 ﻿using System.Collections.Generic;
 
-public class Observable<T>{
-    public delegate void ChangeValue(T v);
-    public event ChangeValue propertyUpdated;
- 
-    T v;
-    public T val{
-        get{
-            return v;
-        }
-        set{
-            T previousValue = v;
-         
-            if(!EqualityComparer<T>.Default.Equals(previousValue, value)){
-                v = value;
+namespace Ball.Utils
+{
+    public class Observable<T>
+    {
+        public delegate void ChangeValue(T v);
 
-                if(propertyUpdated != null){
-                    propertyUpdated(v);
+        private T _v;
+
+        public Observable(T value)
+        {
+            _v = value;
+        }
+
+        public T Val
+        {
+            get => _v;
+            set
+            {
+                var previousValue = _v;
+
+                if (!EqualityComparer<T>.Default.Equals(previousValue, value))
+                {
+                    _v = value;
+
+                    if (PropertyUpdated != null)
+                    {
+                        PropertyUpdated(_v);
+                    }
                 }
             }
         }
-    }
 
-    public Observable(T value){
-        v = value;
+        public event ChangeValue PropertyUpdated;
     }
 }
-

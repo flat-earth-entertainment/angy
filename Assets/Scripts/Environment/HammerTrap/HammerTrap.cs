@@ -1,26 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class HammerTrap : MonoBehaviour
+namespace Environment.HammerTrap
 {
-    public GameObject blood;
-    // Start is called before the first frame update
-    void Start()
+    public class HammerTrap : MonoBehaviour
     {
-        
-    }
+        public GameObject blood;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    private void OnTriggerEnter(Collider other) {
-        if(other.tag == "Lemming"){
-            GameObject bld = Instantiate(blood,other.transform.position, Quaternion.identity);
-            bld.GetComponent<ParticleSystem>().Play();
-            Destroy(bld, 8f);
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Lemming"))
+            {
+                var bld = Instantiate(blood, other.transform.position, Quaternion.identity);
+                bld.GetComponent<ParticleSystem>().Play();
+                Destroy(bld, 8f);
+            }
         }
     }
 }

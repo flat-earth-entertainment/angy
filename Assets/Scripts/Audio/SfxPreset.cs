@@ -7,23 +7,24 @@ namespace Audio
     [Serializable]
     public class SfxPreset
     {
-        [field: SerializeField]
-        public SfxType SfxType { get; private set; }
-
-        [field: SerializeField]
-        private AudioClip[] Clips { get; set; }
-
         [SerializeField]
         private bool limitFrequency;
 
         [SerializeField]
         private float minimumInterval;
 
-        [field: SerializeField, Range(0, 1)]
-        public float Volume { get; private set; } = 1f;
-
         private float _frequencyTimer;
         private float _previousTime;
+
+        [field: SerializeField]
+        public SfxType SfxType { get; private set; }
+
+        [field: SerializeField]
+        private AudioClip[] Clips { get; set; }
+
+        [field: SerializeField]
+        [field: Range(0, 1)]
+        public float Volume { get; private set; } = 1f;
 
         public AudioClip RandomClip
         {

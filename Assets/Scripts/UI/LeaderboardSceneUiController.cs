@@ -7,8 +7,6 @@ namespace UI
 {
     public class LeaderboardSceneUiController : MonoBehaviour
     {
-        public static string SceneToLoad { get; set; }
-
         [SerializeField]
         private Button mainMenuButton;
 
@@ -30,6 +28,8 @@ namespace UI
         [SerializeField]
         private GameObject player2Highlight;
 
+        public static string SceneToLoad { get; set; }
+
         private void Awake()
         {
             mainMenuButton.onClick.AddListener(LoadNextScene);
@@ -38,6 +38,17 @@ namespace UI
             player2Highlight.SetActive(false);
 
             FillLeaderboard();
+        }
+
+        private void Update()
+        {
+            // TEMP
+            if (Input.anyKeyDown)
+            {
+                LoadNextScene();
+            }
+
+            // TEMP
         }
 
         private static void LoadNextScene()
@@ -83,17 +94,6 @@ namespace UI
                     player2Highlight.SetActive(true);
                 }
             }
-        }
-
-        private void Update()
-        {
-            // TEMP
-            if (Input.anyKeyDown)
-            {
-                LoadNextScene();
-            }
-
-            // TEMP
         }
     }
 }

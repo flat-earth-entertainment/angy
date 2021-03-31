@@ -6,6 +6,8 @@ namespace Scenes.Victory
 {
     public class VictorySceneController : MonoBehaviour
     {
+        private static readonly int IdleBlend = Animator.StringToHash("idleBlend");
+
         [SerializeField]
         private SkinnedMeshRenderer winner;
 
@@ -23,8 +25,6 @@ namespace Scenes.Victory
 
         [SerializeField]
         private float loserIdleBlend;
-
-        private static readonly int IdleBlend = Animator.StringToHash("idleBlend");
 
         private void Awake()
         {

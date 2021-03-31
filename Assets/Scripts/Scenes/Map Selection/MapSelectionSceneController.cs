@@ -1,6 +1,5 @@
 using Config;
 using NaughtyAttributes;
-using Rewired.Integration.UnityUI;
 using UI;
 using UnityEngine;
 using UnityEngine.EventSystems;

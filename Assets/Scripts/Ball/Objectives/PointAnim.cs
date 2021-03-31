@@ -1,22 +1,27 @@
 using UnityEngine;
 
-public class PointAnim : MonoBehaviour
+namespace Ball.Objectives
 {
-    private Vector3 startPos;
-    private float heightIncrease = 2, timer;
-    // Start is called before the first frame update
-    void Start()
+    public class PointAnim : MonoBehaviour
     {
-        startPos = transform.position;
-    }
+        private const float HeightIncrease = 2;
+        private float _timer;
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(timer < 1){
-            timer += Time.deltaTime;
-            transform.position = Vector3.Lerp(startPos, startPos + new Vector3(0,heightIncrease,0), timer * 3);
+        private Vector3 _startPos;
+
+        private void Start()
+        {
+            _startPos = transform.position;
         }
 
+        private void Update()
+        {
+            if (_timer < 1)
+            {
+                _timer += Time.deltaTime;
+                transform.position =
+                    Vector3.Lerp(_startPos, _startPos + new Vector3(0, HeightIncrease, 0), _timer * 3);
+            }
+        }
     }
 }

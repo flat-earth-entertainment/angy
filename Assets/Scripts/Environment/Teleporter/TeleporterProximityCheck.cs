@@ -1,48 +1,62 @@
-using System.Collections;
 using System.Collections.Generic;
-using Audio;
+using Ball;
+using Player;
 using UnityEngine;
 
-public class TeleporterProximityCheck : MonoBehaviour
+namespace Environment.Teleporter
 {
-    public float range = 4;
-    [HideInInspector]
-    public bool inRange;
-    [HideInInspector]
-    public TeleporterProximityCheck linkedTeleporter;
-    [HideInInspector]
-    public Animator anim;
-    public List<PlayerView> players = new List<PlayerView>();
-    public List<GameObject> particles = new List<GameObject>();
-    // Start is called before the first frame update
-    void Start()
+    public class TeleporterProximityCheck : MonoBehaviour
     {
-        players.AddRange(GameObject.FindObjectsOfType<PlayerView>());
-        linkedTeleporter = transform.parent.GetComponentInChildren<Teleporter>().teleportTarget.GetComponentInChildren<TeleporterProximityCheck>();
-        anim = GetComponent<Animator>();
-    }
+        public float range = 4;
 
-    // Update is called once per frame
-    void Update()
-    {
-        inRange = false;
-        foreach (PlayerView item in players)
+        [HideInInspector]
+        public bool inRange;
+
+        [HideInInspector]
+        public TeleporterProximityCheck linkedTeleporter;
+
+        [HideInInspector]
+        public Animator anim;
+
+        public List<PlayerView> players = new List<PlayerView>();
+
+        public List<GameObject> particles = new List<GameObject>();
+
+        private void Start()
         {
-            if(Vector3.Distance(transform.position, item.GetComponentInChildren<BallBehaviour>(true).transform.position) < range){
-                inRange = true;
-            }
+            players.AddRange(FindObjectsOfType<PlayerView>());
+            linkedTeleporter = transform.parent.GetComponentInChildren<Teleporter>().teleportTarget
+                .GetComponentInChildren<TeleporterProximityCheck>();
+            anim = GetComponent<Animator>();
         }
-        if(inRange || linkedTeleporter.inRange){
-            anim.SetBool("isOpened", true);
-            foreach (GameObject item in particles)
+
+        private void Update()
+        {
+            inRange = false;
+            foreach (var item in players)
             {
-                item.SetActive(true);
+                if (Vector3.Distance(transform.position,
+                    item.GetComponentInChildren<BallBehaviour>(true).transform.position) < range)
+                {
+                    inRange = true;
+                }
             }
-        }else{
-            anim.SetBool("isOpened", false);
-            foreach (GameObject item in particles)
+
+            if (inRange || linkedTeleporter.inRange)
             {
-                item.SetActive(false);
+                anim.SetBool("isOpened", true);
+                foreach (var item in particles)
+                {
+                    item.SetActive(true);
+                }
+            }
+            else
+            {
+                anim.SetBool("isOpened", false);
+                foreach (var item in particles)
+                {
+                    item.SetActive(false);
+                }
             }
         }
     }

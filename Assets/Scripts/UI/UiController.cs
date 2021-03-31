@@ -9,11 +9,6 @@ namespace UI
 {
     public class UiController : MonoBehaviour
     {
-        public bool CameraModeHelperActive
-        {
-            set => cameraModeHelper.SetActive(value);
-        }
-
         [SerializeField]
         private GameObject cameraModeWarning;
 
@@ -35,37 +30,9 @@ namespace UI
         [SerializeField]
         private AbilityUi[] abilityUis;
 
-
-        public void WobbleAbilityUi(PlayerView playerView, bool state)
+        public bool CameraModeHelperActive
         {
-            if (playerView.PlayerId < abilityUis.Length)
-            {
-                abilityUis[playerView.PlayerId].Wobble = state;
-            }
-            else
-            {
-                Debug.LogWarning($"Can't find Ability UI for player with ID {playerView.PlayerId}");
-            }
-        }
-
-        public void DoSlotMachineFor(PlayerView player, Ability ability)
-        {
-            abilityUis[player.PlayerId].Visible = true;
-            abilityUis[player.PlayerId]
-                .DoSlotMachine(3.2f, AbilityConfig.GetConfigSpriteFor(ability), player.PlayerColor);
-            AudioManager.PlaySfx(SfxType.RandomActivate);
-        }
-
-        private void SetAbilityIconFor(PlayerView player, Sprite icon)
-        {
-            if (player.PlayerId < abilityUis.Length)
-            {
-                abilityUis[player.PlayerId].SetAbilityIcon(icon, player.PlayerColor);
-            }
-            else
-            {
-                Debug.LogWarning($"Can't find Ability UI for player with ID {player.PlayerId}");
-            }
+            set => cameraModeHelper.SetActive(value);
         }
 
         private void Awake()
@@ -84,6 +51,39 @@ namespace UI
         private void OnDisable()
         {
             PlayerView.NewAbilitySet -= OnNewAbilitySet;
+        }
+
+
+        public void WobbleAbilityUi(PlayerView playerView, bool state)
+        {
+            if (playerView.PlayerId < abilityUis.Length)
+            {
+                abilityUis[playerView.PlayerId].Wobble = state;
+            }
+            else
+            {
+                Debug.LogWarning($"Can't find Ability UI for player with ID {playerView.PlayerId}");
+            }
+        }
+
+        public void DoSlotMachineFor(PlayerView player, Ability ability)
+        {
+            abilityUis[player.PlayerId].Visible = true;
+            abilityUis[player.PlayerId]
+                .DoSlotMachine(3.2f, AbilityConfig.GetConfigSpriteFor(ability), player.PlayerPreset.PlayerColor);
+            AudioManager.PlaySfx(SfxType.RandomActivate);
+        }
+
+        private void SetAbilityIconFor(PlayerView player, Sprite icon)
+        {
+            if (player.PlayerId < abilityUis.Length)
+            {
+                abilityUis[player.PlayerId].SetAbilityIcon(icon, player.PlayerPreset.PlayerColor);
+            }
+            else
+            {
+                Debug.LogWarning($"Can't find Ability UI for player with ID {player.PlayerId}");
+            }
         }
 
         private void OnNewAbilitySet(PlayerView player, Ability ability)

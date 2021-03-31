@@ -2,95 +2,106 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class BallBehaviour : MonoBehaviour
+namespace Ball
 {
-    public event Action BecameStill;
-    private Shooter shooter;
-    private Rigidbody rb;
-    public bool inMotion;
-    private float timer, stopTimer;
-    private Vector3 spinDirection, currentVelocity;
-    private Transform velocityDirection, offsetPointer, offsetHolder;
-    public Vector3 displayVector;
-    private float windDown = 1;
-
-    public void ResetRotation()
+    public class BallBehaviour : MonoBehaviour
     {
-        //transform.rotation = Quaternion.Euler(180, 0, 0);
-        //shooter.lemming.transform.rotation = Quaternion.Euler(0, 0, 0);
-    }
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        shooter = GetComponentInChildren<Shooter>();
-        rb = GetComponent<Rigidbody>();
+        public bool inMotion;
 
-        velocityDirection = new GameObject("Velocity direction of player " + shooter.playerId).GetComponent<Transform>();
-        velocityDirection.parent = transform;
+        private Rigidbody _rb;
+        private Shooter _shooter;
+        private Vector3 _spinDirection;
+        private float _timer, _stopTimer;
+        private Transform _velocityDirection, _offsetPointer, _offsetHolder;
+        private float _windDown = 1;
 
-        // All of these would be unnecessary if i for the life of me could just turn a vector correctly
-        offsetPointer = new GameObject("Offset pointer").GetComponent<Transform>();
-        offsetPointer.parent = velocityDirection;
-        offsetHolder = new GameObject("Offset holder").GetComponent<Transform>();
-        offsetHolder.parent = velocityDirection;
-        offsetPointer.position = offsetHolder.position = new Vector3(0,0,0);
-    }
+        private void Start()
+        {
+            _shooter = GetComponentInChildren<Shooter>();
+            _rb = GetComponent<Rigidbody>();
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(inMotion){
-            timer += Time.deltaTime;
-            if(rb.velocity.magnitude < 0.2f && timer > 0.5f){
-                stopTimer += Time.deltaTime;
-                if(stopTimer > 1){
-                    BecameStill?.Invoke();
-                    timer = 0;
-                    inMotion = false;
-                    shooter.activateShootingRetinae = true;
-                    rb.velocity = new Vector3(0,0,0);
-                    rb.angularVelocity = new Vector3(0,0,0);
-                    shooter.lemmingAnim.SetBool("isBall", false);
-                    shooter.lemmingAnim.SetBool("isKnockback", false);
-                    transform.rotation = Quaternion.Euler(180,0,0);
-                    shooter.lemming.transform.rotation = Quaternion.Euler(0, (shooter.horSnap * shooter.horSnapAngle) + 180, 0);
+            _velocityDirection =
+                new GameObject("Velocity direction of player " + _shooter.playerId).GetComponent<Transform>();
+            _velocityDirection.parent = transform;
+
+            // All of these would be unnecessary if i for the life of me could just turn a vector correctly
+            _offsetPointer = new GameObject("Offset pointer").GetComponent<Transform>();
+            _offsetPointer.parent = _velocityDirection;
+            _offsetHolder = new GameObject("Offset holder").GetComponent<Transform>();
+            _offsetHolder.parent = _velocityDirection;
+            _offsetPointer.position = _offsetHolder.position = new Vector3(0, 0, 0);
+        }
+
+        private void Update()
+        {
+            if (inMotion)
+            {
+                _timer += Time.deltaTime;
+                if (_rb.velocity.magnitude < 0.2f && _timer > 0.5f)
+                {
+                    _stopTimer += Time.deltaTime;
+                    if (_stopTimer > 1)
+                    {
+                        BecameStill?.Invoke();
+                        _timer = 0;
+                        inMotion = false;
+                        _shooter.activateShootingRetinae = true;
+                        _rb.velocity = new Vector3(0, 0, 0);
+                        _rb.angularVelocity = new Vector3(0, 0, 0);
+                        _shooter.lemmingAnim.SetBool("isBall", false);
+                        _shooter.lemmingAnim.SetBool("isKnockback", false);
+                        transform.rotation = Quaternion.Euler(180, 0, 0);
+                        _shooter.lemming.transform.rotation =
+                            Quaternion.Euler(0, _shooter.horSnap * _shooter.horSnapAngle + 180, 0);
+                    }
                 }
-            }else{
-                stopTimer = 0;
+                else
+                {
+                    _stopTimer = 0;
+                }
+
+                _velocityDirection.transform.position = transform.position;
+                _velocityDirection.LookAt(_rb.velocity + transform.position, Vector3.up);
             }
-            velocityDirection.transform.position = transform.position;
-            velocityDirection.LookAt(rb.velocity + transform.position, Vector3.up);
-        }
-        if(rb.velocity.magnitude > 0.2f && !inMotion){
-            inMotion = true;
-        }
-    }
-    public IEnumerator BallSpin(Vector3 spinDir){
-        yield return null;
-        spinDirection = spinDir;
-        offsetHolder.localPosition = spinDirection;
-        offsetPointer.LookAt(offsetHolder, Vector3.up);
-        
-        Vector3 direction = offsetPointer.TransformDirection(offsetPointer.position);
-        rb.AddTorque(direction * 20, ForceMode.Impulse);
-        while(inMotion)
-        {   
-            direction = offsetPointer.TransformDirection(offsetPointer.position);
-            displayVector = offsetPointer.forward;
-            rb.AddTorque((direction * Time.deltaTime) * windDown, ForceMode.Impulse);
-            //Quaternion rotation = Quaternion.Euler(0,velocityDirection.eulerAngles.y,0);
-            //Vector3 rotateVector = rotation * spinDirection;
-            //Vector3 rotateVector = velocityDirection.forward + spinDirection; 
-            //Vector3 rotateVector = Quaternion.AngleAxis(velocityDirection.localEulerAngles.y, velocityDirection.up) * spinDirection;
-            //Vector3 rotateVector = velocityDirection.localEulerAngles * spinDirection;
-            //Vector3 rotateVector = Quaternion.Euler(0,velocityDirection.localRotation.y,0) * spinDirection;
-            if(windDown > 0){
-                windDown -= Time.deltaTime;
-            }else{
-                windDown = 0;
+
+            if (_rb.velocity.magnitude > 0.2f && !inMotion)
+            {
+                inMotion = true;
             }
+        }
+
+        public event Action BecameStill;
+
+        public IEnumerator BallSpin(Vector3 spinDir)
+        {
             yield return null;
+            _spinDirection = spinDir;
+            _offsetHolder.localPosition = _spinDirection;
+            _offsetPointer.LookAt(_offsetHolder, Vector3.up);
+
+            var direction = _offsetPointer.TransformDirection(_offsetPointer.position);
+            _rb.AddTorque(direction * 20, ForceMode.Impulse);
+            while (inMotion)
+            {
+                direction = _offsetPointer.TransformDirection(_offsetPointer.position);
+                _rb.AddTorque(direction * (Time.deltaTime * _windDown), ForceMode.Impulse);
+                //Quaternion rotation = Quaternion.Euler(0,velocityDirection.eulerAngles.y,0);
+                //Vector3 rotateVector = rotation * spinDirection;
+                //Vector3 rotateVector = velocityDirection.forward + spinDirection; 
+                //Vector3 rotateVector = Quaternion.AngleAxis(velocityDirection.localEulerAngles.y, velocityDirection.up) * spinDirection;
+                //Vector3 rotateVector = velocityDirection.localEulerAngles * spinDirection;
+                //Vector3 rotateVector = Quaternion.Euler(0,velocityDirection.localRotation.y,0) * spinDirection;
+                if (_windDown > 0)
+                {
+                    _windDown -= Time.deltaTime;
+                }
+                else
+                {
+                    _windDown = 0;
+                }
+
+                yield return null;
+            }
         }
     }
 }

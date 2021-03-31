@@ -11,9 +11,9 @@ namespace Abilities
     public class IceBlockAbility : Ability
     {
         private float _initialDrag;
-        private PlayerView _playerView;
-        private IceBlockOnCollision _otherIceBlockOnCollision;
         private Material _originalBodyMaterial;
+        private IceBlockOnCollision _otherIceBlockOnCollision;
+        private PlayerView _playerView;
 
         protected override void InvokeAbility(PlayerView player)
         {

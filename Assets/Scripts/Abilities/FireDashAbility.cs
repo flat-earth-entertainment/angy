@@ -1,25 +1,24 @@
 using System.Linq;
 using System.Threading;
-using Abilities.Config;
 using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Player;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Abilities
 {
     public class FireDashAbility : Ability
     {
-        private Tween _rotateTween;
-        private PlayerView _player;
         private CancellationTokenSource _cancellationTokenSource;
+        private AudioSource _cracklingSource;
         private Transform _fireDashClock;
         private Material _originalBodyMaterial;
-        private GameObject _trail;
+        private PlayerView _player;
         private bool _pressedLaunch;
-        private AudioSource _cracklingSource;
+        private Tween _rotateTween;
+        private GameObject _trail;
 
         protected override async void InvokeAbility(PlayerView player)
         {
@@ -86,11 +85,10 @@ namespace Abilities
             Object.Destroy(_fireDashClock.gameObject);
             Time.timeScale = GameConfig.Instance.TimeScale;
 
-            var playerPreset = GameConfig.Instance.PlayerPresets.First(p => p.PlayerColor == _player.PlayerColor);
-            _trail = Object.Instantiate(playerPreset.Trail, _player.Ball.transform);
+            _trail = Object.Instantiate(_player.PlayerPreset.Trail, _player.Ball.transform);
 
             _originalBodyMaterial = _player.Materials[0];
-            _player.SetBodyMaterial(playerPreset.FireMaterial);
+            _player.SetBodyMaterial(_player.PlayerPreset.FireMaterial);
 
             _player.BecameStill += WrapInternal;
 

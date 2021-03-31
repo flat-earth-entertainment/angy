@@ -1,13 +1,16 @@
 using DG.Tweening;
 using UnityEngine;
 
-public class CellFractureOptimizer : MonoBehaviour
+namespace Animations
 {
-    [SerializeField]
-    private float duration = 5f;
-
-    private void Start()
+    public class CellFractureOptimizer : MonoBehaviour
     {
-        DOTween.Sequence().Append(transform.DOScale(0f, duration)).AppendCallback(delegate { Destroy(gameObject); });
+        [SerializeField]
+        private float duration = 5f;
+
+        private void Start()
+        {
+            DOTween.Sequence().Append(transform.DOScale(0f, duration)).AppendCallback(delegate { Destroy(gameObject); });
+        }
     }
 }

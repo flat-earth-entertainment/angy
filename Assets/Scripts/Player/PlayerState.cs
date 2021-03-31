@@ -1,11 +1,14 @@
-public enum PlayerState
+namespace Player
 {
-    ShouldSpawnAtSpawn,
-    ShouldSpawnAtLastPosition,
-    ShouldSpawnAtLastStandablePosition,
-    ShouldSpawnCanNotMove,
-    ShouldMakeTurn,
-    ActiveAiming,
-    ActivePowerMode,
-    ActiveInMotion
+    public enum PlayerState
+    {
+        ShouldSpawnAtSpawn,
+        ShouldSpawnAtLastPosition,
+        ShouldSpawnAtLastStandablePosition,
+        ShouldSpawnCanNotMove,
+        ShouldMakeTurn,
+        ActiveAiming,
+        ActivePowerMode,
+        ActiveInMotion
+    }
 }

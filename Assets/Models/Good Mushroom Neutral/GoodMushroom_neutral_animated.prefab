@@ -259,8 +259,8 @@ GameObject:
   - component: {fileID: 7690177730151381570}
   - component: {fileID: 6949484234498266357}
   - component: {fileID: 375314162866139865}
-  - component: {fileID: 5029757512218756571}
   - component: {fileID: 4619884121143546255}
+  - component: {fileID: 547800520692456206}
   m_Layer: 0
   m_Name: Cylinder.001
   m_TagString: Untagged
@@ -377,21 +377,6 @@ MonoBehaviour:
   UVScale: 1
   DistributeMass: 0
   Asynchronous: 1
---- !u!114 &5029757512218756571
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7906650034367211531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d27bdb455b9c9e43ab54cf38b0eb5df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ForceThreshold: 0
-  ForceFalloffRadius: 1
-  AdjustForKinematic: 1
 --- !u!136 &4619884121143546255
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -406,6 +391,21 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0.5}
+--- !u!114 &547800520692456206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7906650034367211531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 328aca16ffaf3b04e902c6a99b0a09f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceThreshold: 0
+  forceFalloffRadius: 1
+  adjustForKinematic: 0
 --- !u!1 &8807066145004991495
 GameObject:
   m_ObjectHideFlags: 0

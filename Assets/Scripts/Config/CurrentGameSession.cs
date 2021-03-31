@@ -8,8 +8,6 @@ namespace Config
 {
     public class MapCollectionScores
     {
-        public MapScore[] Scores { get; }
-
         private readonly MapCollection _mapCollection;
 
         public MapCollectionScores(MapCollection mapCollection)
@@ -17,6 +15,8 @@ namespace Config
             _mapCollection = mapCollection;
             Scores = new MapScore[mapCollection.Maps.Length];
         }
+
+        public MapScore[] Scores { get; }
 
         public void SetMapScore(string mapSceneName, MapScore mapScore)
         {
@@ -42,6 +42,10 @@ namespace Config
 
     public static class CurrentGameSession
     {
+        private static MapCollectionScores _mapCollectionScores;
+
+        private static MapCollection _mapCollection;
+
         public static MapCollectionScores CollectionScores =>
             _mapCollectionScores ??= new MapCollectionScores(MapCollection);
 
@@ -76,10 +80,6 @@ namespace Config
 
         public static Material WinnerMaterial { get; set; }
         public static Material LoserMaterial { get; set; }
-
-        private static MapCollectionScores _mapCollectionScores;
-
-        private static MapCollection _mapCollection;
 
         public static void ClearSession()
         {

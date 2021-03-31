@@ -10,7 +10,8 @@ namespace Scenes.Map_Selection
         [field: SerializeField]
         public string Name { get; private set; }
 
-        [field: SerializeField, Scene]
+        [field: SerializeField]
+        [field: Scene]
         public string[] Maps { get; private set; }
 
         [field: SerializeField]

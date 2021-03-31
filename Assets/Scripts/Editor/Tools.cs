@@ -1,3 +1,4 @@
+using Ball.Objectives;
 using TMPro;
 using UnityEditor;
 using UnityEditor.Experimental.SceneManagement;
@@ -62,7 +63,7 @@ namespace Editor
             {
                 foreach (var mushroom in FindObjectsOfType<GoodNeutralMushroom>())
                 {
-                    if (mushroom.mushroomDropAbility != GoodNeutralMushroom.AbilitySelect.none)
+                    if (mushroom.mushroomDropAbility != GoodNeutralMushroom.AbilitySelect.None)
                     {
                         Debug.Log(
                             $"This mushroom has the {mushroom.mushroomDropAbility.ToString()}! Click this line to highlight it",

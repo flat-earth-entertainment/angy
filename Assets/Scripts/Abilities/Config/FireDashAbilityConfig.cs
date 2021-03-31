@@ -6,7 +6,8 @@ namespace Abilities.Config
     [Serializable]
     public class FireDashAbilityConfig : AbilityConfig
     {
-        [field: SerializeField, Range(0, 1)]
+        [field: SerializeField]
+        [field: Range(0, 1)]
         public float CracklingVolume { get; private set; }
 
         [field: SerializeField]

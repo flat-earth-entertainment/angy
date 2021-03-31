@@ -22,6 +22,9 @@ namespace UI
         [SerializeField]
         private GameObject buttonHelper;
 
+        private Vector3 _initialScale;
+        private Tween _wobbleTween;
+
         public bool Visible
         {
             set => abilityParent.SetActive(value);
@@ -50,8 +53,13 @@ namespace UI
             }
         }
 
-        private Tween _wobbleTween;
-        private Vector3 _initialScale;
+        private static Sprite[] AllAbilitySprites => new[]
+        {
+            AbilityConfig.GetConfigSpriteFor(new ExpandAbility()),
+            AbilityConfig.GetConfigSpriteFor(new NoGravityAbility()),
+            AbilityConfig.GetConfigSpriteFor(new FireDashAbility()),
+            AbilityConfig.GetConfigSpriteFor(new IceBlockAbility())
+        };
 
         private void Awake()
         {
@@ -73,14 +81,6 @@ namespace UI
             abilityImage.enabled = icon != null;
             backgroundImage.enabled = icon != null;
         }
-
-        private static Sprite[] AllAbilitySprites => new[]
-        {
-            AbilityConfig.GetConfigSpriteFor(new ExpandAbility()),
-            AbilityConfig.GetConfigSpriteFor(new NoGravityAbility()),
-            AbilityConfig.GetConfigSpriteFor(new FireDashAbility()),
-            AbilityConfig.GetConfigSpriteFor(new IceBlockAbility())
-        };
 
         public void DoSlotMachine(float slotDuration, Sprite spriteToSet, Color backgroundColor)
         {

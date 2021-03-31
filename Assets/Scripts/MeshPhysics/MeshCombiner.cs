@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Ball.Objectives;
 using Config;
 using UnityEngine;
 using Utils;
@@ -7,27 +8,17 @@ namespace MeshPhysics
 {
     public class MeshCombiner : MonoBehaviour
     {
-        public bool Baked { get; private set; }
-
-        private static readonly List<Transform> _objectsToRemove = new List<Transform>();
-        private static readonly List<Transform> _objectsToAdd = new List<Transform>();
-        private readonly List<Transform> _meshObjects = new List<Transform>();
+        private static readonly List<Transform> ObjectsToRemove = new List<Transform>();
+        private static readonly List<Transform> ObjectsToAdd = new List<Transform>();
         private readonly List<CombineInstance> _combineInstances = new List<CombineInstance>();
-
-        private Transform _obstacleParent;
+        private readonly List<Transform> _meshObjects = new List<Transform>();
         private MeshCollider _meshCollider;
         private MeshFilter _meshFilter;
 
+        private Transform _obstacleParent;
 
-        public static void AddObject(Transform transform)
-        {
-            _objectsToAdd.Add(transform);
-        }
-
-        public static void RemoveObject(Transform transform)
-        {
-            _objectsToRemove.Add(transform);
-        }
+        private bool _shouldBake;
+        public bool Baked { get; private set; }
 
         private void Awake()
         {
@@ -35,17 +26,48 @@ namespace MeshPhysics
 
             _meshFilter = transform.GetComponent<MeshFilter>();
             _meshCollider = transform.GetComponent<MeshCollider>();
-            _objectsToRemove.Clear();
+            ObjectsToRemove.Clear();
 
-            foreach (Collider child in _obstacleParent.GetComponentsInChildren<Collider>())
+            foreach (var child in _obstacleParent.GetComponentsInChildren<Collider>())
             {
-                if(child.isTrigger)
+                if (child.isTrigger)
                     continue;
                 _meshObjects.Add(child.transform);
                 child.gameObject.layer = LayerMask.NameToLayer("IgnoredMap");
             }
 
             RebakeMesh();
+        }
+
+        private void Update()
+        {
+            if (ObjectsToRemove.Count > 0)
+            {
+                foreach (var obj in ObjectsToRemove)
+                {
+                    _meshObjects.Remove(obj);
+                }
+
+                ObjectsToRemove.Clear();
+                _shouldBake = true;
+            }
+
+            if (ObjectsToAdd.Count > 0)
+            {
+                foreach (var obj in ObjectsToAdd)
+                {
+                    _meshObjects.Add(obj);
+                }
+
+                ObjectsToAdd.Clear();
+                _shouldBake = true;
+            }
+
+            if (_shouldBake)
+            {
+                RebakeMesh();
+                _shouldBake = false;
+            }
         }
 
         private void OnEnable()
@@ -58,37 +80,15 @@ namespace MeshPhysics
             GoodNeutralMushroom.BecameHole -= OnSomethingBecameHole;
         }
 
-        private bool _shouldBake;
 
-        private void Update()
+        public static void AddObject(Transform transform)
         {
-            if (_objectsToRemove.Count > 0)
-            {
-                foreach (var obj in _objectsToRemove)
-                {
-                    _meshObjects.Remove(obj);
-                }
+            ObjectsToAdd.Add(transform);
+        }
 
-                _objectsToRemove.Clear();
-                _shouldBake = true;
-            }
-
-            if (_objectsToAdd.Count > 0)
-            {
-                foreach (var obj in _objectsToAdd)
-                {
-                    _meshObjects.Add(obj);
-                }
-
-                _objectsToAdd.Clear();
-                _shouldBake = true;
-            }
-
-            if (_shouldBake)
-            {
-                RebakeMesh();
-                _shouldBake = false;
-            }
+        public static void RemoveObject(Transform transform)
+        {
+            ObjectsToRemove.Add(transform);
         }
 
         private void RebakeMesh()
@@ -97,7 +97,7 @@ namespace MeshPhysics
 
             _combineInstances.Clear();
 
-            foreach (Transform child in _meshObjects)
+            foreach (var child in _meshObjects)
             {
                 if (child.TryGetComponent(out MeshFilter meshFilter))
                 {
