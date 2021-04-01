@@ -23,6 +23,7 @@ namespace Ball
         private LineRenderer _lineRenderer;
         private PhysicsScene _predictionPhysicsScene;
         private Scene _predictionScene;
+        private Vector3 deathPlane;
 
         private void Start()
         {
@@ -36,6 +37,8 @@ namespace Ball
             _predictionPhysicsScene = _predictionScene.GetPhysicsScene();
 
             _lineRenderer = GetComponent<LineRenderer>();
+
+            deathPlane = GameObject.FindGameObjectWithTag("Height OB Threshold").transform.position;
         }
 
         private void FixedUpdate()
@@ -106,7 +109,11 @@ namespace Ball
                 for (var i = 0; i < lineLength; i++)
                 {
                     _predictionPhysicsScene.Simulate(Time.fixedDeltaTime * 2);
-                    _lineRenderer.SetPosition(i, _dummy.transform.position - new Vector3(0, 0.49f, 0));
+                    if(_dummy.transform.position.y > deathPlane.y){
+                        _lineRenderer.SetPosition(i, _dummy.transform.position - new Vector3(0, 0.49f, 0));
+                    }else{
+                        _lineRenderer.SetPosition(i, _lineRenderer.GetPosition(Mathf.Clamp(i-1, 0, lineLength)));
+                    }
                 }
 
                 indicatorHolder = _dummy.GetComponent<GroundIndicator>().spawnedIndicator;
