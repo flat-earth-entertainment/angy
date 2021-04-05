@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: PredictionHitMat
+  m_Name: PredictionHitMatUnused
   m_Shader: {fileID: -6465566751694194690, guid: f8e6233406e6c3f4dbe4c19776ae8fa8, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -93,8 +93,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_3bfb3a393d494280b5f8ea4ab517474a: 3.62
-    - Vector1_4b97af76250f40d497959df3e2c067f8: -3
+    - Vector1_3bfb3a393d494280b5f8ea4ab517474a: 2.8
+    - Vector1_4b97af76250f40d497959df3e2c067f8: -1.97
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1
@@ -122,7 +122,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_1b021a1f4b9b41959c661aee4fad49cd: {r: 1, g: 0.514151, b: 0.51790774, a: 1}
+    - Color_1b021a1f4b9b41959c661aee4fad49cd: {r: 1, g: 1, b: 1, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
