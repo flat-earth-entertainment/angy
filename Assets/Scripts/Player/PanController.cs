@@ -1,6 +1,5 @@
 ﻿using Cinemachine;
 using Config;
-using Rewired;
 using UnityEngine;
 
 namespace Player
@@ -13,43 +12,56 @@ namespace Player
         [SerializeField]
         private Vector3 topRightBound;
 
-        private Rewired.Player _player;
-
         [field: SerializeField]
         public CinemachineVirtualCamera PanningCamera { get; private set; }
+
+        private PlayerView _player;
+        private float _horizontalInput;
+        private float _verticalInput;
+
+        private void OnHorizontalInput(float input)
+        {
+            _horizontalInput = input * Time.deltaTime * GameConfig.Instance.CameraPanningSpeed;
+        }
+
+        private void OnVerticalInput(float input)
+        {
+            _verticalInput = input * Time.deltaTime * GameConfig.Instance.CameraPanningSpeed;
+        }
 
         private void Update()
         {
             var currentPosition = transform.localPosition;
 
-            var vertical = _player.GetAxis("Move Vertical") * Time.deltaTime
-                                                            * GameConfig.Instance.CameraPanningSpeed;
-
-            if (vertical + currentPosition.z <= bottomLeftBound.z ||
-                vertical + currentPosition.z >= topRightBound.z)
+            if (_verticalInput + currentPosition.z <= bottomLeftBound.z ||
+                _verticalInput + currentPosition.z >= topRightBound.z)
             {
-                vertical = 0f;
+                _verticalInput = 0f;
             }
 
-            var horizontal = _player.GetAxis("Move Horizontal") * Time.deltaTime *
-                             GameConfig.Instance.CameraPanningSpeed;
-            if (horizontal + currentPosition.x <= bottomLeftBound.x ||
-                horizontal + currentPosition.x >= topRightBound.x)
+            if (_horizontalInput + currentPosition.x <= bottomLeftBound.x ||
+                _horizontalInput + currentPosition.x >= topRightBound.x)
             {
-                horizontal = 0f;
+                _horizontalInput = 0f;
             }
 
-            transform.position += transform.forward * vertical + transform.right * horizontal;
+            transform.position += transform.forward * _verticalInput + transform.right * _horizontalInput;
         }
 
         public void EnableControls(PlayerView player)
         {
-            _player = ReInput.players.GetPlayer(player.PlayerId);
+            _player = player;
             enabled = true;
+
+            _player.PlayerInputs.HorizontalAxisInput += OnHorizontalInput;
+            _player.PlayerInputs.VerticalAxisInput += OnVerticalInput;
         }
 
         public void DisableControls()
         {
+            _player.PlayerInputs.HorizontalAxisInput -= OnHorizontalInput;
+            _player.PlayerInputs.VerticalAxisInput -= OnVerticalInput;
+
             _player = null;
             enabled = false;
         }

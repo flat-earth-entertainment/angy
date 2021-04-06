@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Ball.Objectives;
+using GameSession;
 using Player;
 using TMPro;
 using UnityEngine;
@@ -9,19 +12,26 @@ namespace Logic
     public class PointController : MonoBehaviour
     {
         public List<GoodNeutralMushroom> pointHolders;
-        public List<int> pointIds;
         public List<TextMeshProUGUI> pointText;
 
+        private const int RedId = 0, BlueId = 1;
+
+        private readonly Dictionary<PlayerView, int> _playerPoints = new Dictionary<PlayerView, int>();
         private int _enemiesRemaining;
 
         private void Start()
         {
             pointHolders.AddRange(FindObjectsOfType<GoodNeutralMushroom>());
             _enemiesRemaining = pointHolders.Count;
-            pointIds = new List<int>();
-            for (var i = 0; i < GetComponent<PlayersManager>().Players.Count; i++)
+
+            FindObjectOfType<PlayersManager>().InitializedAllPlayers += OnPlayersInitialized;
+        }
+
+        private void OnPlayersInitialized(PlayerView[] playerViews)
+        {
+            foreach (var playerView in playerViews)
             {
-                pointIds.Add(0);
+                _playerPoints.Add(playerView, 0);
             }
         }
 
@@ -33,11 +43,9 @@ namespace Logic
                 foreach (var item in pointHolders)
                 {
                     var enemy = item;
-                    if (enemy.ownerId == 99)
+                    if (enemy.owner == null)
                     {
                         enemy.SpawnGoal();
-
-                        // Tell camera to focus on goal and freeze balls
                     }
                 }
             }
@@ -45,29 +53,35 @@ namespace Logic
 
         public void UpdateScore()
         {
-            for (var i = 0; i < pointIds.Count; i++)
+            PlayerView[] playerPoints = new PlayerView[_playerPoints.Keys.Count];
+            _playerPoints.Keys.CopyTo(playerPoints, 0);
+
+            foreach (var playerPoint in playerPoints)
             {
-                pointIds[i] = 0;
+                _playerPoints[playerPoint] = 0;
+
+                var playerId = CurrentGameSession.PlayerFromPlayerView(playerPoint).PresetIndex;
                 if (pointText[0] != null)
-                    pointText[i].text = pointIds[i].ToString();
+                    pointText[playerId].text = _playerPoints[playerPoint].ToString();
             }
 
-            foreach (var item in pointHolders)
+            foreach (var enemy in pointHolders)
             {
-                var enemy = item;
-                if (enemy.ownerId < 98)
+                if (enemy.owner != null)
                 {
-                    pointIds[enemy.ownerId] += enemy.pointValue;
+                    _playerPoints[enemy.owner] += enemy.pointValue;
                     if (pointText[0] != null)
-                        pointText[enemy.ownerId].text = pointIds[enemy.ownerId].ToString();
+                        pointText[CurrentGameSession.PlayerFromPlayerView(enemy.owner).PresetIndex].text =
+                            _playerPoints[enemy.owner].ToString();
                 }
             }
         }
 
-        public List<int> GetPoints()
+        //TODO: 
+        public IReadOnlyDictionary<PlayerView, int> GetPoints()
         {
             UpdateScore();
-            return pointIds;
+            return _playerPoints;
         }
     }
 }

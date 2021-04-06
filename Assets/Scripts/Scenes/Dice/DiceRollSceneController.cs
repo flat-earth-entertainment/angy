@@ -2,11 +2,16 @@ using System;
 using System.Linq;
 using Config;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
+using ExitGames.Client.Photon;
+using GameSession;
+using Logic;
 using Rewired;
 using TMPro;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 using Random = UnityEngine.Random;
 
 namespace Scenes.Dice
@@ -29,7 +34,7 @@ namespace Scenes.Dice
         private Sprite[] diceFaces;
 
         [SerializeField]
-        private float dieFaceChangeSpeed;
+        private float dieFaceChangeInterval = .5f;
 
         [SerializeField]
         private GameObject player1First;
@@ -38,8 +43,8 @@ namespace Scenes.Dice
         private bool _player1Rolled;
         private int _player1Value;
         private bool _shouldChangeFaces;
-
         private float _timer;
+        private Sequence _middleImageFaceChangeSequence;
 
         private void Awake()
         {
@@ -47,19 +52,47 @@ namespace Scenes.Dice
             player2Image.gameObject.SetActive(false);
 
             player1First.SetActive(false);
+
+            PhotonEventListener.ListenTo(GameEvent.PlayerOrderSet,
+                delegate(EventData data)
+                {
+                    // CurrentGameSession.
+                });
+
+            PhotonEventListener.ListenTo(GameEvent.PlayerSelectedDice, delegate(EventData data)
+            {
+                
+            }, false);
         }
 
         private void Start()
         {
             _shouldChangeFaces = true;
             currentPlayerText.text = "Player 1";
+
+            _middleImageFaceChangeSequence = FaceChangeSequence(dieImage).Pause();
+        }
+
+        // private void
+
+        private Sequence FaceChangeSequence(Image image)
+        {
+            return DOTween.Sequence()
+                .AppendCallback(delegate
+                {
+                    var dieImageSprites = diceFaces.Where(f => f != image.sprite).ToArray();
+                    image.sprite = dieImageSprites[Random.Range(0, dieImageSprites.Length)];
+                })
+                .AppendInterval(dieFaceChangeInterval)
+                .SetUpdate(true)
+                .SetLoops(-1);
         }
 
         private async void Update()
         {
             if (_shouldChangeFaces)
             {
-                if (_timer >= dieFaceChangeSpeed)
+                if (_timer >= dieFaceChangeInterval)
                 {
                     var dieImageSprites = diceFaces.Where(f => f != dieImage.sprite).ToArray();
                     dieImage.sprite = dieImageSprites[Random.Range(0, dieImageSprites.Length)];

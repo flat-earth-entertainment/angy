@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4585025521711169937}
   - component: {fileID: 4206041225563901588}
   - component: {fileID: 5560386918644359306}
+  - component: {fileID: 4053600320833705454}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -46,15 +47,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02b86dc75e68489bb185df86803322a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Ball>k__BackingField: {fileID: 4629074905832054383}
-  <Animator>k__BackingField: {fileID: 4707792727575392929}
-  <BallCamera>k__BackingField: {fileID: 2568511267011732018}
-  <BallRigidbody>k__BackingField: {fileID: 4629074905832054381}
   playerState: 0
   skinnedMeshRenderer: {fileID: 3996367952303146709}
   shooter: {fileID: 8148711711352872623}
   ballBehaviour: {fileID: 3544505496180173070}
   outOfBoundsCheck: {fileID: 3214668965113160429}
+  <Ball>k__BackingField: {fileID: 4629074905832054383}
+  <Animator>k__BackingField: {fileID: 4707792727575392929}
+  <BallCamera>k__BackingField: {fileID: 2568511267011732018}
+  <BallRigidbody>k__BackingField: {fileID: 4629074905832054381}
 --- !u!114 &5560386918644359306
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,6 +72,30 @@ MonoBehaviour:
   lemming: {fileID: 492513687683201413}
   distance: 10
   cinemachineVirtualCamera: {fileID: 2568511267011732018}
+--- !u!114 &4053600320833705454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3588541474785268593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 2
+  OwnershipTransfer: 1
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 5980206215520440548}
+  - {fileID: 8148711711352872623}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!114 &3357687179883922486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96,6 +121,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerView: {fileID: 4206041225563901588}
+--- !u!114 &5980206215520440548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4629074905832054383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &8147309645726428112
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,31 +17,34 @@ namespace GameDebug
         private Button iceBlockAbility;
 
         private Canvas _debugCanvas;
+        private GameManager _gameManager;
 
         private void Awake()
         {
+            _gameManager = FindObjectOfType<GameManager>();
+
             _debugCanvas = GetComponent<Canvas>();
             _debugCanvas.enabled = false;
 
             expandAbility.onClick.AddListener(delegate
             {
-                GameManager.CurrentTurnPlayer.Ability = new ExpandAbility();
+                _gameManager.CurrentTurnPlayer.Ability = new ExpandAbility();
             });
 
             noGravityAbility.onClick.AddListener(delegate
             {
-                GameManager.CurrentTurnPlayer.Ability = new NoGravityAbility();
+                _gameManager.CurrentTurnPlayer.Ability = new NoGravityAbility();
             });
 
             iceBlockAbility.onClick.AddListener(delegate
             {
-                GameManager.CurrentTurnPlayer.Ability = new IceBlockAbility();
+                _gameManager.CurrentTurnPlayer.Ability = new IceBlockAbility();
             });
         }
 
         private void Update()
         {
-            SetButtonInteractable(GameManager.CurrentTurnPlayer != null);
+            SetButtonInteractable(_gameManager.CurrentTurnPlayer != null);
 
             if (Input.GetKeyDown(KeyCode.F3))
             {

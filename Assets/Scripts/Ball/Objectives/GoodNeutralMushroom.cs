@@ -33,7 +33,8 @@ namespace Ball.Objectives
         public AbilitySelect mushroomDropAbility;
 
         // Owner Id 99 refers to no ownership, shouldn't be a problem unless we want 100 players.
-        public int ownerId = 99, pointValue = 1;
+        public PlayerView owner;
+        public int pointValue = 1;
 
         [HideInInspector]
         public bool mushroomDisabled;
@@ -65,13 +66,13 @@ namespace Ball.Objectives
         {
             if (other.CompareTag("Lemming"))
             {
-                var hitId = other.transform.GetChild(0).GetComponent<Shooter>().playerId;
-                if (ownerId != hitId && _point != null)
+                var hitPlayer = other.transform.GetChild(0).GetComponent<Shooter>().PlayerView;
+                if (owner != hitPlayer && _point != null)
                 {
                     AudioManager.PlaySfx(SfxType.PointReclaimed);
                 }
 
-                ownerId = hitId;
+                owner = hitPlayer;
                 if (_point != null)
                 {
                     mushroomDisabled = true;

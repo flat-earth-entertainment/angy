@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Abilities;
 using Abilities.Config;
 using Audio;
@@ -19,16 +20,16 @@ namespace UI
         private GameObject angyMeter;
 
         [SerializeField]
-        private AngyUi angyUi1;
+        private AngyUi[] angyUis;
 
         [SerializeField]
-        private AngyUi angyUi2;
+        private AbilityUi[] abilityUis;
 
         [SerializeField]
         private PlayersManager playersManager;
 
-        [SerializeField]
-        private AbilityUi[] abilityUis;
+        private Dictionary<PlayerView, AbilityUi> _abilityPlayerUis = new Dictionary<PlayerView, AbilityUi>();
+        private Dictionary<PlayerView, AngyUi> _angyPlayerUis = new Dictionary<PlayerView, AngyUi>();
 
         public bool CameraModeHelperActive
         {
@@ -37,8 +38,10 @@ namespace UI
 
         private void Awake()
         {
-            angyUi1.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
-            angyUi2.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
+            foreach (var angyUi in angyUis)
+            {
+                angyUi.Initialize(GameConfig.Instance.AngyValues.MinAngy, GameConfig.Instance.AngyValues.MaxAngy);
+            }
 
             playersManager.InitializedAllPlayers += OnPlayersInitialized;
         }
@@ -56,33 +59,39 @@ namespace UI
 
         public void WobbleAbilityUi(PlayerView playerView, bool state)
         {
-            if (playerView.PlayerId < abilityUis.Length)
+            if (_abilityPlayerUis.ContainsKey(playerView))
             {
-                abilityUis[playerView.PlayerId].Wobble = state;
+                _abilityPlayerUis[playerView].Wobble = state;
             }
             else
             {
-                Debug.LogWarning($"Can't find Ability UI for player with ID {playerView.PlayerId}");
+                Debug.LogWarning($"Can't find Ability UI for player {playerView.PlayerPreset.PlayerName}",
+                    playerView.gameObject);
             }
         }
 
         public void DoSlotMachineFor(PlayerView player, Ability ability)
         {
-            abilityUis[player.PlayerId].Visible = true;
-            abilityUis[player.PlayerId]
-                .DoSlotMachine(3.2f, AbilityConfig.GetConfigSpriteFor(ability), player.PlayerPreset.PlayerColor);
-            AudioManager.PlaySfx(SfxType.RandomActivate);
+            if (_abilityPlayerUis.ContainsKey(player))
+            {
+                _abilityPlayerUis[player].Visible = true;
+                _abilityPlayerUis[player]
+                    .DoSlotMachine(3.2f, AbilityConfig.GetConfigSpriteFor(ability), player.PlayerPreset.PlayerColor);
+                AudioManager.PlaySfx(SfxType.RandomActivate);
+            }
         }
 
         private void SetAbilityIconFor(PlayerView player, Sprite icon)
         {
-            if (player.PlayerId < abilityUis.Length)
+            if (_abilityPlayerUis.ContainsKey(player))
+
             {
-                abilityUis[player.PlayerId].SetAbilityIcon(icon, player.PlayerPreset.PlayerColor);
+                _abilityPlayerUis[player].SetAbilityIcon(icon, player.PlayerPreset.PlayerColor);
             }
             else
             {
-                Debug.LogWarning($"Can't find Ability UI for player with ID {player.PlayerId}");
+                Debug.LogWarning($"Can't find Ability UI for player {player.PlayerPreset.PlayerName}",
+                    player.gameObject);
             }
         }
 
@@ -103,12 +112,18 @@ namespace UI
             }
         }
 
-        private void OnPlayersInitialized(PlayerView[] obj)
+        private void OnPlayersInitialized(PlayerView[] players)
         {
             playersManager.InitializedAllPlayers -= OnPlayersInitialized;
 
-            obj[0].AngyChanged += angyUi1.OnAngyChanged;
-            obj[1].AngyChanged += angyUi2.OnAngyChanged;
+            players[0].AngyChanged += angyUis[0].OnAngyChanged;
+            players[1].AngyChanged += angyUis[0].OnAngyChanged;
+
+            _angyPlayerUis.Add(players[0], angyUis[0]);
+            _angyPlayerUis.Add(players[1], angyUis[1]);
+
+            _abilityPlayerUis.Add(players[0], abilityUis[0]);
+            _abilityPlayerUis.Add(players[1], abilityUis[1]);
         }
 
         public void SetCameraModeActive(bool state)

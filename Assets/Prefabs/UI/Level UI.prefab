@@ -1960,10 +1960,17 @@ MonoBehaviour:
     angySlider: {fileID: 4591822376570766504}
     particle1: {fileID: 8579801292572029903}
     particle2: {fileID: 6726052004081007422}
-  playersManager: {fileID: 0}
+  angyUis:
+  - angySlider: {fileID: 6541874316454686430}
+    particle1: {fileID: 2105741449843724998}
+    particle2: {fileID: 3998976331126430263}
+  - angySlider: {fileID: 4591822376570766504}
+    particle1: {fileID: 8579801292572029903}
+    particle2: {fileID: 6726052004081007422}
   abilityUis:
   - {fileID: 8362725737942152476}
   - {fileID: 3802385596899845182}
+  playersManager: {fileID: 0}
 --- !u!1 &6541874316454686428
 GameObject:
   m_ObjectHideFlags: 0

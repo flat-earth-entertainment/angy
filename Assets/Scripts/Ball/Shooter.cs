@@ -3,16 +3,19 @@ using System.Collections;
 using Audio;
 using Coffee.UIExtensions;
 using Config;
+using ExitGames.Client.Photon;
+using GameSession;
 using Logic;
+using Photon.Pun;
+using Photon.Realtime;
 using Player;
-using Rewired;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
 
 namespace Ball
 {
-    public class Shooter : MonoBehaviour
+    public class Shooter : MonoBehaviour, IPunObservable, IOnEventCallback
     {
         public ParticleSystem dust;
 
@@ -61,18 +64,21 @@ namespace Ball
         private bool _movedRet, _forcePercentBool, _maxPower;
         private Rewired.Player _rewiredPlayer;
         private float _vertSnapCooldownTimer, _horSnapCooldownTimer;
-
         private Transform _spinIndicator;
+        private bool _isOnlinePlayer;
+        private float _prevVertSnap;
+        private float _prevHorSnap;
 
         // Rotation cooldown modifier
         private float _vertRotTimeMultiplier = 1, _horRotTimeMultiplier = 1;
         private float _vertSnapMultiplier = 0.1f, _horSnapMultiplier = 0.1f;
+        private bool _receivedOnlineCancel;
 
         public PlayerView PlayerView { get; private set; }
 
-        private void Start()
+        private void Awake()
         {
-            _rewiredPlayer = ReInput.players.GetPlayer(playerId);
+            FindObjectOfType<PlayersManager>().InitializedAllPlayers += OnInitializedPlayers;
 
             _currentPosition = transform.position;
             _currentRotation = transform.rotation;
@@ -81,7 +87,7 @@ namespace Ball
             ballStorage = transform.parent.gameObject;
             rb = ballStorage.GetComponent<Rigidbody>();
 
-            ShouldPlayerActivate(playerId);
+            ShouldPlayerActivate(PlayerView);
 
             // MUST BE IMPROVED
             powerSlider = GameObject.FindGameObjectWithTag("TEMPFINDSLIDER").transform.GetChild(0).GetChild(0)
@@ -93,9 +99,43 @@ namespace Ball
             FindObjectOfType<LemmingInitialDirection>().RotateLemming(this);
         }
 
+        private void OnEnable()
+        {
+            PhotonNetwork.AddCallbackTarget(this);
+        }
+
+        private void OnDisable()
+        {
+            PhotonNetwork.RemoveCallbackTarget(this);
+        }
+
+        private void OnInitializedPlayers(PlayerView[] obj)
+        {
+            if (CurrentGameSession.PlayerFromPlayerView(PlayerView) is LocalPlayer localPlayer)
+            {
+                _rewiredPlayer = localPlayer.RewiredPlayer;
+            }
+            else
+            {
+                _isOnlinePlayer = true;
+            }
+        }
+
 
         private void Update()
         {
+            if (_isOnlinePlayer)
+            {
+                if (horSnap != _prevHorSnap || vertSnap != _prevVertSnap)
+                {
+                    Predict();
+                }
+
+                _prevVertSnap = vertSnap;
+                _prevHorSnap = horSnap;
+                return;
+            }
+
             if (activateShootingRetinae && active)
             {
                 // Vertical movement controls
@@ -224,17 +264,23 @@ namespace Ball
                 {
                     transform.rotation = Quaternion.Euler(vertSnap * vertSnapAngle, horSnap * horSnapAngle, 0);
 
+                    var shouldPredict = false;
                     // Draw prediction curve if player has moved curve
                     if (_currentRotation != transform.rotation)
                     {
-                        Predict();
+                        shouldPredict = true;
                         _currentRotation = transform.rotation;
                     }
 
                     if (_currentPosition != transform.position)
                     {
-                        Predict();
+                        shouldPredict = true;
                         _currentPosition = transform.position;
+                    }
+
+                    if (shouldPredict)
+                    {
+                        Predict();
                     }
 
                     _movedRet = false;
@@ -243,9 +289,15 @@ namespace Ball
                 // Shoot the ball
                 if (_rewiredPlayer.GetButtonDown("Confirm"))
                 {
-                    StartCoroutine(nameof(PreShot));
+                    StartPreShot();
+                    PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerStartedPowerMode);
                 }
             }
+        }
+
+        private void StartPreShot()
+        {
+            StartCoroutine(nameof(PreShot));
         }
 
         public event Action Shot;
@@ -267,19 +319,20 @@ namespace Ball
         private void Shoot()
         {
             rb.constraints = RigidbodyConstraints.None;
-            rb.AddForce(CalculateForce(), ForceMode.Impulse);
+
+            if (!_isOnlinePlayer)
+            {
+                rb.AddForce(CalculateForce(), ForceMode.Impulse);
+                Shot?.Invoke();
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerShot);
+            }
+
             ballStorage.GetComponent<BallBehaviour>().inMotion = true;
 
-            Shot?.Invoke();
             if (spinDirection.magnitude > 0)
             {
                 StartCoroutine(ballStorage.GetComponent<BallBehaviour>().BallSpin(spinDirection));
             }
-
-            AudioManager.PlaySfx(SfxType.LemmingLaunch);
-            AudioManager.PlaySfx(SfxType.LemmingLaunchVoice);
-
-            Destroy(PredictionManager.Instance.indicatorHolder);
         }
 
         public Vector3 CalculateForce()
@@ -309,15 +362,26 @@ namespace Ball
 
             // Shoot the ball
             Shoot();
-            CreateDust();
-            DisableRetinae();
-            active = false;
-            _maxPower = false;
+            AfterShot();
 
             // Wait 1 frame and Reset system
             yield return null;
             forcePercent = 1;
             activateShootingRetinae = true;
+        }
+
+        public void AfterShot()
+        {
+            AudioManager.PlaySfx(SfxType.LemmingLaunch);
+            AudioManager.PlaySfx(SfxType.LemmingLaunchVoice);
+            Destroy(PredictionManager.Instance.indicatorHolder);
+
+            CreateDust();
+            DisableRetinae();
+            active = false;
+            _maxPower = false;
+            //Just in case..?
+            _receivedOnlineCancel = false;
         }
 
         private IEnumerator CalculateSpin()
@@ -368,14 +432,25 @@ namespace Ball
             }
         }
 
+        private bool ShootForceBreakCondition()
+        {
+            if (_rewiredPlayer == null)
+            {
+                return _receivedOnlineCancel;
+            }
+
+            return _rewiredPlayer.GetButtonDown("Confirm");
+        }
+
         private IEnumerator CalculateShootForce()
         {
             var currentAngy = Mathf.Lerp(1, 0.25f,
-                (float) GameManager.CurrentTurnPlayer.Angy / GameConfig.Instance.AngyValues.MaxAngy);
+                (float) PlayerView.Angy / GameConfig.Instance.AngyValues.MaxAngy);
             forcePercent = 0;
             yield return null;
-            while (!_rewiredPlayer.GetButtonDown("Confirm") && forcePercent >= 0)
+            while (!ShootForceBreakCondition() && forcePercent >= 0)
             {
+                _receivedOnlineCancel = false;
                 powerSlider.value = forcePercent;
                 if (!_forcePercentBool)
                 {
@@ -392,6 +467,8 @@ namespace Ball
 
                 yield return null;
             }
+
+            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerCancelledPowerMode);
 
             if (forcePercent >= 1)
             {
@@ -428,10 +505,10 @@ namespace Ball
             lemming.transform.rotation = Quaternion.Euler(0, horSnap * horSnapAngle + 180, 0);
         }
 
-        public void ShouldPlayerActivate(int playerToActivate)
+        public void ShouldPlayerActivate(PlayerView playerToActivate)
         {
             // Use this to define what player can move.
-            if (playerToActivate == playerId)
+            if (playerToActivate == PlayerView)
             {
                 active = true;
                 rb.constraints = RigidbodyConstraints.FreezeAll; // Freeze player
@@ -449,6 +526,43 @@ namespace Ball
         private void CreateDust()
         {
             dust.Play();
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                stream.SendNext(vertSnap);
+                stream.SendNext(horSnap);
+            }
+            else
+            {
+                vertSnap = (float) stream.ReceiveNext();
+                horSnap = (float) stream.ReceiveNext();
+            }
+        }
+
+        public void OnEvent(EventData photonEvent)
+        {
+            if (!OnlinePlayer.SessionPlayerByActorNumber(photonEvent.Sender).RoundPlayerView == PlayerView)
+            {
+                return;
+            }
+
+            if (photonEvent.Code == GameEvent.PlayerStartedPowerMode.ToByte())
+            {
+                StartPreShot();
+            }
+
+            if (photonEvent.Code == GameEvent.PlayerShot.ToByte())
+            {
+                Shot?.Invoke();
+            }
+
+            if (photonEvent.Code == GameEvent.PlayerCancelledPowerMode.ToByte())
+            {
+                _receivedOnlineCancel = true;
+            }
         }
     }
 }

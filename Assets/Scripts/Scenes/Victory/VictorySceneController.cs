@@ -1,4 +1,7 @@
+using System.Linq;
 using Config;
+using GameSession;
+using Photon.Pun;
 using UI;
 using UnityEngine;
 
@@ -28,6 +31,11 @@ namespace Scenes.Victory
 
         private void Awake()
         {
+            //CRITICAL!
+            //TODO: Use score instead of last round
+            var redScore = CurrentGameSession.CollectionScores.Scores.Sum(m => m.Player1Score ?? 0);
+            var blueScore = CurrentGameSession.CollectionScores.Scores.Sum(m => m.Player2Score ?? 0);
+
             var winnerMaterials = winner.materials;
             winnerMaterials[0] = CurrentGameSession.WinnerMaterial;
             winner.materials = winnerMaterials;
@@ -45,6 +53,8 @@ namespace Scenes.Victory
             if (Input.anyKey)
             {
                 SceneChanger.ChangeScene(GameConfig.Instance.Scenes.MainMenuScene);
+                PhotonNetwork.LeaveRoom();
+                PhotonNetwork.Disconnect();
             }
         }
     }

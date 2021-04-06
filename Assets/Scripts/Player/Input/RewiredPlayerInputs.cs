@@ -1,6 +1,8 @@
 ﻿using System;
+using Logic;
 using Rewired;
 using UnityEngine;
+using Utils;
 
 namespace Player.Input
 {
@@ -11,24 +13,22 @@ namespace Player.Input
         public event Action MenuButtonPressed;
         public event Action FireButtonPressed;
         public event Action<float> HorizontalAxisInput;
+        public event Action<float> VerticalAxisInput;
 
         private Rewired.Player _thisPlayer;
 
-        /// <summary>
-        /// Should be called after setting the Player ID!
-        /// </summary>
-        public static IPlayerInputs AttachToPlayer(PlayerView playerView)
+        public static IPlayerInputs AttachToPlayer(PlayerView playerView, int rewiredPlayerId)
         {
-            if (playerView.gameObject.TryGetComponent(out RewiredPlayerInputs rewiredPlayerInputs))
+            RewiredPlayerInputs rewiredPlayerInputs;
+            if (playerView.gameObject.TryGetComponent(out rewiredPlayerInputs))
             {
-                rewiredPlayerInputs._thisPlayer = ReInput.players.GetPlayer(playerView.PlayerId);
             }
             else
             {
                 rewiredPlayerInputs = playerView.gameObject.AddComponent<RewiredPlayerInputs>();
             }
 
-            rewiredPlayerInputs._thisPlayer = ReInput.players.GetPlayer(playerView.PlayerId);
+            rewiredPlayerInputs._thisPlayer = ReInput.players.GetPlayer(rewiredPlayerId);
 
             return rewiredPlayerInputs;
         }
@@ -38,6 +38,7 @@ namespace Player.Input
             if (_thisPlayer.GetButtonDown("AbilityFire"))
             {
                 AbilityButtonPressed?.Invoke();
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityButtonPressed);
             }
 
             if (_thisPlayer.GetButtonDown("CameraMode"))
@@ -56,6 +57,7 @@ namespace Player.Input
             }
 
             HorizontalAxisInput?.Invoke(_thisPlayer.GetAxis("Move Horizontal"));
+            VerticalAxisInput?.Invoke(_thisPlayer.GetAxis("Move Vertical"));
         }
     }
 }

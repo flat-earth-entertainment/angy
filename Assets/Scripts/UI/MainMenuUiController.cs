@@ -1,5 +1,6 @@
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace UI
@@ -10,11 +11,11 @@ namespace UI
         private GameObject buttonListParent;
 
         [SerializeField]
-        private Button startButton;
+        private Button playmodeButton;
 
         [Scene]
         [SerializeField]
-        private string startScene;
+        private string playmodeScene;
 
         [SerializeField]
         private Button helpButton;
@@ -44,7 +45,7 @@ namespace UI
 
         private void Awake()
         {
-            startButton.onClick.AddListener(delegate { SceneChanger.ChangeScene(startScene); });
+            playmodeButton.onClick.AddListener(delegate { SceneManager.LoadScene(playmodeScene); });
 
             helpButton.onClick.AddListener(delegate
             {

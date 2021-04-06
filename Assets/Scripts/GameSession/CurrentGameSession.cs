@@ -1,51 +1,14 @@
-using System;
 using System.Linq;
+using Config;
+using Player;
 using Scenes.Map_Selection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Config
+namespace GameSession
 {
-    public class MapCollectionScores
-    {
-        private readonly MapCollection _mapCollection;
-
-        public MapCollectionScores(MapCollection mapCollection)
-        {
-            _mapCollection = mapCollection;
-            Scores = new MapScore[mapCollection.Maps.Length];
-        }
-
-        public MapScore[] Scores { get; }
-
-        public void SetMapScore(string mapSceneName, MapScore mapScore)
-        {
-            if (_mapCollection.Maps.Contains(mapSceneName))
-            {
-                var mapIndex = Array.IndexOf(_mapCollection.Maps, mapSceneName);
-                Scores[mapIndex] = mapScore;
-            }
-        }
-    }
-
-    public readonly struct MapScore
-    {
-        public readonly int? Player1Score;
-        public readonly int? Player2Score;
-
-        public MapScore(int player1Score, int player2Score)
-        {
-            Player1Score = player1Score;
-            Player2Score = player2Score;
-        }
-    }
-
     public static class CurrentGameSession
     {
-        private static MapCollectionScores _mapCollectionScores;
-
-        private static MapCollection _mapCollection;
-
         public static MapCollectionScores CollectionScores =>
             _mapCollectionScores ??= new MapCollectionScores(MapCollection);
 
@@ -76,10 +39,64 @@ namespace Config
             }
         }
 
-        public static int? NextRoundRewiredPlayerId { get; set; }
+        public static Player NextRoundPlayer { get; private set; }
 
         public static Material WinnerMaterial { get; set; }
         public static Material LoserMaterial { get; set; }
+
+        public static Player[] Players
+        {
+            get
+            {
+#if UNITY_EDITOR
+                if (_players == null)
+                {
+                    Debug.LogWarning("Current Session players were not set! Trying to use default...");
+                    _players = new Player[]
+                    {
+                        new LocalPlayer(0, 0, 0),
+                        new LocalPlayer(0, 1, 1)
+                    };
+                }
+#endif
+                return _players;
+            }
+            set => _players = value;
+        }
+
+        private static Player[] _players;
+        private static MapCollectionScores _mapCollectionScores;
+        private static MapCollection _mapCollection;
+
+        public static void ResetPlayerViews()
+        {
+            foreach (var player in Players)
+            {
+                player.RoundPlayerView = null;
+            }
+        }
+
+        public static Player PlayerFromPlayerView(PlayerView playerView)
+        {
+            return Players.First(p => p.RoundPlayerView == playerView);
+        }
+
+        public static void SetNextRoundPlayer(Player player)
+        {
+            NextRoundPlayer = player;
+        }
+
+        public static void SetNextRoundPlayer(PlayerView playerView)
+        {
+            if (Players != null)
+            {
+                NextRoundPlayer = PlayerFromPlayerView(playerView);
+            }
+            else
+            {
+                Debug.LogError("Current Session players are not set!");
+            }
+        }
 
         public static void ClearSession()
         {
@@ -87,7 +104,8 @@ namespace Config
             LoserMaterial = null;
             _mapCollection = null;
             _mapCollectionScores = null;
-            NextRoundRewiredPlayerId = null;
+            NextRoundPlayer = null;
+            _players = null;
         }
 
         public static string GetNextMap(string currentMap)

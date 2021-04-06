@@ -1,10 +1,14 @@
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using ExitGames.Client.Photon;
+using Logic;
+using Photon.Pun;
 using Rewired.Integration.UnityUI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using Utils;
 
 namespace UI
 {
@@ -49,6 +53,16 @@ namespace UI
             }
         }
 
+        public static void BroadcastChangeSceneToSceneSync(string sceneName,
+            SceneChangeType sceneChangeType = SceneChangeType.Default)
+        {
+            // PhotonEventListener.ListenTo(GameEvent.SceneChange,
+            //     delegate(EventData data) { ChangeScene((string) data.CustomData); });
+            //
+            PhotonShortcuts.ReliableRaiseEventToAll(GameEvent.SceneChange, sceneName);
+            // PhotonNetwork.LoadLevel(sceneName);
+        }
+
         public static async void ChangeScene(string sceneName,
             SceneChangeType sceneChangeType = SceneChangeType.Default)
         {
@@ -59,8 +73,8 @@ namespace UI
             Instance.logo.SetActive(false);
             Instance.cutout.gameObject.SetActive(false);
 
-            var sceneLoad = SceneManager.LoadSceneAsync(sceneName);
-            sceneLoad.allowSceneActivation = false;
+            // var sceneLoad = SceneManager.LoadSceneAsync(sceneName);
+            // sceneLoad.allowSceneActivation = false;
             _isCurrentlyChanging = true;
 
             foreach (var eventSystem in FindObjectsOfType<EventSystem>())
@@ -93,8 +107,8 @@ namespace UI
             }
 
 
-            sceneLoad.allowSceneActivation = true;
-
+            // sceneLoad.allowSceneActivation = true;
+            PhotonNetwork.LoadLevel(sceneName);
             await UniTask.NextFrame();
 
             Destroy(Instance.gameObject);

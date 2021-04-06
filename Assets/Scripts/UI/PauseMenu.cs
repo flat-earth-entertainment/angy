@@ -1,5 +1,7 @@
 using System;
 using Config;
+using GameSession;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -75,6 +77,8 @@ namespace UI
             {
                 SceneChanger.ChangeScene(GameConfig.Instance.Scenes.MainMenuScene);
                 CurrentGameSession.ClearSession();
+                PhotonNetwork.LeaveRoom();
+                PhotonNetwork.Disconnect();
             });
 
             resumeButton.onClick.AddListener(delegate { ResumeButtonClicked?.Invoke(); });

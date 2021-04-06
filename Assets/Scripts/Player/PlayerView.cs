@@ -7,15 +7,19 @@ using Cinemachine;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using ExitGames.Client.Photon;
+using GameSession;
+using Logic;
 using NaughtyAttributes;
+using Photon.Pun;
+using Photon.Realtime;
 using Player.Input;
-using Rewired;
 using UnityEngine;
 using Utils;
 
 namespace Player
 {
-    public class PlayerView : MonoBehaviour
+    public class PlayerView : MonoBehaviour, IPunInstantiateMagicCallback, IOnEventCallback
     {
         [SerializeField]
         [ReadOnly]
@@ -113,26 +117,14 @@ namespace Player
                 }
 
                 AngyChanged?.Invoke(value);
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAngyChanged, value);
             }
         }
-
-        public int PlayerId
-        {
-            get => _playerId;
-            set
-            {
-                _playerId = value;
-                shooter.playerId = value;
-            }
-        }
-
 
         public Vector3 LastStillPosition { get; set; }
 
         [ShowNativeProperty]
         public Vector3 LastStandablePosition { get; set; }
-
-        public Rewired.Player RewiredPlayer => ReInput.players.GetPlayer(PlayerId);
 
         public Ability Ability
         {
@@ -148,6 +140,8 @@ namespace Player
                 }
 
                 NewAbilitySet?.Invoke(this, value);
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilitySet,
+                    Ability.CodeFromInstance(value));
             }
         }
 
@@ -163,6 +157,9 @@ namespace Player
 
         public IPlayerInputs PlayerInputs { get; set; }
 
+        public static Action<PlayerView, PlayerState, PlayerState> PlayerStateChanged;
+
+
         public PlayerState PlayerState
         {
             get => playerState;
@@ -170,7 +167,24 @@ namespace Player
             {
                 Debug.Log(PlayerPreset.PlayerName.Color(PlayerPreset.PlayerColor) + "'s state was " + playerState +
                           " and became " + value);
+
+                PlayerStateChanged?.Invoke(this, playerState, value);
+
                 playerState = value;
+            }
+        }
+
+        public void ChangeStateAndNotify(PlayerState newPlayerState)
+        {
+            PlayerState = newPlayerState;
+            if (!PhotonNetwork.OfflineMode)
+            {
+                var playerFromPlayerView = CurrentGameSession.PlayerFromPlayerView(this);
+                if (playerFromPlayerView != null)
+                {
+                    PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerStateChanged,
+                        new object[] {playerFromPlayerView.Id, (byte) newPlayerState});
+                }
             }
         }
 
@@ -182,6 +196,8 @@ namespace Player
 
         private async void OnEnable()
         {
+            PhotonNetwork.AddCallbackTarget(this);
+
             ballBehaviour.BecameStill += OnBallBecameStill;
             shooter.Shot += OnBallShot;
             outOfBoundsCheck.WentOutOfBounds += OnWentOutOfBounds;
@@ -192,6 +208,8 @@ namespace Player
 
         private void OnDisable()
         {
+            PhotonNetwork.RemoveCallbackTarget(this);
+
             ballBehaviour.BecameStill -= OnBallBecameStill;
             shooter.Shot -= OnBallShot;
             outOfBoundsCheck.WentOutOfBounds -= OnWentOutOfBounds;
@@ -295,16 +313,16 @@ namespace Player
                 .SetEase(Ease.Linear).ToUniTask();
         }
 
-        public void ShouldPlayerActivate(int playerId)
+        public void ShouldPlayerActivate(PlayerView playerView)
         {
-            shooter.ShouldPlayerActivate(playerId);
+            shooter.ShouldPlayerActivate(playerView);
         }
 
         private void OnMenuButtonPressed()
         {
             OptionsMenuRequested?.Invoke(this);
+            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerMenuOpened);
         }
-
 
         private void OnBallBecameStill()
         {
@@ -318,11 +336,13 @@ namespace Player
             LastStillPosition = lastStillPosition;
 
             BecameStill?.Invoke();
+            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerBecameStill);
         }
 
         private void OnWentOutOfBounds()
         {
             WentOutOfBounds?.Invoke(this);
+            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerWentOutOfBounds);
         }
 
         private void OnBallShot()
@@ -357,11 +377,78 @@ namespace Player
             shooter.enabled = toggle;
         }
 
-
         public void SetBallPosition(Vector3 position)
         {
             position.y += BallRigidbody.GetComponent<SphereCollider>().radius;
             BallRigidbody.transform.position = position;
+        }
+
+        public void OnPhotonInstantiate(PhotonMessageInfo info)
+        {
+            var addresseeActorNumber = (int) info.photonView.InstantiationData[0];
+
+            if (PhotonNetwork.OfflineMode)
+            {
+                CurrentGameSession.Players.First(p => p.RoundPlayerView == null).RoundPlayerView = this;
+            }
+            else
+            {
+                if (PhotonNetwork.LocalPlayer.ActorNumber == addresseeActorNumber)
+                {
+                    CurrentGameSession.Players.First(p => p is LocalPlayer).RoundPlayerView = this;
+                }
+                else
+                {
+                    CurrentGameSession.Players
+                        .First(p =>
+                            p is OnlinePlayer onlinePlayer &&
+                            onlinePlayer.PhotonPlayer.ActorNumber == addresseeActorNumber)
+                        .RoundPlayerView = this;
+                }
+            }
+
+            FindObjectOfType<PlayersManager>().AddNewPlayer(this);
+        }
+
+        public void OnEvent(EventData photonEvent)
+        {
+            if (!Enum.IsDefined(typeof(GameEvent), photonEvent.Code) ||
+                photonEvent.Code == GameEvent.PlayerStateChanged.ToByte())
+            {
+                return;
+            }
+
+            var gameEvent = (GameEvent) photonEvent.Code;
+
+            var senderPlayer = OnlinePlayer.SessionPlayerByActorNumber(photonEvent.Sender);
+
+            if (senderPlayer.RoundPlayerView == this)
+            {
+                switch (gameEvent)
+                {
+                    case GameEvent.PlayerShot:
+                        Shot?.Invoke();
+                        break;
+                    case GameEvent.PlayerBecameStill:
+                        BecameStill?.Invoke();
+                        break;
+                    case GameEvent.PlayerWentOutOfBounds:
+                        WentOutOfBounds?.Invoke(this);
+                        break;
+                    case GameEvent.PlayerAngyChanged:
+                        var angy = (int) photonEvent.CustomData;
+                        _angy = angy;
+                        AngyChanged?.Invoke(angy);
+                        break;
+                    case GameEvent.PlayerAbilitySet:
+                        NewAbilitySet?.Invoke(this,
+                            Ability.InstanceFromCode((AbilityCode) (byte) photonEvent.CustomData));
+                        break;
+                    case GameEvent.PlayerMenuOpened:
+                        OptionsMenuRequested?.Invoke(this);
+                        break;
+                }
+            }
         }
     }
 }

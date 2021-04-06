@@ -1,5 +1,5 @@
 using System.Linq;
-using Config;
+using GameSession;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;

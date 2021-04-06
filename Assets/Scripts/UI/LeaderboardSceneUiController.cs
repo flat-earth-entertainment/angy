@@ -1,7 +1,10 @@
 using Config;
+using GameSession;
+using Logic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Utils;
 
 namespace UI
 {
@@ -53,11 +56,7 @@ namespace UI
 
         private static void LoadNextScene()
         {
-            SceneChanger.ChangeScene(SceneToLoad);
-            if (SceneToLoad == GameConfig.Instance.Scenes.MainMenuScene)
-            {
-                CurrentGameSession.ClearSession();
-            }
+            SceneChanger.BroadcastChangeSceneToSceneSync(SceneToLoad);
         }
 
         private void FillLeaderboard()

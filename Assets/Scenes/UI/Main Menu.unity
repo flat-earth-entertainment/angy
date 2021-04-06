@@ -693,8 +693,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   buttonListParent: {fileID: 1786865936}
-  startButton: {fileID: 349610821}
-  startScene: Lobby
+  playmodeButton: {fileID: 349610821}
+  playmodeScene: Playmode Selection
   helpButton: {fileID: 58586260}
   helpUiPrefab: {fileID: 4032952905642766581, guid: 41ac29dd0139d3e48849b2ea61a132c7, type: 3}
   optionsButton: {fileID: 282342544}
@@ -1437,7 +1437,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6023202246225209832, guid: 78bf1a60b3e8c4c49a6e8429f19e0350, type: 3}
       propertyPath: m_Name
-      value: Start Button
+      value: Play Button
       objectReference: {fileID: 0}
     - target: {fileID: 6023202246225209835, guid: 78bf1a60b3e8c4c49a6e8429f19e0350, type: 3}
       propertyPath: m_Pivot.x
@@ -1536,6 +1536,14 @@ PrefabInstance:
       value: 0.9433962
       objectReference: {fileID: 0}
     - target: {fileID: 6023202246684085728, guid: 78bf1a60b3e8c4c49a6e8429f19e0350, type: 3}
+      propertyPath: m_text
+      value: Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 6023202246684085728, guid: 78bf1a60b3e8c4c49a6e8429f19e0350, type: 3}
+      propertyPath: m_fontSize
+      value: 64.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6023202246684085728, guid: 78bf1a60b3e8c4c49a6e8429f19e0350, type: 3}
       propertyPath: m_fontColor.b
       value: 1
       objectReference: {fileID: 0}
@@ -1549,7 +1557,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6023202246684085728, guid: 78bf1a60b3e8c4c49a6e8429f19e0350, type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4294638330
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78bf1a60b3e8c4c49a6e8429f19e0350, type: 3}

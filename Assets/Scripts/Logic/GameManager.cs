@@ -9,6 +9,10 @@ using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Environment;
+using ExitGames.Client.Photon;
+using GameSession;
+using Photon.Pun;
+using Photon.Realtime;
 using Player;
 using UI;
 using UnityEngine;
@@ -17,10 +21,10 @@ using Utils;
 
 namespace Logic
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviour, IOnEventCallback
     {
         public static event Action RoundPassed;
-        public static PlayerView CurrentTurnPlayer => _currentTurnPlayer;
+        public PlayerView CurrentTurnPlayer => _currentTurnPlayer;
 
         [SerializeField]
         private TrajectoryLineController trajectoryLineController;
@@ -28,7 +32,7 @@ namespace Logic
         [SerializeField]
         private UiController uiController;
 
-        private static PlayerView _currentTurnPlayer;
+        private PlayerView _currentTurnPlayer;
         private PlayerView _firstPlayer;
         private PlayerView _playerInOptions;
         private CinemachineVirtualCamera _levelOverviewCamera;
@@ -96,6 +100,8 @@ namespace Logic
             PlayerView.OptionsMenuRequested += OnPauseMenuOpenRequested;
 
             KillingTrigger.HitKillTrigger += OnPlayerHitKillTrigger;
+
+            PhotonNetwork.AddCallbackTarget(this);
         }
 
         private void OnDisable()
@@ -110,6 +116,8 @@ namespace Logic
 
             PlayerView.OptionsMenuRequested -= OnPauseMenuOpenRequested;
             KillingTrigger.HitKillTrigger -= OnPlayerHitKillTrigger;
+
+            PhotonNetwork.RemoveCallbackTarget(this);
 
             Time.timeScale = GameConfig.Instance.TimeScale;
         }
@@ -225,7 +233,7 @@ namespace Logic
                 player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
             }
 
-            player.PlayerState = PlayerState.ShouldSpawnAtLastPosition;
+            _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ShouldSpawnAtLastPosition);
 
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
@@ -246,7 +254,7 @@ namespace Logic
                 player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
             }
 
-            player.PlayerState = PlayerState.ShouldSpawnAtLastStandablePosition;
+            _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ShouldSpawnAtLastStandablePosition);
 
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
@@ -277,16 +285,24 @@ namespace Logic
             UnsubscribeFromPreStillEvents(player);
             var points = FindObjectOfType<PointController>().GetPoints();
 
-            var winnerPoints = points.Max();
-            var winnerId = points.IndexOf(winnerPoints);
-            var winner = _playersManager.Players.First(p => p.PlayerId == winnerId);
+            var winnerPoints = points.Values.Max();
+            var winner = points.First(t => t.Value == winnerPoints).Key;
 
             CurrentGameSession.WinnerMaterial = winner.Materials[0];
             CurrentGameSession.LoserMaterial = _playersManager.Players.First(p => p != winner).Materials[0];
 
-            CurrentGameSession.NextRoundRewiredPlayerId = winner.RewiredPlayer.id;
+            CurrentGameSession.SetNextRoundPlayer(winner);
+
+            var redPlayerScore = points.First(p =>
+                p.Key == CurrentGameSession.Players.First(c => c.PresetIndex == 0).RoundPlayerView).Value;
+            var bluePlayerScore = points.First(p =>
+                p.Key == CurrentGameSession.Players.First(c => c.PresetIndex == 1).RoundPlayerView).Value;
+
             CurrentGameSession.CollectionScores
-                .SetMapScore(SceneManager.GetActiveScene().name, new MapScore(points[0], points[1]));
+                .SetMapScore(SceneManager.GetActiveScene().name, new MapScore(redPlayerScore, bluePlayerScore));
+
+            CurrentGameSession.SetNextRoundPlayer(winner);
+            CurrentGameSession.ResetPlayerViews();
 
             OnLevelFinished();
         }
@@ -297,22 +313,19 @@ namespace Logic
 
             var currentMap = SceneManager.GetActiveScene().name;
 
-            if (!CurrentGameSession.IsLastMapInList(currentMap))
-            {
-                LeaderboardSceneUiController.SceneToLoad = CurrentGameSession.GetNextMap(currentMap);
-            }
-            else
-            {
-                LeaderboardSceneUiController.SceneToLoad = GameConfig.Instance.Scenes.VictoryScene;
-            }
+            LeaderboardSceneUiController.SceneToLoad =
+                !CurrentGameSession.IsLastMapInList(currentMap)
+                    ? CurrentGameSession.GetNextMap(currentMap)
+                    : GameConfig.Instance.Scenes.VictoryScene;
 
-            SceneChanger.ChangeScene(GameConfig.Instance.Scenes.LeaderboardScene, SceneChangeType.MapChange);
+            PhotonShortcuts.ReliableRaiseEventToAll(GameEvent.SceneChange, GameConfig.Instance.Scenes.LeaderboardScene);
+            // SceneChanger.BroadcastChangeScene(GameConfig.Instance.Scenes.LeaderboardScene, SceneChangeType.MapChange);
         }
-
 
         private async void MakeTurn()
         {
             _currentTurnPlayer = _playersManager.GetNextPlayer(_currentTurnPlayer);
+
 
             if (_currentTurnPlayer == _firstPlayer)
                 RoundPassed?.Invoke();
@@ -320,7 +333,23 @@ namespace Logic
             if (_firstPlayer == null)
                 _firstPlayer = _currentTurnPlayer;
 
+            //Here player freezes
             _playersManager.PrepareTrajectoryFor(_currentTurnPlayer);
+
+            if (CurrentGameSession.PlayerFromPlayerView(_currentTurnPlayer) is LocalPlayer)
+            {
+                Debug.Log("this is local player turn");
+                foreach (var player in CurrentGameSession.Players)
+                {
+                    player.RoundPlayerView.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
+                }
+            }
+            //Here player thaws
+            // else
+            // {
+            //     Debug.Log("rigidbody should be unblocked", _currentTurnPlayer.gameObject);
+            //     _currentTurnPlayer.BallRigidbody.constraints = RigidbodyConstraints.None;
+            // }
 
             _currentTurnPlayer.SetIdleAnimation();
 
@@ -355,15 +384,16 @@ namespace Logic
                 case PlayerState.ShouldSpawnCanNotMove:
                     await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _currentTurnPlayer.LastStillPosition);
 
-                    _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
+                    _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ShouldMakeTurn);
                     _currentTurnPlayer.BallRigidbody.constraints = RigidbodyConstraints.None;
 
                     MakeTurn();
                     return;
 
                 case PlayerState.ShouldSpawnAtSpawn:
-                    _currentTurnPlayer.LastStillPosition = _spawnPoint.position;
-                    await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, _spawnPoint.position);
+                    var spawnPointPosition = _spawnPoint.position;
+                    _currentTurnPlayer.LastStillPosition = spawnPointPosition;
+                    await SpawnShowJumpInAndSetCamera(_currentTurnPlayer, spawnPointPosition);
                     goto case PlayerState.ShouldMakeTurn;
 
                 case PlayerState.ShouldSpawnAtLastPosition:
@@ -387,7 +417,8 @@ namespace Logic
                     trajectoryLineController.SetTrajectoryActive(true);
                     trajectoryLineController.SetGradientColor(_currentTurnPlayer.PlayerPreset.Gradient);
 
-                    _currentTurnPlayer.PlayerState = PlayerState.ActiveAiming;
+                    _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ActiveAiming);
+
                     uiController.CameraModeHelperActive = true;
 
                     SubscribeToPreShotEvents(_currentTurnPlayer);
@@ -412,7 +443,7 @@ namespace Logic
 
         private void OnFireButtonPressed()
         {
-            _currentTurnPlayer.PlayerState = PlayerState.ActivePowerMode;
+            _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ActivePowerMode);
             _currentTurnPlayer.PlayerInputs.FireButtonPressed -= OnFireButtonPressed;
         }
 
@@ -449,7 +480,7 @@ namespace Logic
 
             _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
 
-            _currentTurnPlayer.PlayerState = PlayerState.ActiveInMotion;
+            _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ActiveInMotion);
         }
 
         private void SubscribeToPreStillEvents(PlayerView player)
@@ -469,6 +500,7 @@ namespace Logic
             if (_currentTurnPlayer.Ability != null && !_currentTurnPlayer.Ability.WasFired)
             {
                 _currentTurnPlayer.Ability.Invoke(_currentTurnPlayer);
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityFired);
 
                 uiController.WobbleAbilityUi(_currentTurnPlayer, false);
             }
@@ -490,15 +522,15 @@ namespace Logic
             }
             else
             {
-                _currentTurnPlayer.PlayerState = PlayerState.ShouldMakeTurn;
+                _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ShouldMakeTurn);
             }
 
             await DelayAndMakeTurn();
         }
 
-        private static UniTask OnMaxAngy(PlayerView player)
+        private UniTask OnMaxAngy(PlayerView player)
         {
-            player.PlayerState = PlayerState.ShouldSpawnCanNotMove;
+            _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ShouldSpawnCanNotMove);
 
             //TODO: Play explosion animation
             return player.ExplodeHideAndResetAngy();
@@ -555,7 +587,23 @@ namespace Logic
                 _currentTurnPlayer.AlterAngy(AngyEvent.FellOutOfTheMap);
             }
 
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                UnsubscribeFromPreShotEvents(_currentTurnPlayer);
+                EndOfTurnActions(_currentTurnPlayer);
+                MakeTurn();
+            }
+
+
 #endif
+        }
+
+        public void OnEvent(EventData photonEvent)
+        {
+            if (photonEvent.Code == GameEvent.PlayerAbilityFired.ToByte())
+            {
+                OnAbilityButtonPressed();
+            }
         }
     }
 }

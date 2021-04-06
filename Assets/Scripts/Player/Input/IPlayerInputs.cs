@@ -9,5 +9,6 @@ namespace Player.Input
         public event Action MenuButtonPressed;
         public event Action FireButtonPressed;
         public event Action<float> HorizontalAxisInput;
+        public event Action<float> VerticalAxisInput;
     }
 }

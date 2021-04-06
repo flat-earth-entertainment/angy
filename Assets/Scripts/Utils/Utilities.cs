@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ExitGames.Client.Photon;
+using Logic;
 using UnityEngine;
 
 namespace Utils
@@ -37,6 +39,16 @@ namespace Utils
         public static string Color(this string stringToColor, Color color)
         {
             return $"<color=#{ColorUtility.ToHtmlStringRGBA(color)}>{stringToColor}</color>";
+        }
+
+        public static byte ToByte(this GameEvent gameEvent)
+        {
+            return (byte) gameEvent;
+        }
+
+        public static T Read<T>(this EventData eventData, int itemIndex = 0)
+        {
+            return (T) (eventData.CustomData as object[])?[itemIndex];
         }
     }
 }

@@ -8,9 +8,17 @@ namespace Animations
         [SerializeField]
         private float duration = 5f;
 
+        private Sequence _sequence;
+
         private void Start()
         {
-            DOTween.Sequence().Append(transform.DOScale(0f, duration)).AppendCallback(delegate { Destroy(gameObject); });
+            _sequence = DOTween.Sequence().Append(transform.DOScale(0f, duration))
+                .AppendCallback(delegate { Destroy(gameObject); });
+        }
+
+        private void OnDisable()
+        {
+            _sequence.Kill();
         }
     }
 }

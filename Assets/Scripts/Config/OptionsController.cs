@@ -1,4 +1,6 @@
 using System;
+using GameSession;
+using Photon.Pun;
 using UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -61,6 +63,8 @@ namespace Config
             {
                 SceneChanger.ChangeScene(GameConfig.Instance.Scenes.MainMenuScene);
                 CurrentGameSession.ClearSession();
+                PhotonNetwork.LeaveRoom();
+                PhotonNetwork.Disconnect();
             });
 
             InitializeAndBindSlider(GameSettings.Settings.MasterVolume, masterVolume);

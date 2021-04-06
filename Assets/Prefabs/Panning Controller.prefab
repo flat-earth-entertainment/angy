@@ -84,6 +84,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7082831498794393665}
   - component: {fileID: 7082831498794393670}
+  - component: {fileID: 9211144005612411198}
+  - component: {fileID: 3189753964527441920}
   m_Layer: 0
   m_Name: Camera Anchor
   m_TagString: Untagged
@@ -118,9 +120,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcdb0ca8c78942944a317cb2d1bf5b23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <PanningCamera>k__BackingField: {fileID: 8832180925560160010}
   bottomLeftBound: {x: -25, y: 0, z: -46}
   topRightBound: {x: 28, y: 0, z: 15}
+  <PanningCamera>k__BackingField: {fileID: 8832180925560160010}
+--- !u!114 &9211144005612411198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7082831498794393671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 3189753964527441920}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &3189753964527441920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7082831498794393671}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 0
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &7082831498855325367
 GameObject:
   m_ObjectHideFlags: 0
