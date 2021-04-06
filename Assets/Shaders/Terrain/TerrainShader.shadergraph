@@ -95,6 +95,9 @@
         },
         {
             "m_Id": "844e25cee12c4729995a3af65766dc58"
+        },
+        {
+            "m_Id": "f5a0bb2b85f24a899a5e620b7664a052"
         }
     ],
     "m_GroupDatas": [],
@@ -354,6 +357,9 @@
             },
             {
                 "m_Id": "91ac206c566f439db3eefc0bdafbfad9"
+            },
+            {
+                "m_Id": "f5a0bb2b85f24a899a5e620b7664a052"
             }
         ]
     },
@@ -1690,7 +1696,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.Rendering.Universal.ShaderGraph.UniversalLitSubTarget",
     "m_ObjectId": "6a133ca7804c40c99f3b044f9dcccc4a",
-    "m_WorkflowMode": 0,
+    "m_WorkflowMode": 1,
     "m_NormalDropOffSpace": 1,
     "m_ClearCoat": false
 }
@@ -1761,6 +1767,21 @@
     "m_Property": {
         "m_Id": "086a850d98ad4e52b0e47cc26941667d"
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
+    "m_ObjectId": "792b46a2b83d4cdbb87d770a30bd6501",
+    "m_Id": 0,
+    "m_DisplayName": "Metallic",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "Metallic",
+    "m_StageCapability": 2,
+    "m_Value": 0.0,
+    "m_DefaultValue": 0.0,
+    "m_Labels": []
 }
 
 {
@@ -2891,6 +2912,39 @@
         "a": 0.0
     },
     "m_ColorMode": 0
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.BlockNode",
+    "m_ObjectId": "f5a0bb2b85f24a899a5e620b7664a052",
+    "m_Group": {
+        "m_Id": ""
+    },
+    "m_Name": "SurfaceDescription.Metallic",
+    "m_DrawState": {
+        "m_Expanded": true,
+        "m_Position": {
+            "serializedVersion": "2",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 0.0,
+            "height": 0.0
+        }
+    },
+    "m_Slots": [
+        {
+            "m_Id": "792b46a2b83d4cdbb87d770a30bd6501"
+        }
+    ],
+    "synonyms": [],
+    "m_Precision": 0,
+    "m_PreviewExpanded": true,
+    "m_PreviewMode": 0,
+    "m_CustomColors": {
+        "m_SerializableColors": []
+    },
+    "m_SerializedDescriptor": "SurfaceDescription.Metallic"
 }
 
 {
