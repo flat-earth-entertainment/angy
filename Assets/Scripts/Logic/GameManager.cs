@@ -42,6 +42,7 @@ namespace Logic
         private VirtualCamerasController _camerasController;
         private PanController _panController;
         private bool _isInMapOverview;
+        private bool _playersInitialized;
 
         private void Awake()
         {
@@ -81,6 +82,9 @@ namespace Logic
             await _camerasController.BlendTo(_levelOverviewCamera, GameConfig.Instance.LevelOverviewTime);
 
             await _camerasController.BlendTo(_spawnPointCamera, 2f);
+
+            if (!_playersInitialized)
+                await UniTask.WaitUntil(() => _playersInitialized);
 
             MakeTurn();
         }
@@ -203,6 +207,7 @@ namespace Logic
 
         private void OnAllPlayersInitialized(PlayerView[] players)
         {
+            _playersInitialized = true;
             foreach (var player in players)
             {
                 player.WentOutOfBounds += OnPlayerWentOutOfBounds;
