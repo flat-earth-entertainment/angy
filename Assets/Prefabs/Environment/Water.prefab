@@ -111,7 +111,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseDrag: 0.25
   waterDrag: 2
-  bounceThreshold: 5
+  bounceThreshold: 8
   waterVerticalBounce: 5
   iceAbility: 0
   bounce: 0
@@ -164,7 +164,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7410924651927399019}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
