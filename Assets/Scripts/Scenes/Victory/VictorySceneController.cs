@@ -1,7 +1,6 @@
-using System.Linq;
 using Config;
 using GameSession;
-using Photon.Pun;
+using TMPro;
 using UI;
 using UnityEngine;
 
@@ -10,6 +9,12 @@ namespace Scenes.Victory
     public class VictorySceneController : MonoBehaviour
     {
         private static readonly int IdleBlend = Animator.StringToHash("idleBlend");
+
+        [SerializeField]
+        private TextMeshProUGUI winnerScoreLine;
+
+        [SerializeField]
+        private TextMeshProUGUI loserScoreLine;
 
         [SerializeField]
         private SkinnedMeshRenderer winner;
@@ -31,21 +36,41 @@ namespace Scenes.Victory
 
         private void Awake()
         {
-            //CRITICAL!
-            //TODO: Use score instead of last round
-            var redScore = CurrentGameSession.CollectionScores.Scores.Sum(m => m.Player1Score ?? 0);
-            var blueScore = CurrentGameSession.CollectionScores.Scores.Sum(m => m.Player2Score ?? 0);
+            winnerAnimator.SetFloat(IdleBlend, winnerIdleBlend);
+            loserAnimator.SetFloat(IdleBlend, loserIdleBlend);
+
+            int sum1;
+            var sum0 = sum1 = 0;
+
+            for (var i = 0; i < CurrentGameSession.CollectionScores.Scores.Length; i++)
+            {
+                var mapScore = CurrentGameSession.CollectionScores.Scores[i];
+                if (mapScore.Player1Score != null) sum0 += mapScore.Player1Score.Value;
+                if (mapScore.Player2Score != null) sum1 += mapScore.Player2Score.Value;
+            }
+
+            int winnerId, loserId;
+            if (sum0 > sum1)
+            {
+                winnerId = 0;
+                loserId = 1;
+            }
+            else
+            {
+                winnerId = 1;
+                loserId = 0;
+            }
+
+            winnerScoreLine.text = sum0.ToString();
+            loserScoreLine.text = sum1.ToString();
 
             var winnerMaterials = winner.materials;
-            winnerMaterials[0] = CurrentGameSession.WinnerMaterial;
+            winnerMaterials[0].SetColor("Color_Primary", GameConfig.Instance.PlayerPresets[winnerId].PlayerColor);
             winner.materials = winnerMaterials;
 
             var loserMaterials = loser.materials;
-            loserMaterials[0] = CurrentGameSession.LoserMaterial;
+            loserMaterials[0].SetColor("Color_Primary", GameConfig.Instance.PlayerPresets[loserId].PlayerColor);
             loser.materials = loserMaterials;
-
-            winnerAnimator.SetFloat(IdleBlend, winnerIdleBlend);
-            loserAnimator.SetFloat(IdleBlend, loserIdleBlend);
         }
 
         private void Update()
@@ -53,8 +78,6 @@ namespace Scenes.Victory
             if (Input.anyKey)
             {
                 SceneChanger.ChangeScene(GameConfig.Instance.Scenes.MainMenuScene);
-                PhotonNetwork.LeaveRoom();
-                PhotonNetwork.Disconnect();
             }
         }
     }

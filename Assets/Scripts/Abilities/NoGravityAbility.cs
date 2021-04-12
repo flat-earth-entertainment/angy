@@ -12,7 +12,6 @@ namespace Abilities
     public class NoGravityAbility : Ability
     {
         private CancellationTokenSource _cancellationTokenSource;
-        private Vector3 _initialGravity;
         private Material _originalMaterial;
         private PlayerView _playerView;
 
@@ -26,8 +25,7 @@ namespace Abilities
 
             _originalMaterial = player.Materials[0];
             player.SetBodyMaterial(GameConfig.Instance.AbilityValues.NoGravityAbility.Material);
-            _initialGravity = Physics.gravity;
-            Physics.gravity = Vector3.zero;
+            player.BallRigidbody.useGravity = false;
             AudioManager.Instance.DoLowPass(.5f);
             await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.AbilityValues.NoGravityAbility.DurationTime),
                 DelayType.UnscaledDeltaTime,
@@ -42,7 +40,8 @@ namespace Abilities
             _playerView.SetBodyMaterial(_originalMaterial);
             _playerView.PlayerInputs.AbilityButtonPressed -= WrapInternal;
             AudioManager.Instance.UndoLowPass(.5f);
-            Physics.gravity = _initialGravity;
+            _playerView.BallRigidbody.useGravity = true;
+
             Finished = true;
             Active = false;
             IsFinalized = true;

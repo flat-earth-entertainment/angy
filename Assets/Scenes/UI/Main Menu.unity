@@ -372,7 +372,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &227502539
 RectTransform:
   m_ObjectHideFlags: 0
@@ -923,6 +923,63 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6023202246225209832, guid: 78bf1a60b3e8c4c49a6e8429f19e0350, type: 3}
   m_PrefabInstance: {fileID: 6023202246018206377}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &997384597
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 68
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 551.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5998918674596085475, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6423733193468997342, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
+      propertyPath: m_Name
+      value: Backdrop_Checker
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: fbcbd64868ba38748a16f3f61422c233, type: 3}
 --- !u!1 &1548572591
 GameObject:
   m_ObjectHideFlags: 0
