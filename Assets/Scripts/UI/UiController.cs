@@ -117,7 +117,7 @@ namespace UI
             playersManager.InitializedAllPlayers -= OnPlayersInitialized;
 
             players[0].AngyChanged += angyUis[0].OnAngyChanged;
-            players[1].AngyChanged += angyUis[0].OnAngyChanged;
+            players[1].AngyChanged += angyUis[1].OnAngyChanged;
 
             _angyPlayerUis.Add(players[0], angyUis[0]);
             _angyPlayerUis.Add(players[1], angyUis[1]);
