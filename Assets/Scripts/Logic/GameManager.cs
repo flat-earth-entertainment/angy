@@ -225,7 +225,7 @@ namespace Logic
 
         private void OnPlayerWentOutOfBounds(PlayerView player)
         {
-            Debug.Log($"{player.PlayerPreset.PlayerName} went out of bounds");
+            Debug.Log($"{player.PlayerPreset.PlayerName.Color(player.PlayerPreset.PlayerColor)} went out of bounds");
 
             player.Hide();
 
@@ -238,7 +238,7 @@ namespace Logic
                 player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
             }
 
-            _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ShouldSpawnAtLastPosition);
+            player.ChangeStateAndNotify(PlayerState.ShouldSpawnAtLastPosition);
 
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
@@ -259,7 +259,7 @@ namespace Logic
                 player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
             }
 
-            _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ShouldSpawnAtLastStandablePosition);
+            player.ChangeStateAndNotify(PlayerState.ShouldSpawnAtLastStandablePosition);
 
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
@@ -535,7 +535,7 @@ namespace Logic
 
         private UniTask OnMaxAngy(PlayerView player)
         {
-            _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ShouldSpawnCanNotMove);
+            player.ChangeStateAndNotify(PlayerState.ShouldSpawnCanNotMove);
 
             //TODO: Play explosion animation
             return player.ExplodeHideAndResetAngy();

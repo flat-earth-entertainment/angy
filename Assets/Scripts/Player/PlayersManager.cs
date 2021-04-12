@@ -55,7 +55,7 @@ namespace Player
         {
             player.PlayerPreset = playerPreset;
             player.Knockback = GameConfig.Instance.ExplosionForceOnPlayerHit;
-            player.PlayerState = PlayerState.ShouldSpawnAtSpawn;
+            player.ChangeStateAndNotify(PlayerState.ShouldSpawnAtSpawn);
 
             player.PlayerInputs = RewiredPlayerInputs.AttachToPlayer(player, _rewiredPlayerIdCounter++);
 
