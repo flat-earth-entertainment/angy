@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Rewired;
+using Player;
+using Abilities;
 
 public class TooltipManager : MonoBehaviour
 {
     private Animator animator;
     public List<GameObject> tooltips, borders;
-    private int tooltipId;
+    public int tooltipId;
     private List<Rewired.Player> _rewiredPlayer = new List<Rewired.Player>();
     private List<bool> achieved;
     private List<Player.PlayerView> players = new List<Player.PlayerView>();
-    private bool waiting = true, once;
+    private bool waiting = true, once, abilityPickup;
     // Start is called before the first frame update
     IEnumerator Start()
     {
@@ -32,6 +34,12 @@ public class TooltipManager : MonoBehaviour
 
         achieved = new List<bool>(new bool[tooltips.Count]);
         StartCoroutine("Tooltip");
+        PlayerView.NewAbilitySet += AbilityPickedUp;
+    }
+    void AbilityPickedUp(PlayerView player, Ability ability){   // GOTCHA! Ability was caught
+        if(ability != null){
+        abilityPickup = true;
+        }
     }
 
     // Update is called once per frame
@@ -69,12 +77,28 @@ public class TooltipManager : MonoBehaviour
                     }
                     break;
                 case 3: // Listen for F
+                    foreach (var item in _rewiredPlayer)
+                    {
+                        if(item.GetButtonDown("AbilityFire") && !achieved[tooltipId] && abilityPickup){
+                            achieved[tooltipId] = true;
+                        }
+                    }
+                    
+                    break;
+                default:
                     break;
             }
         }
     }
     IEnumerator Tooltip(){
         yield return null;
+        while (tooltipId == 3)
+        {
+            if(abilityPickup){
+                break;
+            }
+            yield return null;
+        }
         // enable new 
         for (int i = 0; i < tooltips.Count; i++)
         {
