@@ -20,6 +20,7 @@ namespace Logic
         PlayerShot,
         PlayerBecameStill,
         PlayerWentOutOfBounds,
+        PlayerHitKillTrigger,
         PlayerAngyChanged,
         PlayerAbilitySet,
         PlayerAbilityFired,
@@ -34,7 +35,8 @@ namespace Logic
         Expand,
         FireDash,
         IceBlock,
-        NoGravity
+        NoGravity,
+        Random
     }
 
     public interface IListener

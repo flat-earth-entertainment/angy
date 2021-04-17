@@ -1,4 +1,5 @@
 ﻿using System;
+using GameSession;
 using Logic;
 using Rewired;
 using UnityEngine;
@@ -16,6 +17,25 @@ namespace Player.Input
         public event Action<float> VerticalAxisInput;
 
         private Rewired.Player _thisPlayer;
+        private PlayerView _playerView;
+
+        //TODO: Refactor
+        public static IPlayerInputs AttachToPlayer(PlayerView playerView, Rewired.Player rewiredPlayer)
+        {
+            RewiredPlayerInputs rewiredPlayerInputs;
+            if (playerView.gameObject.TryGetComponent(out rewiredPlayerInputs))
+            {
+            }
+            else
+            {
+                rewiredPlayerInputs = playerView.gameObject.AddComponent<RewiredPlayerInputs>();
+            }
+
+            rewiredPlayerInputs._thisPlayer = rewiredPlayer;
+            rewiredPlayerInputs._playerView = playerView;
+
+            return rewiredPlayerInputs;
+        }
 
         public static IPlayerInputs AttachToPlayer(PlayerView playerView, int rewiredPlayerId)
         {
@@ -29,6 +49,7 @@ namespace Player.Input
             }
 
             rewiredPlayerInputs._thisPlayer = ReInput.players.GetPlayer(rewiredPlayerId);
+            rewiredPlayerInputs._playerView = playerView;
 
             return rewiredPlayerInputs;
         }
@@ -38,7 +59,14 @@ namespace Player.Input
             if (_thisPlayer.GetButtonDown("AbilityFire"))
             {
                 AbilityButtonPressed?.Invoke();
-                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityButtonPressed);
+                object data = null;
+                var playerFromPlayerView = CurrentGameSession.PlayerFromPlayerView(_playerView);
+                if (playerFromPlayerView != null)
+                {
+                    data = playerFromPlayerView.Id;
+                }
+
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityButtonPressed, data);
             }
 
             if (_thisPlayer.GetButtonDown("CameraMode"))

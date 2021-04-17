@@ -109,7 +109,7 @@ namespace UI
 
         private void CreateRoom()
         {
-            PhotonNetwork.CreateRoom(Random.Range(100, 1000).ToString(), new RoomOptions {MaxPlayers = 2});
+            PhotonNetwork.CreateRoom("Room " + Random.Range(100, 1000), new RoomOptions {MaxPlayers = 2});
         }
 
         private void Update()

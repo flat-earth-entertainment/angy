@@ -19,10 +19,5 @@ namespace Utils
             return PhotonNetwork.RaiseEvent((byte) gameEvent, data, RaiseEventOptions.Default,
                 SendOptions.SendReliable);
         }
-
-        public static bool Notify()
-        {
-            return false;
-        }
     }
 }

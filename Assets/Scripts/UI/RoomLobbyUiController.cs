@@ -72,7 +72,6 @@ namespace UI
             CurrentGameSession.Players = players.ToArray();
             CurrentGameSession.SetNextRoundPlayer(players[0]);
             PhotonNetwork.LoadLevel(CurrentGameSession.MapCollection.Maps[0]);
-            PhotonNetwork.AutomaticallySyncScene = true;
         }
 
         private void Awake()
@@ -111,7 +110,7 @@ namespace UI
                 // SceneChanger.ChangeScene(nextScene);
             });
 
-            foreach (var player in PhotonNetwork.CurrentRoom.Players.Values.Where(p => !p.IsLocal))
+            foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
             {
                 AddNewPlayer(player);
             }
@@ -127,7 +126,9 @@ namespace UI
         private void AddNewPlayer(Photon.Realtime.Player player)
         {
             var playerListRow = Instantiate(playerListRowPrefab, playerList.content).GetComponent<PlayerListRow>();
-            playerListRow.PlayerName = player.NickName;
+            playerListRow.PlayerName =
+                string.IsNullOrEmpty(player.NickName) ? "Player " + player.UserId : player.NickName;
+
             playerListRow.PlayerReadyStatus = "N/A";
 
             _playerRows.Add(player, playerListRow);

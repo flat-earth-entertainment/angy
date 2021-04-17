@@ -4,12 +4,13 @@ using Abilities;
 using Audio;
 using DG.Tweening;
 using DinoFracture;
+using GameSession;
 using Logic;
 using MeshPhysics;
 using Models.Berries;
 using Player;
-using UI;
 using UnityEngine;
+using Utils;
 
 namespace Ball.Objectives
 {
@@ -95,36 +96,35 @@ namespace Ball.Objectives
                     {
                         _point.SetActive(true);
                         splatter.Play(true);
-                        other.transform.parent.GetComponent<PlayerView>().AlterAngy(AngyEvent.MushroomHit);
+                        FindObjectOfType<AngyController>().AlterAngyIfActive(hitPlayer, AngyEvent.MushroomHit);
                     });
 
-                    switch (mushroomDropAbility)
+                    if (mushroomDropAbility != AbilitySelect.None && !CurrentGameSession.IsNowPassive)
                     {
-                        case AbilitySelect.None:
-                            break;
-                        case AbilitySelect.IceBlockAbility:
-                            other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability =
-                                new IceBlockAbility();
-                            break;
-                        case AbilitySelect.NoGravityAbility:
-                            other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability =
-                                new NoGravityAbility();
-                            break;
-                        case AbilitySelect.ExpandAbility:
-                            other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability =
-                                new ExpandAbility();
-                            break;
-                        case AbilitySelect.FireDashAbility:
-                            other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.Ability =
-                                new FireDashAbility();
-                            break;
-                        case AbilitySelect.RandomAbility:
+                        var abilityController = FindObjectOfType<AbilityController>();
+                        if (mushroomDropAbility == AbilitySelect.RandomAbility)
                         {
-                            var newAbility = Ability.RandomAbility();
-                            var player = other.transform.GetChild(0).GetComponent<Shooter>().PlayerView;
-                            player.Ability = newAbility;
-                            FindObjectOfType<UiController>().DoSlotMachineFor(player, newAbility);
-                            break;
+                            var newAbility = RandomAbility.DoAndGetRandomAbilityFor(hitPlayer);
+
+                            abilityController.SetNewAbility(hitPlayer, newAbility);
+                            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilitySet, new int[]
+                            {
+                                CurrentGameSession.PlayerFromPlayerView(hitPlayer).Id,
+                                (int) AbilityCode.Random,
+                                (int) Ability.AbilityCodeFromInstance(newAbility)
+                            });
+                        }
+                        else
+                        {
+                            Ability newAbility = mushroomDropAbility switch
+                            {
+                                AbilitySelect.IceBlockAbility => new IceBlockAbility(),
+                                AbilitySelect.NoGravityAbility => new NoGravityAbility(),
+                                AbilitySelect.ExpandAbility => new ExpandAbility(),
+                                AbilitySelect.FireDashAbility => new FireDashAbility(),
+                                _ => default
+                            };
+                            abilityController.SetNewAbilityAndTryNotify(hitPlayer, newAbility);
                         }
                     }
                 }
@@ -137,7 +137,7 @@ namespace Ball.Objectives
                         item.materials = new[] {baseFruitMat};
 
                         item.materials[0].SetColor("BerryColor",
-                            other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerPreset.PlayerColor);
+                            hitPlayer.PlayerPreset.PlayerColor);
                         item.gameObject.GetComponent<BerryAnim>().BerryHit();
                     }
                 }
@@ -145,7 +145,7 @@ namespace Ball.Objectives
                 {
                     _point.GetComponent<BerryAnim>().BerryHit();
                     _point.GetComponent<Renderer>().materials[0].SetColor("BerryColor",
-                        other.transform.GetChild(0).GetComponent<Shooter>().PlayerView.PlayerPreset.PlayerColor);
+                        hitPlayer.PlayerPreset.PlayerColor);
                 }
             }
         }

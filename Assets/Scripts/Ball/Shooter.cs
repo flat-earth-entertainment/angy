@@ -59,6 +59,7 @@ namespace Ball
         public Vector3 spinDirection = new Vector3(0, 0, 0);
         public float spinIncrement = 0.2f;
 
+        private AngyController _angyController;
         private Vector3 _currentPosition;
         private Quaternion _currentRotation;
         private bool _movedRet, _forcePercentBool, _maxPower;
@@ -79,6 +80,7 @@ namespace Ball
         private void Awake()
         {
             FindObjectOfType<PlayersManager>().InitializedAllPlayers += OnInitializedPlayers;
+            _angyController = FindObjectOfType<AngyController>();
 
             _currentPosition = transform.position;
             _currentRotation = transform.rotation;
@@ -324,7 +326,8 @@ namespace Ball
             {
                 rb.AddForce(CalculateForce(), ForceMode.Impulse);
                 Shot?.Invoke();
-                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerShot);
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerShot,
+                    CurrentGameSession.PlayerFromPlayerView(PlayerView).Id);
             }
 
             ballStorage.GetComponent<BallBehaviour>().inMotion = true;
@@ -445,7 +448,7 @@ namespace Ball
         private IEnumerator CalculateShootForce()
         {
             var currentAngy = Mathf.Lerp(1, 0.25f,
-                (float) PlayerView.Angy / GameConfig.Instance.AngyValues.MaxAngy);
+                (float) _angyController[PlayerView] / GameConfig.Instance.AngyValues.MaxAngy);
             forcePercent = 0;
             yield return null;
             while (!ShootForceBreakCondition() && forcePercent >= 0)

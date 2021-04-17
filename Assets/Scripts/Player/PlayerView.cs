@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Abilities;
 using Audio;
 using Ball;
 using Cinemachine;
@@ -49,9 +48,6 @@ namespace Player
         [field: SerializeField]
         public Rigidbody BallRigidbody { get; private set; }
 
-        private Ability _ability;
-        private int _angy;
-        private int _playerId;
         private PlayerPreset _playerPreset;
 
         public PlayerPreset PlayerPreset
@@ -97,55 +93,11 @@ namespace Player
                 value;
         }
 
-        public int Angy
-        {
-            get => _angy;
-            private set
-            {
-                if (value > GameConfig.Instance.AngyValues.MaxAngy)
-                {
-                    _angy = GameConfig.Instance.AngyValues.MaxAngy;
-                    ReachedMaxAngy?.Invoke();
-                }
-                else if (value < GameConfig.Instance.AngyValues.MinAngy)
-                {
-                    _angy = GameConfig.Instance.AngyValues.MinAngy;
-                }
-                else
-                {
-                    _angy = value;
-                }
-
-                AngyChanged?.Invoke(value);
-                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAngyChanged, value);
-            }
-        }
 
         public Vector3 LastStillPosition { get; set; }
 
         [ShowNativeProperty]
         public Vector3 LastStandablePosition { get; set; }
-
-        public Ability Ability
-        {
-            get => _ability;
-            set
-            {
-                Ability?.Wrap();
-                _ability = value;
-
-                if (value != null)
-                {
-                    PreviousAbility = value;
-                }
-
-                NewAbilitySet?.Invoke(this, value);
-                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilitySet,
-                    Ability.CodeFromInstance(value));
-            }
-        }
-
-        public Ability PreviousAbility { get; set; }
 
         public float Knockback { get; set; }
 
@@ -157,8 +109,7 @@ namespace Player
 
         public IPlayerInputs PlayerInputs { get; set; }
 
-        public static Action<PlayerView, PlayerState, PlayerState> PlayerStateChanged;
-
+        public static event Action<PlayerView, PlayerState, PlayerState> PlayerStateChanged;
 
         public PlayerState PlayerState
         {
@@ -221,10 +172,6 @@ namespace Player
         public event Action BecameStill;
         public event Action Shot;
         public event Action<PlayerView> WentOutOfBounds;
-        public event Action ReachedMaxAngy;
-        public event Action<int> AngyChanged;
-
-        public static event Action<PlayerView, Ability> NewAbilitySet;
 
         public void Predict()
         {
@@ -248,38 +195,9 @@ namespace Player
             Materials = originalMaterials;
         }
 
-        public void AlterAngy(AngyEvent angyEvent)
-        {
-            switch (angyEvent)
-            {
-                case AngyEvent.HitBadObject:
-                    Angy += GameConfig.Instance.AngyValues.HitBadObject;
-                    break;
-                case AngyEvent.FellOutOfTheMap:
-                    Angy += GameConfig.Instance.AngyValues.FellOutOfTheMap;
-                    break;
-                case AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy:
-                    Angy = GameConfig.Instance.AngyValues.AfterFellOutOfTheMapAndReachedMaxAngy;
-                    break;
-                case AngyEvent.ShotMade:
-                    Angy += GameConfig.Instance.AngyValues.ShotMade;
-                    break;
-                case AngyEvent.HitSomeone:
-                    Angy += GameConfig.Instance.AngyValues.PlayerHitSomeone;
-                    break;
-                case AngyEvent.GotHit:
-                    Angy += GameConfig.Instance.AngyValues.PlayerGotHit;
-                    break;
-                case AngyEvent.MushroomHit:
-                    Angy -= GameConfig.Instance.AngyValues.MushroomHit;
-                    break;
-            }
-        }
 
-        public UniTask ExplodeHideAndResetAngy()
+        public UniTask ExplodeAndHide()
         {
-            Angy = GameConfig.Instance.AngyValues.MinAngy;
-
             //TODO: Convert to proper animation
             BallRigidbody.GetComponent<Collider>().enabled = false;
             BallRigidbody.useGravity = false;
@@ -321,7 +239,8 @@ namespace Player
         private void OnMenuButtonPressed()
         {
             OptionsMenuRequested?.Invoke(this);
-            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerMenuOpened);
+            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerMenuOpened,
+                CurrentGameSession.PlayerFromPlayerView(this).Id);
         }
 
         private void OnBallBecameStill()
@@ -336,13 +255,17 @@ namespace Player
             LastStillPosition = lastStillPosition;
 
             BecameStill?.Invoke();
-            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerBecameStill);
+            var playerFromPlayerView = CurrentGameSession.PlayerFromPlayerView(this);
+            if (playerFromPlayerView != null)
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerBecameStill,
+                    playerFromPlayerView.Id);
         }
 
         private void OnWentOutOfBounds()
         {
             WentOutOfBounds?.Invoke(this);
-            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerWentOutOfBounds);
+            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerWentOutOfBounds,
+                CurrentGameSession.PlayerFromPlayerView(this).Id);
         }
 
         private void OnBallShot()
@@ -350,16 +273,18 @@ namespace Player
             Shot?.Invoke();
         }
 
-        public void JumpIn(Vector3 endPosition, float jumpTime = 1f)
+        public UniTask JumpIn(Vector3 endPosition, float jumpTime = 1f)
         {
             endPosition.y += BallRigidbody.GetComponent<SphereCollider>().radius;
 
-            BallRigidbody.transform.DOMove(endPosition, jumpTime)
+            return BallRigidbody.transform.DOMove(endPosition, jumpTime)
                 .OnComplete(delegate
                 {
                     BallRigidbody.velocity = Vector3.zero;
                     BallRigidbody.angularVelocity = Vector3.zero;
-                });
+                })
+                .SetEase(Ease.OutBounce)
+                .SetUpdate(true).ToUniTask();
         }
 
         public void Show()
@@ -389,13 +314,20 @@ namespace Player
 
             if (PhotonNetwork.OfflineMode)
             {
-                CurrentGameSession.Players.First(p => p.RoundPlayerView == null).RoundPlayerView = this;
+                var player = CurrentGameSession.Players.First(p => p.RoundPlayerView == null);
+                player.RoundPlayerView = this;
+                if (player is LocalPlayer localPlayer)
+                {
+                    PlayerInputs = RewiredPlayerInputs.AttachToPlayer(this, localPlayer.RewiredPlayer);
+                }
             }
             else
             {
                 if (PhotonNetwork.LocalPlayer.ActorNumber == addresseeActorNumber)
                 {
-                    CurrentGameSession.Players.First(p => p is LocalPlayer).RoundPlayerView = this;
+                    var player = CurrentGameSession.Players.First(p => p is LocalPlayer);
+                    player.RoundPlayerView = this;
+                    PlayerInputs = RewiredPlayerInputs.AttachToPlayer(this, ((LocalPlayer) player).RewiredPlayer);
                 }
                 else
                 {
@@ -404,6 +336,8 @@ namespace Player
                             p is OnlinePlayer onlinePlayer &&
                             onlinePlayer.PhotonPlayer.ActorNumber == addresseeActorNumber)
                         .RoundPlayerView = this;
+
+                    PlayerInputs = new NetworkPlayerInputs();
                 }
             }
 
@@ -412,6 +346,11 @@ namespace Player
 
         public void OnEvent(EventData photonEvent)
         {
+            if (!CurrentGameSession.IsNowPassive)
+            {
+                return;
+            }
+
             if (!Enum.IsDefined(typeof(GameEvent), photonEvent.Code) ||
                 photonEvent.Code == GameEvent.PlayerStateChanged.ToByte())
             {
@@ -422,32 +361,25 @@ namespace Player
 
             var senderPlayer = OnlinePlayer.SessionPlayerByActorNumber(photonEvent.Sender);
 
-            if (senderPlayer.RoundPlayerView == this)
+            if (!(photonEvent.CustomData is int id) || id != CurrentGameSession.PlayerFromPlayerView(this).Id)
             {
-                switch (gameEvent)
-                {
-                    case GameEvent.PlayerShot:
-                        Shot?.Invoke();
-                        break;
-                    case GameEvent.PlayerBecameStill:
-                        BecameStill?.Invoke();
-                        break;
-                    case GameEvent.PlayerWentOutOfBounds:
-                        WentOutOfBounds?.Invoke(this);
-                        break;
-                    case GameEvent.PlayerAngyChanged:
-                        var angy = (int) photonEvent.CustomData;
-                        _angy = angy;
-                        AngyChanged?.Invoke(angy);
-                        break;
-                    case GameEvent.PlayerAbilitySet:
-                        NewAbilitySet?.Invoke(this,
-                            Ability.InstanceFromCode((AbilityCode) (byte) photonEvent.CustomData));
-                        break;
-                    case GameEvent.PlayerMenuOpened:
-                        OptionsMenuRequested?.Invoke(this);
-                        break;
-                }
+                return;
+            }
+
+            switch (gameEvent)
+            {
+                case GameEvent.PlayerShot:
+                    Shot?.Invoke();
+                    break;
+                case GameEvent.PlayerBecameStill:
+                    BecameStill?.Invoke();
+                    break;
+                case GameEvent.PlayerWentOutOfBounds:
+                    WentOutOfBounds?.Invoke(this);
+                    break;
+                case GameEvent.PlayerMenuOpened:
+                    OptionsMenuRequested?.Invoke(this);
+                    break;
             }
         }
     }

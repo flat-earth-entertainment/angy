@@ -1,11 +1,13 @@
-using System.Linq;
 using System.Threading;
 using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using GameSession;
+using Logic;
 using Player;
 using UnityEngine;
+using Utils;
 
 namespace Abilities
 {
@@ -19,13 +21,16 @@ namespace Abilities
         private bool _pressedLaunch;
         private Tween _rotateTween;
         private GameObject _trail;
+        private PhotonEventListener _photonEventListener;
+        private AbilityController _abilityController;
 
         protected override async void InvokeAbility(PlayerView player)
         {
             Active = true;
 
             _player = player;
-            PlayerView.NewAbilitySet += OnAbilityOverride;
+            _abilityController = Object.FindObjectOfType<AbilityController>();
+            _abilityController.NewAbilitySet += OnAbilityOverride;
 
             _cancellationTokenSource = new CancellationTokenSource();
             Time.timeScale = 0;
@@ -44,6 +49,16 @@ namespace Abilities
 
             player.PlayerInputs.FireButtonPressed += OnLaunchPressed;
             player.PlayerInputs.AbilityButtonPressed += OnLaunchPressed;
+            _photonEventListener =
+                PhotonEventListener.ListenTo(GameEvent.PlayerAbilityButtonPressed, data =>
+                {
+                    Debug.Log("received dash cancel from network");
+                    if (CurrentGameSession.PlayerFromPlayerView(_player).Id == (int) data.CustomData)
+                    {
+                        Debug.Log("found proper player");
+                        OnLaunchPressed();
+                    }
+                });
 
             _rotateTween = _fireDashClock.DORotate(new Vector3(0, 360, 0),
                     GameConfig.Instance.AbilityValues.FireDashAbilityConfig.RotationTime)
@@ -58,7 +73,7 @@ namespace Abilities
 
         private void OnAbilityOverride(PlayerView player, Ability ability)
         {
-            PlayerView.NewAbilitySet -= OnAbilityOverride;
+            _abilityController.NewAbilitySet -= OnAbilityOverride;
 
             if (_player == player && ability != this)
             {
@@ -94,6 +109,7 @@ namespace Abilities
 
             _player.PlayerInputs.FireButtonPressed -= OnLaunchPressed;
             _player.PlayerInputs.AbilityButtonPressed -= OnLaunchPressed;
+            _photonEventListener.StopListening();
 
             Active = false;
             Finished = true;
@@ -101,7 +117,6 @@ namespace Abilities
 
         protected override void WrapInternal()
         {
-            Debug.Log(_player == null || _player.Equals(null));
             _player.BecameStill -= WrapInternal;
 
             _player.SetBodyMaterial(_originalBodyMaterial);

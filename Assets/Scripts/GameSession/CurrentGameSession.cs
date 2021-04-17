@@ -40,9 +40,9 @@ namespace GameSession
         }
 
         public static Player NextRoundPlayer { get; private set; }
-
         public static Material WinnerMaterial { get; set; }
         public static Material LoserMaterial { get; set; }
+        public static bool IsNowPassive { get; set; }
 
         public static Player[] Players
         {
@@ -55,7 +55,7 @@ namespace GameSession
                     _players = new Player[]
                     {
                         new LocalPlayer(0, 0, 0),
-                        new LocalPlayer(0, 1, 1)
+                        new LocalPlayer(1, 1, 1)
                     };
                 }
 #endif
@@ -78,7 +78,12 @@ namespace GameSession
 
         public static Player PlayerFromPlayerView(PlayerView playerView)
         {
-            return Players.First(p => p.RoundPlayerView == playerView);
+            return Players.FirstOrDefault(p => p.RoundPlayerView == playerView);
+        }
+
+        public static PlayerView PlayerViewFromId(int id)
+        {
+            return Players.FirstOrDefault(p => p.Id == id)?.RoundPlayerView;
         }
 
         public static void SetNextRoundPlayer(Player player)

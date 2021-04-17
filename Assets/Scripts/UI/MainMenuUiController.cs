@@ -1,4 +1,7 @@
+using System;
+using Config;
 using NaughtyAttributes;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -59,6 +62,8 @@ namespace UI
             optionsButton.onClick.AddListener(delegate { SceneChanger.ChangeScene(optionsScene); });
 
             exitButton.onClick.AddListener(Application.Quit);
+
+            PhotonNetwork.MinimalTimeScaleToDispatchInFixedUpdate = GameConfig.Instance.TimeScale - 0.1f;
         }
 
         private void HideHelp()

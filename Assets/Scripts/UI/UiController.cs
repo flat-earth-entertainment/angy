@@ -3,6 +3,7 @@ using Abilities;
 using Abilities.Config;
 using Audio;
 using Config;
+using Logic;
 using Player;
 using UnityEngine;
 
@@ -28,8 +29,11 @@ namespace UI
         [SerializeField]
         private PlayersManager playersManager;
 
-        private Dictionary<PlayerView, AbilityUi> _abilityPlayerUis = new Dictionary<PlayerView, AbilityUi>();
-        private Dictionary<PlayerView, AngyUi> _angyPlayerUis = new Dictionary<PlayerView, AngyUi>();
+        [SerializeField]
+        private AbilityController abilityController;
+
+        private readonly Dictionary<PlayerView, AbilityUi> _abilityPlayerUis = new Dictionary<PlayerView, AbilityUi>();
+        private readonly Dictionary<PlayerView, AngyUi> _angyPlayerUis = new Dictionary<PlayerView, AngyUi>();
 
         public bool CameraModeHelperActive
         {
@@ -45,17 +49,6 @@ namespace UI
 
             playersManager.InitializedAllPlayers += OnPlayersInitialized;
         }
-
-        private void OnEnable()
-        {
-            PlayerView.NewAbilitySet += OnNewAbilitySet;
-        }
-
-        private void OnDisable()
-        {
-            PlayerView.NewAbilitySet -= OnNewAbilitySet;
-        }
-
 
         public void WobbleAbilityUi(PlayerView playerView, bool state)
         {
@@ -97,9 +90,10 @@ namespace UI
 
         private void OnNewAbilitySet(PlayerView player, Ability ability)
         {
-            if (ability == null && player.PreviousAbility != null)
+            var previousPlayerAbility = abilityController.GetPreviousPlayerAbility(player);
+            if (ability == null && previousPlayerAbility != null)
             {
-                SetAbilityIconFor(player, AbilityConfig.GetConfigSpriteFor(player.PreviousAbility));
+                SetAbilityIconFor(player, AbilityConfig.GetConfigSpriteFor(previousPlayerAbility));
             }
             else
             {
@@ -116,8 +110,12 @@ namespace UI
         {
             playersManager.InitializedAllPlayers -= OnPlayersInitialized;
 
-            players[0].AngyChanged += angyUis[0].OnAngyChanged;
-            players[1].AngyChanged += angyUis[1].OnAngyChanged;
+            FindObjectOfType<AngyController>().AngyChanged += delegate(PlayerView view, int newAngy)
+            {
+                _angyPlayerUis[view].OnAngyChanged(newAngy);
+            };
+
+            abilityController.NewAbilitySet += OnNewAbilitySet;
 
             _angyPlayerUis.Add(players[0], angyUis[0]);
             _angyPlayerUis.Add(players[1], angyUis[1]);

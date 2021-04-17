@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Abilities;
 using Audio;
 using Ball;
 using Ball.Objectives;
@@ -32,6 +31,13 @@ namespace Logic
         [SerializeField]
         private UiController uiController;
 
+        [SerializeField]
+        private AngyController angyController;
+
+        [SerializeField]
+        private AbilityController abilityController;
+
+
         private PlayerView _currentTurnPlayer;
         private PlayerView _firstPlayer;
         private PlayerView _playerInOptions;
@@ -43,6 +49,8 @@ namespace Logic
         private PanController _panController;
         private bool _isInMapOverview;
         private bool _playersInitialized;
+        private bool _subscribedToMainEvents;
+        private bool _isPassive;
 
         private void Awake()
         {
@@ -75,6 +83,8 @@ namespace Logic
             uiController.HideAllUi();
 
             trajectoryLineController.SetTrajectoryActive(false);
+
+            _playersManager.InitializedAllPlayers += OnAllPlayersInitialized;
         }
 
         private async void Start()
@@ -90,12 +100,10 @@ namespace Logic
         }
 
 
-        private void OnEnable()
+        private void SubscribeToMainEvents()
         {
             Hole.PlayerEnteredHole += OnPlayerEnteredHole;
             Hole.PlayerLeftHole += OnPlayerLeftHole;
-
-            _playersManager.InitializedAllPlayers += OnAllPlayersInitialized;
 
             HitOtherPlayerTrigger.PlayerHit += OnPlayerGotHit;
 
@@ -106,10 +114,15 @@ namespace Logic
             KillingTrigger.HitKillTrigger += OnPlayerHitKillTrigger;
 
             PhotonNetwork.AddCallbackTarget(this);
+
+            _subscribedToMainEvents = true;
         }
 
-        private void OnDisable()
+        private void UnsubscribeFromMainEvents()
         {
+            if (!_subscribedToMainEvents)
+                return;
+
             Hole.PlayerEnteredHole -= OnPlayerEnteredHole;
             Hole.PlayerLeftHole -= OnPlayerLeftHole;
 
@@ -124,6 +137,11 @@ namespace Logic
             PhotonNetwork.RemoveCallbackTarget(this);
 
             Time.timeScale = GameConfig.Instance.TimeScale;
+        }
+
+        private void OnDisable()
+        {
+            UnsubscribeFromMainEvents();
         }
 
         private void UnsubscribeOutOfBounds()
@@ -208,34 +226,48 @@ namespace Logic
         private void OnAllPlayersInitialized(PlayerView[] players)
         {
             _playersInitialized = true;
+            _playersManager.InitializedAllPlayers -= OnAllPlayersInitialized;
+
             foreach (var player in players)
             {
                 player.WentOutOfBounds += OnPlayerWentOutOfBounds;
             }
+
+            SubscribeToMainEvents();
         }
 
         private void OnPlayerGotHit(PlayerView arg1, PlayerView arg2)
         {
             if (arg1 == _currentTurnPlayer)
             {
-                arg1.AlterAngy(AngyEvent.HitSomeone);
-                arg2.AlterAngy(AngyEvent.GotHit);
+                angyController.AlterAngyIfActive(arg1, AngyEvent.HitSomeone);
+                angyController.AlterAngyIfActive(arg2, AngyEvent.GotHit);
             }
         }
 
         private void OnPlayerWentOutOfBounds(PlayerView player)
         {
+            //Shouldn't react when not spawned
+            switch (player.PlayerState)
+            {
+                case PlayerState.ShouldSpawnAtSpawn:
+                case PlayerState.ShouldSpawnAtLastPosition:
+                case PlayerState.ShouldSpawnAtLastStandablePosition:
+                case PlayerState.ShouldSpawnCanNotMove:
+                    return;
+            }
+
             Debug.Log($"{player.PlayerPreset.PlayerName.Color(player.PlayerPreset.PlayerColor)} went out of bounds");
 
             player.Hide();
 
             AudioManager.PlaySfx(SfxType.LemmingLaunch);
 
-            player.AlterAngy(AngyEvent.FellOutOfTheMap);
+            angyController.AlterAngyIfActive(player, AngyEvent.FellOutOfTheMap);
 
-            if (player.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+            if (angyController[player] >= GameConfig.Instance.AngyValues.MaxAngy)
             {
-                player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
+                angyController.AlterAngyIfActive(player, AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
             }
 
             player.ChangeStateAndNotify(PlayerState.ShouldSpawnAtLastPosition);
@@ -243,7 +275,7 @@ namespace Logic
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
             {
-                EndOfTurnActions(player);
+                EndTurnFor(player);
                 MakeTurn();
             }
         }
@@ -252,11 +284,11 @@ namespace Logic
         {
             player.Hide();
 
-            player.AlterAngy(AngyEvent.FellOutOfTheMap);
+            angyController.AlterAngyIfActive(player, AngyEvent.FellOutOfTheMap);
 
-            if (player.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+            if (angyController[player] >= GameConfig.Instance.AngyValues.MaxAngy)
             {
-                player.AlterAngy(AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
+                angyController.AlterAngyIfActive(player, AngyEvent.AfterFellOutOfTheMapAndReachedMaxAngy);
             }
 
             player.ChangeStateAndNotify(PlayerState.ShouldSpawnAtLastStandablePosition);
@@ -264,7 +296,7 @@ namespace Logic
             //Unsubscribe as the current player should fall only as a result of shooting
             if (player == _currentTurnPlayer)
             {
-                EndOfTurnActions(player);
+                EndTurnFor(player);
                 MakeTurn();
             }
         }
@@ -348,35 +380,25 @@ namespace Logic
                 {
                     player.RoundPlayerView.GetComponent<PhotonView>().TransferOwnership(PhotonNetwork.LocalPlayer);
                 }
+
+                CurrentGameSession.IsNowPassive = false;
             }
-            //Here player thaws
-            // else
-            // {
-            //     Debug.Log("rigidbody should be unblocked", _currentTurnPlayer.gameObject);
-            //     _currentTurnPlayer.BallRigidbody.constraints = RigidbodyConstraints.None;
-            // }
+            else
+            {
+                CurrentGameSession.IsNowPassive = true;
+            }
 
             _currentTurnPlayer.SetIdleAnimation();
 
-            CinemachineVirtualCamera nextCamera = null;
-
-            //Decide where to move camera to
-            switch (_currentTurnPlayer.PlayerState)
-            {
-                case PlayerState.ShouldSpawnAtSpawn:
-                    nextCamera = _spawnPointCamera;
-                    break;
-                //TODO: Decide where should spawn in this case
-                case PlayerState.ShouldSpawnCanNotMove:
-                case PlayerState.ShouldMakeTurn:
-                    nextCamera = _currentTurnPlayer.BallCamera;
-                    break;
-            }
+            var nextCamera =
+                _currentTurnPlayer.PlayerState == PlayerState.ShouldSpawnAtSpawn
+                    ? _spawnPointCamera
+                    : _currentTurnPlayer.BallCamera;
 
             await _camerasController.BlendTo(nextCamera, GameConfig.Instance.FlyToNextPlayerTime);
 
             //Explode and skip turn if needed
-            if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+            if (angyController[_currentTurnPlayer] >= GameConfig.Instance.AngyValues.MaxAngy)
             {
                 await OnMaxAngy(_currentTurnPlayer);
                 MakeTurn();
@@ -413,7 +435,7 @@ namespace Logic
                     uiController.EnableAngyMeter();
                     uiController.EnableAbilityUi();
 
-                    _currentTurnPlayer.Ability = Ability.Copy(_currentTurnPlayer.PreviousAbility);
+                    abilityController.CopyPreviousAbilityToCurrent(_currentTurnPlayer);
 
                     _currentTurnPlayer.Predict();
 
@@ -427,7 +449,6 @@ namespace Logic
                     uiController.CameraModeHelperActive = true;
 
                     SubscribeToPreShotEvents(_currentTurnPlayer);
-
                     break;
             }
         }
@@ -460,15 +481,14 @@ namespace Logic
             player.Show();
 
             //TODO: Change to animation
-            player.JumpIn(spawnPosition, GameConfig.Instance.JumpInTime);
-            await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.JumpInTime));
+            await player.JumpIn(spawnPosition, GameConfig.Instance.JumpInTime);
 
             _camerasController.SetActiveCamera(player.BallCamera, 1f);
         }
 
         private void OnPlayerShot()
         {
-            if (_currentTurnPlayer.Ability != null)
+            if (abilityController.GetPlayerAbility(_currentTurnPlayer) != null)
             {
                 uiController.WobbleAbilityUi(_currentTurnPlayer, true);
             }
@@ -483,7 +503,7 @@ namespace Logic
 
             uiController.CameraModeHelperActive = false;
 
-            _currentTurnPlayer.AlterAngy(AngyEvent.ShotMade);
+            angyController.AlterAngyIfActive(_currentTurnPlayer, AngyEvent.ShotMade);
 
             _currentTurnPlayer.ChangeStateAndNotify(PlayerState.ActiveInMotion);
         }
@@ -502,9 +522,10 @@ namespace Logic
 
         private void OnAbilityButtonPressed()
         {
-            if (_currentTurnPlayer.Ability != null && !_currentTurnPlayer.Ability.WasFired)
+            var currentTurnPlayerAbility = abilityController.GetPlayerAbility(_currentTurnPlayer);
+            if (currentTurnPlayerAbility != null && !currentTurnPlayerAbility.WasFired)
             {
-                _currentTurnPlayer.Ability.Invoke(_currentTurnPlayer);
+                currentTurnPlayerAbility.Invoke(_currentTurnPlayer);
                 PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityFired);
 
                 uiController.WobbleAbilityUi(_currentTurnPlayer, false);
@@ -513,15 +534,17 @@ namespace Logic
 
         private async void OnCurrentPlayerBecameStill()
         {
-            if (_currentTurnPlayer.Ability != null && _currentTurnPlayer.Ability.Active)
+            var currentTurnPlayerAbility = abilityController.GetPlayerAbility(_currentTurnPlayer);
+
+            if (currentTurnPlayerAbility != null && currentTurnPlayerAbility.Active)
             {
-                await UniTask.WaitUntil(() => _currentTurnPlayer.Ability.Finished);
+                await UniTask.WaitUntil(() => currentTurnPlayerAbility.Finished);
             }
 
-            EndOfTurnActions(_currentTurnPlayer);
+            EndTurnFor(_currentTurnPlayer);
 
             //If angy became full
-            if (_currentTurnPlayer.Angy >= GameConfig.Instance.AngyValues.MaxAngy)
+            if (angyController[_currentTurnPlayer] >= GameConfig.Instance.AngyValues.MaxAngy)
             {
                 await OnMaxAngy(_currentTurnPlayer);
             }
@@ -533,12 +556,12 @@ namespace Logic
             await DelayAndMakeTurn();
         }
 
-        private UniTask OnMaxAngy(PlayerView player)
+        private static UniTask OnMaxAngy(PlayerView player)
         {
             player.ChangeStateAndNotify(PlayerState.ShouldSpawnCanNotMove);
 
             //TODO: Play explosion animation
-            return player.ExplodeHideAndResetAngy();
+            return player.ExplodeAndHide();
         }
 
         private async UniTask DelayAndMakeTurn()
@@ -547,7 +570,7 @@ namespace Logic
             MakeTurn();
         }
 
-        private void EndOfTurnActions(PlayerView player)
+        private void EndTurnFor(PlayerView player)
         {
             UnsubscribeFromPreStillEvents(player);
 
@@ -556,7 +579,7 @@ namespace Logic
             uiController.WobbleAbilityUi(player, false);
             uiController.CameraModeHelperActive = false;
 
-            _currentTurnPlayer.Ability?.Wrap();
+            abilityController.GetPlayerAbility(_currentTurnPlayer)?.Wrap();
         }
 
         private async void OnMapButtonPressed()
@@ -579,9 +602,28 @@ namespace Logic
             }
         }
 
+        public void OnEvent(EventData photonEvent)
+        {
+            if (!CurrentGameSession.IsNowPassive)
+            {
+                return;
+            }
+
+            if (photonEvent.Code == GameEvent.PlayerAbilityFired.ToByte())
+            {
+                OnAbilityButtonPressed();
+            }
+
+            if (photonEvent.Code == GameEvent.PlayerHitKillTrigger.ToByte())
+            {
+                var playerId = (int) photonEvent.CustomData;
+                OnPlayerHitKillTrigger(CurrentGameSession.PlayerViewFromId(playerId));
+            }
+        }
+
+#if UNITY_EDITOR
         private void Update()
         {
-#if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.O))
             {
                 OnPlayerConfirmedPresenceInHole(_currentTurnPlayer);
@@ -589,26 +631,16 @@ namespace Logic
 
             if (Input.GetKeyDown(KeyCode.I))
             {
-                _currentTurnPlayer.AlterAngy(AngyEvent.FellOutOfTheMap);
+                angyController.AlterAngyIfActive(_currentTurnPlayer, AngyEvent.FellOutOfTheMap);
             }
 
             if (Input.GetKeyDown(KeyCode.J))
             {
                 UnsubscribeFromPreShotEvents(_currentTurnPlayer);
-                EndOfTurnActions(_currentTurnPlayer);
+                EndTurnFor(_currentTurnPlayer);
                 MakeTurn();
             }
-
-
+        }
 #endif
-        }
-
-        public void OnEvent(EventData photonEvent)
-        {
-            if (photonEvent.Code == GameEvent.PlayerAbilityFired.ToByte())
-            {
-                OnAbilityButtonPressed();
-            }
-        }
     }
 }

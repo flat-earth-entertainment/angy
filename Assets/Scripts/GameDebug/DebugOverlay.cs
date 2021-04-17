@@ -26,19 +26,21 @@ namespace GameDebug
             _debugCanvas = GetComponent<Canvas>();
             _debugCanvas.enabled = false;
 
+            var currentTurnPlayer = _gameManager.CurrentTurnPlayer;
+            var abilityController = FindObjectOfType<AbilityController>();
             expandAbility.onClick.AddListener(delegate
             {
-                _gameManager.CurrentTurnPlayer.Ability = new ExpandAbility();
+                abilityController.SetNewAbilityAndTryNotify(currentTurnPlayer, new ExpandAbility());
             });
 
             noGravityAbility.onClick.AddListener(delegate
             {
-                _gameManager.CurrentTurnPlayer.Ability = new NoGravityAbility();
+                abilityController.SetNewAbilityAndTryNotify(currentTurnPlayer, new NoGravityAbility());
             });
 
             iceBlockAbility.onClick.AddListener(delegate
             {
-                _gameManager.CurrentTurnPlayer.Ability = new IceBlockAbility();
+                abilityController.SetNewAbilityAndTryNotify(currentTurnPlayer, new IceBlockAbility());
             });
         }
 

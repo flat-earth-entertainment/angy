@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using Logic;
-using Photon.Pun;
 using Player;
 using Utils;
 
@@ -26,7 +25,7 @@ namespace Abilities
             return (Ability) Activator.CreateInstance(ability.GetType());
         }
 
-        public static Ability InstanceFromCode(AbilityCode abilityCode)
+        public static Ability InstanceFromAbilityCode(AbilityCode abilityCode)
         {
             return abilityCode switch
             {
@@ -34,12 +33,13 @@ namespace Abilities
                 AbilityCode.FireDash => new FireDashAbility(),
                 AbilityCode.IceBlock => new IceBlockAbility(),
                 AbilityCode.NoGravity => new NoGravityAbility(),
+                AbilityCode.Random => new RandomAbility(),
                 AbilityCode.None => null,
                 _ => throw new ArgumentOutOfRangeException(nameof(abilityCode), abilityCode, null)
             };
         }
 
-        public static AbilityCode CodeFromInstance(Ability ability)
+        public static AbilityCode AbilityCodeFromInstance(Ability ability)
         {
             return ability switch
             {
@@ -55,14 +55,13 @@ namespace Abilities
         public static Ability RandomAbility()
         {
             var abilityTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => typeof(Ability).IsAssignableFrom(t) && t != typeof(Ability));
+                .Where(t => typeof(Ability).IsAssignableFrom(t) && t != typeof(Ability) && t != typeof(RandomAbility));
 
             return (Ability) Activator.CreateInstance(abilityTypes.RandomElement());
         }
 
         public void Invoke(PlayerView player)
         {
-            PhotonNetwork.AddCallbackTarget(this);
             WasFired = true;
             InvokeAbility(player);
         }
@@ -73,13 +72,6 @@ namespace Abilities
             {
                 WrapInternal();
             }
-
-            PhotonNetwork.RemoveCallbackTarget(this);
-        }
-
-        ~Ability()
-        {
-            PhotonNetwork.RemoveCallbackTarget(this);
         }
 
         protected virtual void WrapInternal()
