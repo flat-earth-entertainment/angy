@@ -12,6 +12,8 @@ namespace Player
         [SerializeField]
         private PlayerView player;
 
+        private Vector3 _previousPosition;
+
         private void Awake()
         {
             _notStandableLayerMask = LayerMask.GetMask("NotRespawnable");
@@ -19,7 +21,8 @@ namespace Player
 
         private void FixedUpdate()
         {
-            if (Physics.Raycast(transform.position + Vector3.up * 50, Vector3.down, 200, _notStandableLayerMask))
+            if (_previousPosition == transform.position || Physics.Raycast(transform.position + Vector3.up * 50,
+                Vector3.down, 200, _notStandableLayerMask))
             {
                 return;
             }
@@ -32,6 +35,8 @@ namespace Player
                     player.LastStandablePosition = hit.point;
                 }
             }
+
+            _previousPosition = transform.position;
         }
     }
 }
