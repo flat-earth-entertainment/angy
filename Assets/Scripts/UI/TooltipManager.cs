@@ -4,6 +4,7 @@ using UnityEngine;
 using Rewired;
 using Player;
 using Abilities;
+using Logic;
 
 public class TooltipManager : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class TooltipManager : MonoBehaviour
 
         achieved = new List<bool>(new bool[tooltips.Count]);
         StartCoroutine("Tooltip");
-        PlayerView.NewAbilitySet += AbilityPickedUp;
+        FindObjectOfType<AbilityController>().NewAbilitySet += AbilityPickedUp;
     }
     void AbilityPickedUp(PlayerView player, Ability ability){   // GOTCHA! Ability was caught
         if(ability != null){
