@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Config;
-using Cysharp.Threading.Tasks;
 using ExitGames.Client.Photon;
 using GameSession;
 using Logic;
@@ -33,10 +32,6 @@ namespace UI
         [SerializeField]
         [Scene]
         private string roomSelectionScene;
-
-        [SerializeField]
-        [Scene]
-        private string nextScene;
 
         [SerializeField]
         private GameObject playerListRowPrefab;
@@ -96,9 +91,11 @@ namespace UI
             startButton.onClick.AddListener(delegate
             {
                 //Add player count (byte)
-                var eventData = new List<object> {PhotonNetwork.CurrentRoom.PlayerCount};
+                var eventData = new List<object>
+                {
+                    PhotonNetwork.CurrentRoom.PlayerCount, byte.Parse(mapCollection.text)
+                };
 
-                eventData.Add(byte.Parse(mapCollection.text));
 
                 //Add (byte)game session player id + (int)photon player id
                 for (byte i = 0; i < PhotonNetwork.CurrentRoom.Players.Values.Count; i++)
@@ -108,7 +105,6 @@ namespace UI
                 }
 
                 PhotonShortcuts.ReliableRaiseEventToAll(GameEvent.GameSessionPlayersShouldInitialize, eventData);
-                // SceneChanger.ChangeScene(nextScene);
             });
 
             foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
@@ -128,7 +124,7 @@ namespace UI
         {
             var playerListRow = Instantiate(playerListRowPrefab, playerList.content).GetComponent<PlayerListRow>();
             playerListRow.PlayerName =
-                string.IsNullOrEmpty(player.NickName) ? "Player " + player.ActorNumber : player.NickName;
+                string.IsNullOrEmpty(player.NickName) ? "Lemming " + player.ActorNumber : player.NickName;
 
             if (player.Equals(PhotonNetwork.LocalPlayer))
             {
