@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Config;
+using Cysharp.Threading.Tasks;
 using ExitGames.Client.Photon;
 using GameSession;
 using Logic;
@@ -127,9 +128,14 @@ namespace UI
         {
             var playerListRow = Instantiate(playerListRowPrefab, playerList.content).GetComponent<PlayerListRow>();
             playerListRow.PlayerName =
-                string.IsNullOrEmpty(player.NickName) ? "Player " + player.UserId : player.NickName;
+                string.IsNullOrEmpty(player.NickName) ? "Player " + player.ActorNumber : player.NickName;
 
-            playerListRow.PlayerReadyStatus = "N/A";
+            if (player.Equals(PhotonNetwork.LocalPlayer))
+            {
+                playerListRow.PlayerName += " (You)";
+            }
+
+            playerListRow.PlayerReadyStatus = "";
 
             _playerRows.Add(player, playerListRow);
         }
