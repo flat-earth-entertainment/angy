@@ -27,7 +27,7 @@ namespace Logic
 
         public void SetNewAbility(PlayerView playerView, Ability ability)
         {
-            _previousPlayerAbilities[playerView] = _playerAbilities[playerView];
+            _previousPlayerAbilities[playerView] = ability;
             _playerAbilities[playerView]?.Wrap();
             _playerAbilities[playerView] = ability;
         }
@@ -49,8 +49,22 @@ namespace Logic
             }
         }
 
+        public bool HasAbility(PlayerView playerView) => _playerAbilities[playerView] != null;
         public Ability GetPlayerAbility(PlayerView playerView) => _playerAbilities[playerView];
         public Ability GetPreviousPlayerAbility(PlayerView playerView) => _previousPlayerAbilities[playerView];
+
+        public bool TryInvokeAbility(PlayerView playerView)
+        {
+            var playerAbility = _playerAbilities[playerView];
+            if (HasAbility(playerView) && !playerAbility.WasFired)
+            {
+                playerAbility.Invoke(playerView);
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityFired);
+                return true;
+            }
+
+            return false;
+        }
 
         public void CopyPreviousAbilityToCurrent(PlayerView playerView)
         {
