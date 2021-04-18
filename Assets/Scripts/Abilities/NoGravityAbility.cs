@@ -23,13 +23,13 @@ namespace Abilities
         {
             Active = true;
             _playerView = player;
-            _playerView.PlayerInputs.AbilityButtonPressed += WrapInternal;
+            _playerView.PlayerInputs.AbilityButtonPressed += OnAbilityCancelled;
             _photonEventListener =
                 PhotonEventListener.ListenTo(GameEvent.PlayerAbilityButtonPressed, data =>
                 {
                     if (CurrentGameSession.PlayerFromPlayerView(_playerView).Id == (int) data.CustomData)
                     {
-                        WrapInternal();
+                        OnAbilityCancelled();
                     }
                 });
 
@@ -46,9 +46,13 @@ namespace Abilities
             WrapInternal();
         }
 
-        protected override void WrapInternal()
+        private void OnAbilityCancelled()
         {
             _cancellationTokenSource.Cancel();
+        }
+
+        protected override void WrapInternal()
+        {
             _playerView.SetBodyMaterial(_originalMaterial);
 
             _playerView.PlayerInputs.AbilityButtonPressed -= WrapInternal;
