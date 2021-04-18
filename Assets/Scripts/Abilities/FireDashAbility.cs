@@ -58,7 +58,7 @@ namespace Abilities
                         Debug.Log("found proper player");
                         OnLaunchPressed();
                     }
-                });
+                }, false);
 
             _rotateTween = _fireDashClock.DORotate(new Vector3(0, 360, 0),
                     GameConfig.Instance.AbilityValues.FireDashAbilityConfig.RotationTime)

@@ -31,7 +31,7 @@ namespace Abilities
                     {
                         OnAbilityCancelled();
                     }
-                });
+                }, false);
 
             _cancellationTokenSource = new CancellationTokenSource();
 
