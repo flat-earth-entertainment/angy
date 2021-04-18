@@ -36,6 +36,9 @@ namespace Player
         [SerializeField]
         private OutOfBoundsCheck outOfBoundsCheck;
 
+        [SerializeField]
+        private ShadowAligner shadowAligner;
+
         [field: SerializeField]
         public GameObject Ball { get; private set; }
 
@@ -290,10 +293,12 @@ namespace Player
         public void Show()
         {
             Ball.SetActive(true);
+            shadowAligner.gameObject.SetActive(true);
         }
 
         public void Hide()
         {
+            shadowAligner.gameObject.SetActive(false);
             Ball.SetActive(false);
         }
 
