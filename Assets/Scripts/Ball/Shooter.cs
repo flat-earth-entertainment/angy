@@ -9,6 +9,7 @@ using Logic;
 using Photon.Pun;
 using Photon.Realtime;
 using Player;
+using UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils;
@@ -144,7 +145,7 @@ namespace Ball
                 return;
             }
 
-            if (activateShootingRetinae && active)
+            if (activateShootingRetinae && active && !PauseMenu.IsShowing)
             {
                 // Vertical movement controls
                 var vertical = _rewiredPlayer.GetAxis("Move Vertical");

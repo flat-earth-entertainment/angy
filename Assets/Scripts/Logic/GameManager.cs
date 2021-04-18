@@ -160,14 +160,13 @@ namespace Logic
                 || _currentTurnPlayer != null && _currentTurnPlayer.PlayerState == PlayerState.ActivePowerMode)
                 return;
 
-            caller.PlayerInputs.MenuButtonPressed += OnOptionsMenuCloseRequested;
+            PlayerView.OptionsMenuRequested += OnOptionsMenuCloseRequested;
 
-            PauseMenu.Show(OnOptionsMenuCloseRequested);
+            PauseMenu.Show(() => { OnOptionsMenuCloseRequested(caller); });
 
-            Time.timeScale = 0f;
             _playerInOptions = caller;
 
-            if (_currentTurnPlayer == caller)
+            if (_currentTurnPlayer == _playerInOptions)
             {
                 switch (_currentTurnPlayer.PlayerState)
                 {
@@ -182,12 +181,11 @@ namespace Logic
             }
         }
 
-        private async void OnOptionsMenuCloseRequested()
+        private async void OnOptionsMenuCloseRequested(PlayerView caller)
         {
-            _playerInOptions.PlayerInputs.MenuButtonPressed -= OnOptionsMenuCloseRequested;
+            PlayerView.OptionsMenuRequested -= OnOptionsMenuCloseRequested;
 
             PauseMenu.Hide();
-            Time.timeScale = GameConfig.Instance.TimeScale;
 
             if (_currentTurnPlayer == _playerInOptions)
             {

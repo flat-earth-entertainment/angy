@@ -12,6 +12,8 @@ namespace UI
     {
         public static Action ResumeButtonClicked;
 
+        public static bool IsShowing => Instance.gameObject.activeSelf;
+
         private static PauseMenu _instance;
 
         [SerializeField]
@@ -60,6 +62,10 @@ namespace UI
 
         private void Awake()
         {
+            _instance = this;
+
+            Hide();
+
             optionsButton.onClick.AddListener(delegate
             {
                 OptionsController.Show(false);

@@ -25,7 +25,6 @@ namespace Logic
         PlayerAbilitySet,
         PlayerAbilityFired,
         PlayerAbilityButtonPressed,
-        PlayerMenuOpened,
         SceneChange
     }
 

@@ -242,8 +242,6 @@ namespace Player
         private void OnMenuButtonPressed()
         {
             OptionsMenuRequested?.Invoke(this);
-            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerMenuOpened,
-                CurrentGameSession.PlayerFromPlayerView(this).Id);
         }
 
         private void OnBallBecameStill()
@@ -364,8 +362,6 @@ namespace Player
 
             var gameEvent = (GameEvent) photonEvent.Code;
 
-            var senderPlayer = OnlinePlayer.SessionPlayerByActorNumber(photonEvent.Sender);
-
             if (!(photonEvent.CustomData is int id) || id != CurrentGameSession.PlayerFromPlayerView(this).Id)
             {
                 return;
@@ -381,9 +377,6 @@ namespace Player
                     break;
                 case GameEvent.PlayerWentOutOfBounds:
                     WentOutOfBounds?.Invoke(this);
-                    break;
-                case GameEvent.PlayerMenuOpened:
-                    OptionsMenuRequested?.Invoke(this);
                     break;
             }
         }

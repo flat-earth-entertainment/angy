@@ -1,5 +1,6 @@
 ﻿using Cinemachine;
 using Config;
+using UI;
 using UnityEngine;
 
 namespace Player
@@ -31,6 +32,11 @@ namespace Player
 
         private void Update()
         {
+            if (PauseMenu.IsShowing)
+            {
+                return;
+            }
+
             var currentPosition = transform.localPosition;
 
             if (_verticalInput + currentPosition.z <= bottomLeftBound.z ||
