@@ -488,7 +488,7 @@ namespace Logic
 
         private void OnPlayerShot()
         {
-            if (abilityController.GetPlayerAbility(_currentTurnPlayer) != null)
+            if (abilityController.HasAbility(_currentTurnPlayer))
             {
                 uiController.WobbleAbilityUi(_currentTurnPlayer, true);
             }
@@ -522,12 +522,8 @@ namespace Logic
 
         private void OnAbilityButtonPressed()
         {
-            var currentTurnPlayerAbility = abilityController.GetPlayerAbility(_currentTurnPlayer);
-            if (currentTurnPlayerAbility != null && !currentTurnPlayerAbility.WasFired)
+            if (abilityController.TryInvokeAbility(_currentTurnPlayer))
             {
-                currentTurnPlayerAbility.Invoke(_currentTurnPlayer);
-                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityFired);
-
                 uiController.WobbleAbilityUi(_currentTurnPlayer, false);
             }
         }
