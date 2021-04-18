@@ -165,20 +165,6 @@ namespace Logic
             PauseMenu.Show(() => { OnOptionsMenuCloseRequested(caller); });
 
             _playerInOptions = caller;
-
-            if (_currentTurnPlayer == _playerInOptions)
-            {
-                switch (_currentTurnPlayer.PlayerState)
-                {
-                    case PlayerState.ActiveAiming:
-                        UnsubscribeFromPreShotEvents(_currentTurnPlayer);
-                        _currentTurnPlayer.SetControlsActive(false);
-                        break;
-                    case PlayerState.ActiveInMotion:
-                        UnsubscribeFromPreStillEvents(_currentTurnPlayer);
-                        break;
-                }
-            }
         }
 
         private async void OnOptionsMenuCloseRequested(PlayerView caller)
@@ -186,20 +172,6 @@ namespace Logic
             PlayerView.OptionsMenuRequested -= OnOptionsMenuCloseRequested;
 
             PauseMenu.Hide();
-
-            if (_currentTurnPlayer == _playerInOptions)
-            {
-                switch (_currentTurnPlayer.PlayerState)
-                {
-                    case PlayerState.ActiveAiming:
-                        SubscribeToPreShotEvents(_currentTurnPlayer);
-                        _currentTurnPlayer.SetControlsActive(true);
-                        break;
-                    case PlayerState.ActiveInMotion:
-                        SubscribeToPreStillEvents(_currentTurnPlayer);
-                        break;
-                }
-            }
 
             await UniTask.Delay(TimeSpan.FromMilliseconds(100), DelayType.UnscaledDeltaTime);
             _playerInOptions = null;
