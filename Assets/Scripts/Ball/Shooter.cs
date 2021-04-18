@@ -123,11 +123,17 @@ namespace Ball
             }
         }
 
+        private float _networkHorSnap, _networkVertSnap;
 
         private void Update()
         {
             if (_isOnlinePlayer)
             {
+                horSnap = Mathf.MoveTowards(horSnap, _networkHorSnap,
+                    Mathf.Abs(_networkHorSnap - horSnap) / (1f / PhotonNetwork.SerializationRate));
+                vertSnap = Mathf.MoveTowards(vertSnap, _networkVertSnap,
+                    Mathf.Abs(_networkVertSnap - vertSnap) / (1f / PhotonNetwork.SerializationRate));
+
                 if (horSnap != _prevHorSnap || vertSnap != _prevVertSnap)
                 {
                     Predict();
@@ -540,8 +546,8 @@ namespace Ball
             }
             else
             {
-                vertSnap = (float) stream.ReceiveNext();
-                horSnap = (float) stream.ReceiveNext();
+                _networkVertSnap = (float) stream.ReceiveNext();
+                _networkHorSnap = (float) stream.ReceiveNext();
             }
         }
 

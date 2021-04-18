@@ -64,6 +64,7 @@ namespace UI
             exitButton.onClick.AddListener(Application.Quit);
 
             PhotonNetwork.MinimalTimeScaleToDispatchInFixedUpdate = GameConfig.Instance.TimeScale - 0.1f;
+            PhotonNetwork.SerializationRate = 20;
         }
 
         private void HideHelp()
