@@ -23,7 +23,7 @@ namespace UI
 
         [SerializeField]
         [Scene]
-        private string roomSelectionScene;
+        private string onlineScene;
 
         [SerializeField]
         private Button backButton;
@@ -57,15 +57,7 @@ namespace UI
                 SceneChanger.ChangeScene(localModeScene);
             });
 
-            onlineButton.onClick.AddListener(delegate
-            {
-                onlineButton.interactable = false;
-                PhotonNetwork.OfflineMode = false;
-                if (PhotonNetwork.ConnectUsingSettings())
-                {
-                    SceneManager.LoadScene(roomSelectionScene);
-                }
-            });
+            onlineButton.onClick.AddListener(delegate { SceneManager.LoadScene(onlineScene); });
 
             backButton.onClick.AddListener(delegate { SceneManager.LoadScene(backScene); });
 

@@ -1,5 +1,7 @@
 using Config;
 using GameSession;
+using Network;
+using Photon.Pun;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -64,6 +66,11 @@ namespace Scenes.Victory
             winnerScoreLine.text = sum0.ToString();
             loserScoreLine.text = sum1.ToString();
 
+            if (!PhotonNetwork.OfflineMode)
+            {
+                CurrentPlayer.TryAddPoints(PhotonNetwork.IsMasterClient ? sum0 : sum1);
+            }
+
             var winnerMaterials = winner.materials;
             winnerMaterials[0].SetColor("Color_Primary", GameConfig.Instance.PlayerPresets[winnerId].PlayerColor);
             winner.materials = winnerMaterials;
@@ -78,6 +85,9 @@ namespace Scenes.Victory
             if (Input.anyKey)
             {
                 SceneChanger.ChangeScene(GameConfig.Instance.Scenes.MainMenuScene);
+                CurrentGameSession.ClearSession();
+                PhotonNetwork.Disconnect();
+                SessionHandler.CancelSession();
             }
         }
     }

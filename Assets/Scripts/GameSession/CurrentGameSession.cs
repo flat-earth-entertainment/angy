@@ -44,6 +44,20 @@ namespace GameSession
         public static Material LoserMaterial { get; set; }
         public static bool IsNowPassive { get; set; }
 
+        private static Player[] _players;
+        private static MapCollectionScores _mapCollectionScores;
+        private static MapCollection _mapCollection;
+
+        public static void ClearSession()
+        {
+            WinnerMaterial = null;
+            LoserMaterial = null;
+            _mapCollection = null;
+            _mapCollectionScores = null;
+            NextRoundPlayer = null;
+            _players = null;
+        }
+
         public static Player[] Players
         {
             get
@@ -63,10 +77,6 @@ namespace GameSession
             }
             set => _players = value;
         }
-
-        private static Player[] _players;
-        private static MapCollectionScores _mapCollectionScores;
-        private static MapCollection _mapCollection;
 
         public static void ResetPlayerViews()
         {
@@ -101,16 +111,6 @@ namespace GameSession
             {
                 Debug.LogError("Current Session players are not set!");
             }
-        }
-
-        public static void ClearSession()
-        {
-            WinnerMaterial = null;
-            LoserMaterial = null;
-            _mapCollection = null;
-            _mapCollectionScores = null;
-            NextRoundPlayer = null;
-            _players = null;
         }
 
         public static string GetNextMap(string currentMap)
