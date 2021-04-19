@@ -31,7 +31,7 @@ namespace GameSession
     {
         public static OnlinePlayer SessionPlayerByActorNumber(int actorNumber)
         {
-            return CurrentGameSession.Players.First(p =>
+            return CurrentGameSession.Players.FirstOrDefault(p =>
                 p is OnlinePlayer onlinePlayer && onlinePlayer.PhotonPlayer.ActorNumber == actorNumber) as OnlinePlayer;
         }
 

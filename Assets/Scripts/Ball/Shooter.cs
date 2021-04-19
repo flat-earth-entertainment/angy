@@ -554,7 +554,9 @@ namespace Ball
 
         public void OnEvent(EventData photonEvent)
         {
-            if (!OnlinePlayer.SessionPlayerByActorNumber(photonEvent.Sender).RoundPlayerView == PlayerView)
+            var sessionPlayerByActorNumber = OnlinePlayer.SessionPlayerByActorNumber(photonEvent.Sender);
+
+            if (sessionPlayerByActorNumber != null && !sessionPlayerByActorNumber.RoundPlayerView == PlayerView)
             {
                 return;
             }
