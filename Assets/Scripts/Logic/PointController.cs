@@ -11,10 +11,11 @@ namespace Logic
 {
     public class PointController : MonoBehaviour
     {
-        public List<GoodNeutralMushroom> pointHolders;
-        public List<TextMeshProUGUI> pointText;
+        [SerializeField]
+        private List<GoodNeutralMushroom> pointHolders;
 
-        private const int RedId = 0, BlueId = 1;
+        [SerializeField]
+        private List<TextMeshProUGUI> pointText;
 
         private readonly Dictionary<PlayerView, int> _playerPoints = new Dictionary<PlayerView, int>();
         private int _enemiesRemaining;
@@ -53,7 +54,7 @@ namespace Logic
 
         public void UpdateScore()
         {
-            PlayerView[] playerPoints = new PlayerView[_playerPoints.Keys.Count];
+            var playerPoints = new PlayerView[_playerPoints.Keys.Count];
             _playerPoints.Keys.CopyTo(playerPoints, 0);
 
             foreach (var playerPoint in playerPoints)
@@ -65,19 +66,15 @@ namespace Logic
                     pointText[playerId].text = _playerPoints[playerPoint].ToString();
             }
 
-            foreach (var enemy in pointHolders)
+            foreach (var enemy in pointHolders.Where(enemy => enemy.owner != null))
             {
-                if (enemy.owner != null)
-                {
-                    _playerPoints[enemy.owner] += enemy.pointValue;
-                    if (pointText[0] != null)
-                        pointText[CurrentGameSession.PlayerFromPlayerView(enemy.owner).PresetIndex].text =
-                            _playerPoints[enemy.owner].ToString();
-                }
+                _playerPoints[enemy.owner] += enemy.pointValue;
+                if (pointText[0] != null)
+                    pointText[CurrentGameSession.PlayerFromPlayerView(enemy.owner).PresetIndex].text =
+                        _playerPoints[enemy.owner].ToString();
             }
         }
 
-        //TODO: 
         public IReadOnlyDictionary<PlayerView, int> GetPoints()
         {
             UpdateScore();
