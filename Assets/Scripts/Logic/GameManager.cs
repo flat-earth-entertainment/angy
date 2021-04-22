@@ -463,8 +463,10 @@ namespace Logic
 
             player.Show();
 
+            player.Shooter.SetBallFormActive(true);
             //TODO: Change to animation
             await player.JumpIn(spawnPosition, GameConfig.Instance.JumpInTime);
+            player.Shooter.SetBallFormActive(false);
 
             _camerasController.SetActiveCamera(player.BallCamera, 1f);
         }
