@@ -74,7 +74,7 @@ namespace UI
 
             CurrentGameSession.Players = players.ToArray();
             CurrentGameSession.SetNextRoundPlayer(players[0]);
-            PhotonNetwork.LoadLevel(roomSelectionScene);
+            PhotonNetwork.LoadLevel(mapSelectionScene);
         }
 
         private void Awake()
