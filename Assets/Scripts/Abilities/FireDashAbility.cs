@@ -73,10 +73,9 @@ namespace Abilities
 
         private void OnAbilityOverride(PlayerView player, Ability ability)
         {
-            _abilityController.NewAbilitySet -= OnAbilityOverride;
-
             if (_player == player && ability != this)
             {
+                _abilityController.NewAbilitySet -= OnAbilityOverride;
                 WrapInternal();
             }
         }
@@ -110,9 +109,6 @@ namespace Abilities
             _player.PlayerInputs.FireButtonPressed -= OnLaunchPressed;
             _player.PlayerInputs.AbilityButtonPressed -= OnLaunchPressed;
             _photonEventListener.StopListening();
-
-            Active = false;
-            Finished = true;
         }
 
         protected override void WrapInternal()
@@ -128,7 +124,9 @@ namespace Abilities
                 Object.Destroy(_trail);
             }
 
+            Active = false;
             IsFinalized = true;
+            Finished = true;
         }
 
         private void OnLaunchPressed()
