@@ -69,7 +69,12 @@ namespace UI
             optionsButton.onClick.AddListener(delegate
             {
                 OptionsController.Show(false);
-                OptionsController.BackButtonClicked = OptionsController.Hide;
+                gameObject.SetActive(false);
+                OptionsController.BackButtonClicked = delegate
+                {
+                    gameObject.SetActive(true);
+                    OptionsController.Hide();
+                };
             });
 
             helpButton.onClick.AddListener(delegate
