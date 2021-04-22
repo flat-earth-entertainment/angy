@@ -92,7 +92,7 @@ namespace UI
                     roomView.PlayerCount = roomInfo.PlayerCount + "/" + roomInfo.MaxPlayers;
                     roomView.RoomState = roomInfo.IsOpen ? "Open" : "Closed";
                 }
-                else
+                else if (!roomInfo.RemovedFromList)
                 {
                     var roomView = Instantiate(roomListRowPrefab, roomScrollRect.content).GetComponent<RoomListRow>();
 
@@ -112,6 +112,7 @@ namespace UI
             PhotonNetwork.CreateRoom("Room " + Random.Range(100, 1000), new RoomOptions {MaxPlayers = 2});
         }
 
+#if UNITY_EDITOR
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.W))
@@ -129,5 +130,6 @@ namespace UI
                 Debug.Log(PhotonNetwork.CountOfPlayersOnMaster);
             }
         }
+#endif
     }
 }
