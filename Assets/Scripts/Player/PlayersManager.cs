@@ -17,6 +17,12 @@ namespace Player
         public event Action<PlayerView[]> InitializedAllPlayers;
 
         private int _rewiredPlayerIdCounter;
+        private Transform _spawnPoint;
+
+        private void Awake()
+        {
+            _spawnPoint = GameObject.FindWithTag("Spawn Point").transform;
+        }
 
         private void Start()
         {
@@ -65,7 +71,7 @@ namespace Player
         private GameObject SpawnNewPlayer(int addresseeActorNumber)
         {
             var newPlayerObject =
-                PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity, 0,
+                PhotonNetwork.Instantiate("Player", _spawnPoint.position, Quaternion.identity, 0,
                     new object[] {addresseeActorNumber});
 
             var playerId = _players.Count;
