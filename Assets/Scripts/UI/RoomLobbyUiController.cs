@@ -140,7 +140,7 @@ namespace UI
         {
             if (_playerRows.ContainsKey(player))
             {
-                Destroy(_playerRows[player]);
+                Destroy(_playerRows[player].gameObject);
                 _playerRows.Remove(player);
             }
         }
@@ -154,6 +154,12 @@ namespace UI
         public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
         {
             RemovePlayer(otherPlayer);
+
+            if (PhotonNetwork.IsMasterClient && otherPlayer.IsInactive)
+            {
+                PhotonNetwork.CloseConnection(otherPlayer);
+            }
+
             UpdateStartButton();
         }
 
