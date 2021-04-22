@@ -153,6 +153,8 @@ namespace Logic
         }
 
 
+        private bool _shouldSubscribeToMenuClose;
+
         private void OnPauseMenuOpenRequested(PlayerView caller)
         {
             if (_playerInOptions != null
@@ -160,7 +162,16 @@ namespace Logic
                 || _currentTurnPlayer != null && _currentTurnPlayer.PlayerState == PlayerState.ActivePowerMode)
                 return;
 
-            PlayerView.OptionsMenuRequested += OnOptionsMenuCloseRequested;
+            if (!_shouldSubscribeToMenuClose)
+            {
+                _shouldSubscribeToMenuClose = true;
+                DOTween.Sequence().AppendInterval(0.1f)
+                    .AppendCallback(() =>
+                    {
+                        PlayerView.OptionsMenuRequested += OnOptionsMenuCloseRequested;
+                        _shouldSubscribeToMenuClose = false;
+                    });
+            }
 
             PauseMenu.Show(() => { OnOptionsMenuCloseRequested(caller); });
 
@@ -229,6 +240,7 @@ namespace Logic
 
             Debug.Log($"{player.PlayerPreset.PlayerName.Color(player.PlayerPreset.PlayerColor)} went out of bounds");
 
+            abilityController.GetPlayerAbility(player)?.Wrap();
             player.Hide();
 
             AudioManager.PlaySfx(SfxType.LemmingLaunch);
@@ -252,6 +264,7 @@ namespace Logic
 
         private void OnPlayerHitKillTrigger(PlayerView player)
         {
+            abilityController.GetPlayerAbility(player)?.Wrap();
             player.Hide();
 
             angyController.AlterAngyIfActive(player, AngyEvent.FellOutOfTheMap);
