@@ -27,8 +27,8 @@ namespace Player
         [SerializeField]
         private SkinnedMeshRenderer skinnedMeshRenderer;
 
-        [SerializeField]
-        private Shooter shooter;
+        [field: SerializeField]
+        public Shooter Shooter { get; private set; }
 
         [SerializeField]
         private BallBehaviour ballBehaviour;
@@ -90,9 +90,9 @@ namespace Player
 
         public Material[] Materials
         {
-            get => shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials
+            get => Shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials
                 .Select(s => new Material(s)).ToArray();
-            set => shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials =
+            set => Shooter.lemming.transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>().materials =
                 value;
         }
 
@@ -145,7 +145,7 @@ namespace Player
 
         private void Awake()
         {
-            shooter.SetPlayer(this);
+            Shooter.SetPlayer(this);
         }
 
         private async void OnEnable()
@@ -153,7 +153,7 @@ namespace Player
             PhotonNetwork.AddCallbackTarget(this);
 
             ballBehaviour.BecameStill += OnBallBecameStill;
-            shooter.Shot += OnBallShot;
+            Shooter.Shot += OnBallShot;
             outOfBoundsCheck.WentOutOfBounds += OnWentOutOfBounds;
 
             await UniTask.WaitUntil(() => PlayerInputs != null);
@@ -165,7 +165,7 @@ namespace Player
             PhotonNetwork.RemoveCallbackTarget(this);
 
             ballBehaviour.BecameStill -= OnBallBecameStill;
-            shooter.Shot -= OnBallShot;
+            Shooter.Shot -= OnBallShot;
             outOfBoundsCheck.WentOutOfBounds -= OnWentOutOfBounds;
             PlayerInputs.MenuButtonPressed -= OnMenuButtonPressed;
         }
@@ -178,16 +178,16 @@ namespace Player
 
         public void Predict()
         {
-            shooter.Invoke(nameof(Shooter.Predict), 1f);
-            shooter.Predict();
+            Shooter.Invoke(nameof(global::Ball.Shooter.Predict), 1f);
+            Shooter.Predict();
         }
 
         public void SetIdleAnimation()
         {
-            if (shooter.lemmingAnim != null && !shooter.lemmingAnim.Equals(null))
+            if (Shooter.lemmingAnim != null && !Shooter.lemmingAnim.Equals(null))
             {
-                shooter.lemmingAnim.SetBool("isBall", false);
-                shooter.lemmingAnim.SetBool("isKnockback", false);
+                Shooter.lemmingAnim.SetBool("isBall", false);
+                Shooter.lemmingAnim.SetBool("isKnockback", false);
             }
         }
 
@@ -236,7 +236,7 @@ namespace Player
 
         public void ShouldPlayerActivate(PlayerView playerView)
         {
-            shooter.ShouldPlayerActivate(playerView);
+            Shooter.ShouldPlayerActivate(playerView);
         }
 
         private void OnMenuButtonPressed()
@@ -302,7 +302,7 @@ namespace Player
 
         public void SetControlsActive(bool toggle)
         {
-            shooter.enabled = toggle;
+            Shooter.enabled = toggle;
         }
 
         public void SetBallPosition(Vector3 position)

@@ -8,7 +8,7 @@ namespace GameSession
     {
         public int Id { get; }
         public PlayerView RoundPlayerView { get; set; }
-        public int PresetIndex { get; set; }
+        public int PresetIndex { get; protected set; }
 
         protected Player(int id)
         {
@@ -18,12 +18,14 @@ namespace GameSession
 
     public class LocalPlayer : Player
     {
-        public Rewired.Player RewiredPlayer { get; set; }
+        public Rewired.Player RewiredPlayer => ReInput.players.GetPlayer(_rewiredPlayerId);
+
+        private readonly int _rewiredPlayerId;
 
         public LocalPlayer(int playerId, int presetIndex, int rewiredPlayerId) : base(playerId)
         {
+            _rewiredPlayerId = rewiredPlayerId;
             PresetIndex = presetIndex;
-            RewiredPlayer = ReInput.players.GetPlayer(rewiredPlayerId);
         }
     }
 
@@ -35,7 +37,7 @@ namespace GameSession
                 p is OnlinePlayer onlinePlayer && onlinePlayer.PhotonPlayer.ActorNumber == actorNumber) as OnlinePlayer;
         }
 
-        public Photon.Realtime.Player PhotonPlayer { get; set; }
+        public Photon.Realtime.Player PhotonPlayer { get; }
 
         public OnlinePlayer(int playerId, int presetIndex, Photon.Realtime.Player photonPlayer) : base(playerId)
         {
