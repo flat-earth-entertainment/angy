@@ -35,7 +35,7 @@ namespace Scenes.Map_Selection
                 CurrentGameSession.MapCollection =
                     GameConfig.Instance.MapCollections.First(c => c.Name == selectedCollectionName);
 
-                SceneChanger.ChangeScene(rollDiceScene);
+                SceneChanger.BroadcastChangeSceneToSceneSync(CurrentGameSession.MapCollection.Maps[0]);
             });
 
             foreach (var mapPreview in GameConfig.Instance.MapCollections)

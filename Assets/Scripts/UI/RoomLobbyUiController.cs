@@ -24,6 +24,10 @@ namespace UI
         private Button startButton;
 
         [SerializeField]
+        [Scene]
+        private string mapSelectionScene;
+
+        [SerializeField]
         private GameObject mapCollectionParent;
 
         [SerializeField]
@@ -39,10 +43,13 @@ namespace UI
         [SerializeField]
         private ScrollRect playerList;
 
+        [SerializeField]
+        private Toggle readyToggle;
+
         private readonly Dictionary<Photon.Realtime.Player, PlayerListRow> _playerRows =
             new Dictionary<Photon.Realtime.Player, PlayerListRow>();
 
-        private static void InitializeGameSession(EventData eventData)
+        private void InitializeGameSession(EventData eventData)
         {
             var players = new List<GameSession.Player>();
 
@@ -67,7 +74,7 @@ namespace UI
 
             CurrentGameSession.Players = players.ToArray();
             CurrentGameSession.SetNextRoundPlayer(players[0]);
-            PhotonNetwork.LoadLevel(CurrentGameSession.MapCollection.Maps[0]);
+            PhotonNetwork.LoadLevel(roomSelectionScene);
         }
 
         private void Awake()
@@ -76,17 +83,13 @@ namespace UI
 
             leaveButton.onClick.AddListener(delegate
             {
-                if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-                {
-                }
-
                 PhotonNetwork.LeaveRoom();
+                SceneManager.LoadScene(roomSelectionScene);
             });
 
             startButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
+            readyToggle.gameObject.SetActive(!PhotonNetwork.IsMasterClient);
             mapCollectionParent.SetActive(PhotonNetwork.IsMasterClient);
-
-            //TODO: Make ready button
 
             startButton.onClick.AddListener(delegate
             {
@@ -96,7 +99,6 @@ namespace UI
                     PhotonNetwork.CurrentRoom.PlayerCount, byte.Parse(mapCollection.text)
                 };
 
-
                 //Add (byte)game session player id + (int)photon player id
                 for (byte i = 0; i < PhotonNetwork.CurrentRoom.Players.Values.Count; i++)
                 {
@@ -105,6 +107,11 @@ namespace UI
                 }
 
                 PhotonShortcuts.ReliableRaiseEventToAll(GameEvent.GameSessionPlayersShouldInitialize, eventData);
+            });
+
+            readyToggle.onValueChanged.AddListener(delegate(bool isOn)
+            {
+                PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable {{"ready", isOn}});
             });
 
             foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
@@ -117,7 +124,10 @@ namespace UI
 
         private void UpdateStartButton()
         {
-            startButton.interactable = PhotonNetwork.CurrentRoom.Players.Count > 1;
+            var allPlayersReady = PhotonNetwork.CurrentRoom.Players.Values
+                .Where(p => !p.Equals(PhotonNetwork.LocalPlayer)).All(p =>
+                    p.CustomProperties.ContainsKey("ready") && (bool) p.CustomProperties["ready"]);
+            startButton.interactable = PhotonNetwork.CurrentRoom.Players.Count > 1 && allPlayersReady;
         }
 
         private void AddNewPlayer(Photon.Realtime.Player player)
@@ -138,11 +148,18 @@ namespace UI
 
         private void RemovePlayer(Photon.Realtime.Player player)
         {
+            PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable {{"ready", true}});
             if (_playerRows.ContainsKey(player))
             {
                 Destroy(_playerRows[player].gameObject);
                 _playerRows.Remove(player);
             }
+        }
+
+        public override void OnPlayerPropertiesUpdate(Photon.Realtime.Player targetPlayer, Hashtable changedProps)
+        {
+            if (PhotonNetwork.IsMasterClient)
+                UpdateStartButton();
         }
 
         public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
@@ -161,11 +178,6 @@ namespace UI
             }
 
             UpdateStartButton();
-        }
-
-        public override void OnLeftRoom()
-        {
-            SceneManager.LoadScene(roomSelectionScene);
         }
     }
 }
