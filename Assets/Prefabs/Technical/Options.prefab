@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8720633943711158675}
   - component: {fileID: 3754130214235899643}
   - component: {fileID: 8257014828499716725}
-  - component: {fileID: 6012326727391930246}
   m_Layer: 0
   m_Name: Rewired Event System
   m_TagString: Untagged
@@ -84,18 +83,6 @@ MonoBehaviour:
   m_deselectIfBackgroundClicked: 0
   m_deselectBeforeSelecting: 0
   m_ForceModuleActive: 1
---- !u!114 &6012326727391930246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4023272662240559013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c64a789728856a41ab8f11089928be3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8288987479598359963
 GameObject:
   m_ObjectHideFlags: 0
@@ -1349,11 +1336,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02e4c68aee13a03409a3f4a33bf07df1, type: 3}
---- !u!224 &5058140011518030669 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3835511866013716346, guid: 02e4c68aee13a03409a3f4a33bf07df1, type: 3}
-  m_PrefabInstance: {fileID: 8288987479431969847}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2834118476530024605 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6078920028818930858, guid: 02e4c68aee13a03409a3f4a33bf07df1, type: 3}
@@ -1365,3 +1347,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &5058140011518030669 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3835511866013716346, guid: 02e4c68aee13a03409a3f4a33bf07df1, type: 3}
+  m_PrefabInstance: {fileID: 8288987479431969847}
+  m_PrefabAsset: {fileID: 0}

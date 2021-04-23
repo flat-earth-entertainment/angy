@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
+    [RequireComponent(typeof(Canvas))]
     public class PauseMenu : MonoBehaviour
     {
         public static Action ResumeButtonClicked;
@@ -35,8 +36,9 @@ namespace UI
         private GameObject helpUiPrefab;
 
         private GameObject _helpUi;
+        private Canvas _canvas;
 
-        public static PauseMenu Instance
+        private static PauseMenu Instance
         {
             get
             {
@@ -62,6 +64,7 @@ namespace UI
 
         private void Awake()
         {
+            _canvas = GetComponent<Canvas>();
             _instance = this;
 
             Hide();
@@ -103,12 +106,12 @@ namespace UI
         public static void Show(Action resumeButtonAction = null)
         {
             ResumeButtonClicked = resumeButtonAction;
-            Instance.gameObject.SetActive(true);
+            Instance._canvas.enabled = true;
         }
 
         public static void Hide()
         {
-            Instance.gameObject.SetActive(false);
+            Instance._canvas.enabled = false;
         }
 
         private void HideHelp()
