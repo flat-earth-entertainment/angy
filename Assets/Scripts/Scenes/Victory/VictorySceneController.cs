@@ -1,5 +1,6 @@
 using Config;
 using GameSession;
+using Photon.Pun;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -75,9 +76,14 @@ namespace Scenes.Victory
 
         private void Update()
         {
-            if (Input.anyKey)
+            if (Input.anyKeyDown)
             {
                 SceneChanger.ChangeScene(GameConfig.Instance.Scenes.MainMenuScene);
+                if (!PhotonNetwork.OfflineMode)
+                {
+                    PhotonNetwork.LeaveRoom();
+                    PhotonNetwork.Disconnect();
+                }
             }
         }
     }
