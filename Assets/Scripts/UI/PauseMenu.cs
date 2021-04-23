@@ -13,7 +13,7 @@ namespace UI
     {
         public static Action ResumeButtonClicked;
 
-        public static bool IsShowing => Instance.gameObject.activeSelf;
+        public static bool IsShowing { get; private set; }
 
         private static PauseMenu _instance;
 
@@ -106,12 +106,14 @@ namespace UI
         public static void Show(Action resumeButtonAction = null)
         {
             ResumeButtonClicked = resumeButtonAction;
-            Instance._canvas.enabled = true;
+            Instance.gameObject.SetActive(true);
+            IsShowing = true;
         }
 
         public static void Hide()
         {
-            Instance._canvas.enabled = false;
+            IsShowing = false;
+            Instance.gameObject.SetActive(false);
         }
 
         private void HideHelp()
