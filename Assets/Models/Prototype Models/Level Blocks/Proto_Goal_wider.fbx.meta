@@ -48,7 +48,17 @@ ModelImporter:
   - first:
       74: 5571707028276290904
     second: Proto_Goal|StarAction.001
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Outer
+    second: {fileID: 2100000, guid: 1fd9864c3eeaf3c47a8d17a2eaef8a22, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ring
+    second: {fileID: 2100000, guid: 630cb634fcc8fe642881781968e40009, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
