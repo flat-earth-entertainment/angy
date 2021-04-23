@@ -7,7 +7,6 @@ using Logic;
 using NaughtyAttributes;
 using Photon.Pun;
 using Scenes.RoomLobby;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -26,12 +25,6 @@ namespace UI
         [SerializeField]
         [Scene]
         private string mapSelectionScene;
-
-        [SerializeField]
-        private GameObject mapCollectionParent;
-
-        [SerializeField]
-        private TMP_InputField mapCollection;
 
         [SerializeField]
         [Scene]
@@ -58,8 +51,8 @@ namespace UI
 
             for (var i = 0; i < (byte) dataArray[0]; i++)
             {
-                var playerId = (byte) dataArray[2 + i * 2];
-                var photonActorNumber = (int) dataArray[3 + i * 2];
+                var playerId = (byte) dataArray[1 + i * 2];
+                var photonActorNumber = (int) dataArray[2 + i * 2];
 
                 if (PhotonNetwork.LocalPlayer.ActorNumber == photonActorNumber)
                 {
@@ -89,14 +82,13 @@ namespace UI
 
             startButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
             readyToggle.gameObject.SetActive(!PhotonNetwork.IsMasterClient);
-            mapCollectionParent.SetActive(PhotonNetwork.IsMasterClient);
 
             startButton.onClick.AddListener(delegate
             {
                 //Add player count (byte)
                 var eventData = new List<object>
                 {
-                    PhotonNetwork.CurrentRoom.PlayerCount, byte.Parse(mapCollection.text)
+                    PhotonNetwork.CurrentRoom.PlayerCount
                 };
 
                 //Add (byte)game session player id + (int)photon player id
