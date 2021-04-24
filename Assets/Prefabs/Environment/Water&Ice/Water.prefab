@@ -116,6 +116,7 @@ MonoBehaviour:
   iceAbility: 0
   bounce: 0
   ice: {fileID: 7410924651927399019}
+  iceCylinder: {fileID: 4031639528410777413, guid: c3fd0221e58e9334081bd77b646ee314, type: 3}
 --- !u!1 &7410924651927399019
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,7 +135,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &157213355894662418
 Transform:
   m_ObjectHideFlags: 0
@@ -164,7 +165,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7410924651927399019}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -207,7 +208,7 @@ MeshCollider:
   m_GameObject: {fileID: 7410924651927399019}
   m_Material: {fileID: 13400000, guid: 48c18fa0d300f7c4899073569ca1ad23, type: 2}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30

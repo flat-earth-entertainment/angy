@@ -12,11 +12,12 @@ public class WaterPhysics : MonoBehaviour
     public float waterVerticalBounce = 5;
 
     public bool iceAbility, bounce;
-    public GameObject ice;
+    public GameObject ice, iceCylinder;
     private Abilities.IceBlockOnCollision player;
     private bool delay;
 
     private AbilityController _abilityController;
+    private List<Transform> playerIcePlatforms = new List<Transform>();
 
     private void Awake()
     {
@@ -60,6 +61,9 @@ public class WaterPhysics : MonoBehaviour
         if (iceAbility)
         {
             ice.SetActive(true);
+            GameObject newIcePlat = Instantiate(iceCylinder, transform.position, Quaternion.identity);
+            newIcePlat.transform.parent = ice.transform;
+            playerIcePlatforms.Add(newIcePlat.transform);
             StartCoroutine("DisableIce");
         }
         else if (bounce)
@@ -85,10 +89,26 @@ public class WaterPhysics : MonoBehaviour
             {
                 break;
             }
+            // Ice tracking
+            foreach (Transform item in playerIcePlatforms)
+            {
+                item.transform.position = new Vector3(
+                    Mathf.Clamp(player.transform.position.x,
+                     transform.position.x - transform.localScale.x / 2,
+                      transform.position.x + transform.localScale.x / 2),
+                    item.transform.position.y,
+                    Mathf.Clamp(player.transform.position.z,
+                     transform.position.z - transform.localScale.z / 2,
+                      transform.position.z + transform.localScale.z / 2));
+            }
 
             yield return null;
         }
-
+        foreach (var item in playerIcePlatforms)
+        {
+            Destroy(item.gameObject);
+        }
+        playerIcePlatforms = new List<Transform>();
         ice.SetActive(false);
     }
 }
