@@ -97,7 +97,8 @@ namespace Logic
 
         public void ResetAngyFor(PlayerView playerView)
         {
-            NotifyAngyChange(playerView, GameConfig.Instance.AngyValues.MinAngy);
+            _playerAngys[playerView] = GameConfig.Instance.AngyValues.MinAngy;
+            AngyChanged?.Invoke(playerView, _playerAngys[playerView]);
         }
 
         private void NotifyAngyChange(PlayerView playerView, int newAngy)
