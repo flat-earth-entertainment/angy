@@ -24,10 +24,14 @@ namespace Environment.Teleporter
 
         private void Start()
         {
-            players.AddRange(FindObjectsOfType<PlayerView>());
+            FindObjectOfType<PlayersManager>().InitializedAllPlayers += AllPlayersInitialized;
+
             linkedTeleporter = transform.parent.GetComponentInChildren<Teleporter>().teleportTarget
                 .GetComponentInChildren<TeleporterProximityCheck>();
             anim = GetComponent<Animator>();
+        }
+        void AllPlayersInitialized(PlayerView[] playerViews){
+            players.AddRange(playerViews);
         }
 
         private void Update()
