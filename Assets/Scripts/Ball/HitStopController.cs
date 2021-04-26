@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using Logic;
 using UnityEngine;
+using Utils;
 
 namespace Ball
 {
@@ -37,7 +38,7 @@ namespace Ball
             if (_isInAction)
                 return;
 
-            Destroy(Instantiate(GameConfig.Instance.HitStop.ImpactParticle, hitPoint, Quaternion.identity), 1f);
+            Utilities.EmitExplosionAtPosition(hitPoint);
             AudioManager.PlaySfx(SfxType.HitStopEngaged);
 
             var hitStopValues = GameConfig.Instance.HitStop;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Config;
 using ExitGames.Client.Photon;
 using Logic;
 using UnityEngine;
@@ -8,6 +9,13 @@ namespace Utils
 {
     public static class Utilities
     {
+        public static void EmitExplosionAtPosition(Vector3 position, float duration = 1f)
+        {
+            Object.Destroy(
+                Object.Instantiate(GameConfig.Instance.HitStop.ImpactParticle, position, Quaternion.identity),
+                duration);
+        }
+
         public static GameObject SafeFindWithThisTag(this string tag)
         {
             var foundObject = GameObject.FindWithTag(tag);

@@ -67,6 +67,7 @@ namespace Abilities
             Debug.Log(
                 $"{player.PlayerPreset.PlayerName.Color(player.PlayerPreset.PlayerColor)} started {GetType().Name.Color(Color.red)} ability");
             InvokeAbility(player);
+            Utilities.EmitExplosionAtPosition(player.BallRigidbody.position);
         }
 
         public void Wrap()
