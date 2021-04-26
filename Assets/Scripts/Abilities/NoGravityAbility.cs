@@ -25,7 +25,7 @@ namespace Abilities
             _playerView = player;
             _playerView.PlayerInputs.AbilityButtonPressed += OnAbilityCancelled;
             _photonEventListener =
-                PhotonEventListener.ListenTo(GameEvent.PlayerAbilityButtonPressed, data =>
+                PhotonEventListener.ListenTo(GameEvent.PlayerAbilityCancelled, data =>
                 {
                     if (CurrentGameSession.PlayerFromPlayerView(_playerView).Id == (int) data.CustomData)
                     {
@@ -49,13 +49,16 @@ namespace Abilities
         private void OnAbilityCancelled()
         {
             _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
+            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityCancelled,
+                CurrentGameSession.PlayerFromPlayerView(_playerView).Id);
         }
 
         protected override void WrapInternal()
         {
             _playerView.SetBodyMaterial(_originalMaterial);
 
-            _playerView.PlayerInputs.AbilityButtonPressed -= WrapInternal;
+            _playerView.PlayerInputs.AbilityButtonPressed -= OnAbilityCancelled;
             _photonEventListener.StopListening();
 
             AudioManager.Instance.UndoLowPass(.5f);

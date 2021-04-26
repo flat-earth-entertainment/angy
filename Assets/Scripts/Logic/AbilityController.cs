@@ -25,6 +25,8 @@ namespace Logic
         private readonly Dictionary<PlayerView, Ability> _previousPlayerAbilities =
             new Dictionary<PlayerView, Ability>();
 
+        private PhotonEventListener _photonEventListener;
+
         public void SetNewAbility(PlayerView playerView, Ability ability)
         {
             _previousPlayerAbilities[playerView] = ability;
@@ -59,7 +61,8 @@ namespace Logic
             if (HasAbility(playerView) && !playerAbility.WasFired)
             {
                 playerAbility.Invoke(playerView);
-                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityFired);
+                PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityFired,
+                    CurrentGameSession.PlayerFromPlayerView(playerView).Id);
                 return true;
             }
 
@@ -69,6 +72,12 @@ namespace Logic
         public void CopyPreviousAbilityToCurrent(PlayerView playerView)
         {
             SetNewAbilityAndTryNotify(playerView, Ability.Copy(_previousPlayerAbilities[playerView]));
+        }
+
+        private void Awake()
+        {
+            _photonEventListener = PhotonEventListener.ListenTo(GameEvent.PlayerAbilityFired,
+                data => TryInvokeAbility(CurrentGameSession.PlayerViewFromId((int) data.CustomData)), false);
         }
 
         private void OnEnable()

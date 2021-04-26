@@ -50,12 +50,10 @@ namespace Abilities
             player.PlayerInputs.FireButtonPressed += OnLaunchPressed;
             player.PlayerInputs.AbilityButtonPressed += OnLaunchPressed;
             _photonEventListener =
-                PhotonEventListener.ListenTo(GameEvent.PlayerAbilityButtonPressed, data =>
+                PhotonEventListener.ListenTo(GameEvent.PlayerAbilityCancelled, data =>
                 {
-                    Debug.Log("received dash cancel from network");
                     if (CurrentGameSession.PlayerFromPlayerView(_player).Id == (int) data.CustomData)
                     {
-                        Debug.Log("found proper player");
                         OnLaunchPressed();
                     }
                 }, false);
@@ -132,11 +130,15 @@ namespace Abilities
         private void OnLaunchPressed()
         {
             _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
 
             _rotateTween.Kill();
             _rotateTween = null;
 
             _pressedLaunch = true;
+
+            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityCancelled,
+                CurrentGameSession.PlayerFromPlayerView(_player).Id);
         }
     }
 }
