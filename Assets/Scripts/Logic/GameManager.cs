@@ -458,14 +458,13 @@ namespace Logic
 
         private async UniTask SpawnShowJumpInAndSetCamera(PlayerView player, Vector3 spawnPosition)
         {
-            //TODO: Change to animation
-            player.SetBallPosition(spawnPosition + Vector3.up * 20f);
-
             player.Show();
 
             player.Shooter.SetBallFormActive(true);
+
             //TODO: Change to animation
             await player.JumpIn(spawnPosition, GameConfig.Instance.JumpInTime);
+
             player.Shooter.SetBallFormActive(false);
 
             _camerasController.SetActiveCamera(player.BallCamera, 1f);
@@ -537,10 +536,11 @@ namespace Logic
             await DelayAndMakeTurn();
         }
 
-        private static UniTask OnMaxAngy(PlayerView player)
+        private UniTask OnMaxAngy(PlayerView player)
         {
             player.ChangeStateAndNotify(PlayerState.ShouldSpawnCanNotMove);
 
+            angyController.ResetAngyFor(_currentTurnPlayer);
             //TODO: Play explosion animation
             return player.ExplodeAndHide();
         }
@@ -617,9 +617,7 @@ namespace Logic
 
             if (Input.GetKeyDown(KeyCode.J))
             {
-                UnsubscribeFromPreShotEvents(_currentTurnPlayer);
-                EndTurnFor(_currentTurnPlayer);
-                MakeTurn();
+                _currentTurnPlayer.JumpIn(_spawnPoint.position, GameConfig.Instance.JumpInTime);
             }
         }
 #endif

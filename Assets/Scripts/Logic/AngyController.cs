@@ -95,6 +95,11 @@ namespace Logic
             }
         }
 
+        public void ResetAngyFor(PlayerView playerView)
+        {
+            NotifyAngyChange(playerView, GameConfig.Instance.AngyValues.MinAngy);
+        }
+
         private void NotifyAngyChange(PlayerView playerView, int newAngy)
         {
             if (newAngy > GameConfig.Instance.AngyValues.MaxAngy)
@@ -105,6 +110,10 @@ namespace Logic
             else if (newAngy < GameConfig.Instance.AngyValues.MinAngy)
             {
                 _playerAngys[playerView] = GameConfig.Instance.AngyValues.MinAngy;
+            }
+            else
+            {
+                _playerAngys[playerView] = newAngy;
             }
 
             AngyChanged?.Invoke(playerView, newAngy);
