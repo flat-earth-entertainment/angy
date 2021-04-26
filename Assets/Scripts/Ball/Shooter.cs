@@ -138,6 +138,7 @@ namespace Ball
                 if (horSnap != _prevHorSnap || vertSnap != _prevVertSnap)
                 {
                     Predict();
+                    AudioManager.PlaySfx(SfxType.LemmingRotate);
                 }
 
                 _prevVertSnap = vertSnap;
