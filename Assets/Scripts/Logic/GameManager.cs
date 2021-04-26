@@ -262,7 +262,7 @@ namespace Logic
             }
         }
 
-        private void OnPlayerHitKillTrigger(PlayerView player)
+        private async void OnPlayerHitKillTrigger(PlayerView player)
         {
             Utilities.EmitExplosionAtPosition(player.BallRigidbody.position);
 
@@ -282,7 +282,7 @@ namespace Logic
             if (player == _currentTurnPlayer)
             {
                 EndTurnFor(player);
-                MakeTurn();
+                await DelayAndMakeTurn();
             }
         }
 
