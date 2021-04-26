@@ -44,6 +44,9 @@ namespace Abilities
                     Quaternion.FromToRotation(Vector3.forward, flatVelocityVector))
                 .transform;
 
+            _originalBodyMaterial = _player.Materials[0];
+            _player.SetBodyMaterial(_player.PlayerPreset.FireMaterial);
+
             await DOTween.To(() => Time.timeScale, t => Time.timeScale = t, 0,
                 GameConfig.Instance.AbilityValues.FireDashAbilityConfig.EnterTime).SetUpdate(true);
 
@@ -98,9 +101,6 @@ namespace Abilities
             Time.timeScale = GameConfig.Instance.TimeScale;
 
             _trail = Object.Instantiate(_player.PlayerPreset.Trail, _player.Ball.transform);
-
-            _originalBodyMaterial = _player.Materials[0];
-            _player.SetBodyMaterial(_player.PlayerPreset.FireMaterial);
 
             _player.BecameStill += WrapInternal;
 
