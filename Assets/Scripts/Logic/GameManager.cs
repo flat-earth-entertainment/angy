@@ -264,6 +264,8 @@ namespace Logic
 
         private void OnPlayerHitKillTrigger(PlayerView player)
         {
+            Utilities.EmitExplosionAtPosition(player.BallRigidbody.position);
+
             abilityController.GetPlayerAbility(player)?.Wrap();
             player.Hide();
 
