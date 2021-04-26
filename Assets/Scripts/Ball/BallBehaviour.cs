@@ -40,6 +40,10 @@ namespace Ball
                 if (_rb.velocity.magnitude < 0.2f && _timer > 0.5f)
                 {
                     _stopTimer += Time.deltaTime;
+                    if(_stopTimer > 0.9f){
+                        _rb.velocity = new Vector3(0, 0, 0);
+                        _rb.angularVelocity = new Vector3(0, 0, 0);
+                    }
                     if (_stopTimer > 1)
                     {
                         BecameStill?.Invoke();
