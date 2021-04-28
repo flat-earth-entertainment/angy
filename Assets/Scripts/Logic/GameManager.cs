@@ -50,8 +50,6 @@ namespace Logic
         private bool _isInMapOverview;
         private bool _playersInitialized;
         private bool _subscribedToMainEvents;
-        private bool _isPassive;
-
         private void Awake()
         {
             _currentTurnPlayer = null;
@@ -226,7 +224,7 @@ namespace Logic
             }
         }
 
-        private void OnPlayerWentOutOfBounds(PlayerView player)
+        private async void OnPlayerWentOutOfBounds(PlayerView player)
         {
             //Shouldn't react when not spawned
             switch (player.PlayerState)
@@ -258,7 +256,7 @@ namespace Logic
             if (player == _currentTurnPlayer)
             {
                 EndTurnFor(player);
-                MakeTurn();
+                await DelayAndMakeTurn();
             }
         }
 
