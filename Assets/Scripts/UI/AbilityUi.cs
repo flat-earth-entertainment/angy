@@ -2,9 +2,10 @@ using Abilities;
 using Abilities.Config;
 using Config;
 using DG.Tweening;
+using Player;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Utils;
 
 namespace UI
 {
@@ -21,6 +22,9 @@ namespace UI
 
         [SerializeField]
         private GameObject buttonHelper;
+
+        [SerializeField]
+        private TextMeshProUGUI tooltipText;
 
         private Vector3 _initialScale;
         private Tween _wobbleTween;
@@ -41,8 +45,9 @@ namespace UI
                 }
                 else
                 {
-                    DOTween.Sequence().AppendInterval(GameConfig.Instance.AbilityValues.AbilityUiConfig.WobbleInterval *
-                                                      _wobbleTween.ElapsedDirectionalPercentage())
+                    DOTween.Sequence()
+                        .AppendInterval(GameConfig.Instance.AbilityValues.AbilityUiConfig.WobbleInterval *
+                                        _wobbleTween.ElapsedDirectionalPercentage())
                         .AppendCallback(delegate
                         {
                             abilityParent.transform.localScale = _initialScale;
@@ -52,14 +57,6 @@ namespace UI
                 }
             }
         }
-
-        private static Sprite[] AllAbilitySprites => new[]
-        {
-            AbilityConfig.GetConfigSpriteFor(new ExpandAbility()),
-            AbilityConfig.GetConfigSpriteFor(new NoGravityAbility()),
-            AbilityConfig.GetConfigSpriteFor(new FireDashAbility()),
-            AbilityConfig.GetConfigSpriteFor(new IceBlockAbility())
-        };
 
         private void Awake()
         {
@@ -71,22 +68,32 @@ namespace UI
                 .SetLoops(-1, LoopType.Yoyo).Pause();
 
             Wobble = false;
+            tooltipText.transform.parent.gameObject.SetActive(false);
         }
 
-        public void SetAbilityIcon(Sprite icon, Color backgroundColor)
+        public void SetAbilityUi(PlayerView playerView, Ability ability)
         {
-            abilityImage.sprite = icon;
-            backgroundImage.color = backgroundColor;
+            var abilityImageSprite = AbilityConfig.GetConfigSpriteFor(ability);
 
-            abilityImage.enabled = icon != null;
-            backgroundImage.enabled = icon != null;
+            var abilityNotNull = abilityImageSprite != null;
+
+            abilityImage.enabled = abilityNotNull;
+            backgroundImage.enabled = abilityNotNull;
+            tooltipText.transform.parent.gameObject.SetActive(abilityNotNull);
+
+            if (!abilityNotNull)
+                return;
+
+            abilityImage.sprite = abilityImageSprite;
+            backgroundImage.color = playerView.PlayerPreset.PlayerColor;
+            tooltipText.text = ability.GetType().Name.Replace("Ability", "");
         }
 
-        public void DoSlotMachine(float slotDuration, Sprite spriteToSet, Color backgroundColor)
+        public void DoSlotMachine(float slotDuration, PlayerView playerView, Ability ability)
         {
             var timeScale = Time.timeScale;
             Time.timeScale = 0f;
-            SetAbilityIcon(AllAbilitySprites.RandomElement(), backgroundColor);
+            SetAbilityUi(playerView, Ability.RandomAbility());
 
             var initialPosition = abilityImage.rectTransform.position;
             abilityImage.rectTransform.position = initialPosition + Vector3.up * 200;
@@ -95,11 +102,11 @@ namespace UI
                 .Append(abilityImage.rectTransform
                     .DOMoveY(abilityImage.rectTransform.position.y - 400, slotDuration / 8f)
                     .SetLoops((int) slotDuration * 2)
-                    .OnStepComplete(delegate { SetAbilityIcon(AllAbilitySprites.RandomElement(), backgroundColor); })
+                    .OnStepComplete(delegate { SetAbilityUi(playerView, Ability.RandomAbility()); })
                     .OnComplete(delegate
                     {
                         abilityImage.rectTransform.position = initialPosition + Vector3.up * 200;
-                        SetAbilityIcon(spriteToSet, backgroundColor);
+                        SetAbilityUi(playerView, ability);
                     })
                 )
                 .Append(abilityImage.rectTransform.DOMoveY(initialPosition.y, slotDuration / 8f))
