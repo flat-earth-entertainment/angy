@@ -454,7 +454,7 @@ namespace Ball
 
         private IEnumerator CalculateShootForce()
         {
-            var currentAngy = Mathf.Lerp(1, 0.25f,
+            var currentAngy = Mathf.Lerp(1, 0.33f,
                 (float) _angyController[PlayerView] / GameConfig.Instance.AngyValues.MaxAngy);
             forcePercent = 0;
             yield return null;
