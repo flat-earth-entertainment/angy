@@ -1,8 +1,10 @@
 ﻿using System.Data;
+using DG.Tweening;
 using NaughtyAttributes;
 using Player;
 using Scenes.Map_Selection;
 using UnityEngine;
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace Config
 {
@@ -21,12 +23,12 @@ namespace Config
         public float LevelOverviewTime { get; private set; }
 
         [field: SerializeField]
-        [field: BoxGroup("Technical")]
-        public GameObject PlayerPrefab { get; private set; }
+        [field: BoxGroup("General")]
+        public float FlyToNextPlayerTime { get; private set; }
 
         [field: SerializeField]
         [field: BoxGroup("General")]
-        public float FlyToNextPlayerTime { get; private set; }
+        public Ease JumpInCurve { get; private set; }
 
         [field: SerializeField]
         [field: BoxGroup("Angy")]

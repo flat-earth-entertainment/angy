@@ -93,16 +93,16 @@ namespace Audio
             _mixerBands.Add(GameSettings.Settings.MasterVolume, new MixerBand("MasterVolume", masterMixer));
             _mixerBands.Add(GameSettings.Settings.MusicVolume, new MixerBand("MusicVolume", masterMixer));
             _mixerBands.Add(GameSettings.Settings.SfxVolume, new MixerBand("SfxVolume", masterMixer));
-
-            foreach (var mixerBand in _mixerBands)
-            {
-                mixerBand.Value.SetVolume(GameSettings.GetFloat(mixerBand.Key));
-            }
         }
 
         private void Start()
         {
             PlayNextMusic();
+
+            foreach (var mixerBand in _mixerBands)
+            {
+                mixerBand.Value.SetVolume(GameSettings.GetFloat(mixerBand.Key));
+            }
         }
 
         private void OnEnable()

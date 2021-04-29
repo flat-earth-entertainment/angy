@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Logic;
 using Player;
+using UnityEngine;
 using Utils;
 
 namespace Abilities
@@ -63,7 +64,10 @@ namespace Abilities
         public void Invoke(PlayerView player)
         {
             WasFired = true;
+            Debug.Log(
+                $"{player.PlayerPreset.PlayerName.Color(player.PlayerPreset.PlayerColor)} started {GetType().Name.Color(Color.red)} ability");
             InvokeAbility(player);
+            Utilities.EmitExplosionAtPosition(player.BallRigidbody.position);
         }
 
         public void Wrap()

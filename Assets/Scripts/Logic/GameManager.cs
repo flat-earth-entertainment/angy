@@ -50,8 +50,6 @@ namespace Logic
         private bool _isInMapOverview;
         private bool _playersInitialized;
         private bool _subscribedToMainEvents;
-        private bool _isPassive;
-
         private void Awake()
         {
             _currentTurnPlayer = null;
@@ -226,7 +224,7 @@ namespace Logic
             }
         }
 
-        private void OnPlayerWentOutOfBounds(PlayerView player)
+        private async void OnPlayerWentOutOfBounds(PlayerView player)
         {
             //Shouldn't react when not spawned
             switch (player.PlayerState)
@@ -258,12 +256,14 @@ namespace Logic
             if (player == _currentTurnPlayer)
             {
                 EndTurnFor(player);
-                MakeTurn();
+                await DelayAndMakeTurn();
             }
         }
 
-        private void OnPlayerHitKillTrigger(PlayerView player)
+        private async void OnPlayerHitKillTrigger(PlayerView player)
         {
+            Utilities.EmitExplosionAtPosition(player.BallRigidbody.position);
+
             abilityController.GetPlayerAbility(player)?.Wrap();
             player.Hide();
 
@@ -280,7 +280,7 @@ namespace Logic
             if (player == _currentTurnPlayer)
             {
                 EndTurnFor(player);
-                MakeTurn();
+                await DelayAndMakeTurn();
             }
         }
 
@@ -458,14 +458,13 @@ namespace Logic
 
         private async UniTask SpawnShowJumpInAndSetCamera(PlayerView player, Vector3 spawnPosition)
         {
-            //TODO: Change to animation
-            player.SetBallPosition(spawnPosition + Vector3.up * 20f);
-
             player.Show();
 
             player.Shooter.SetBallFormActive(true);
+
             //TODO: Change to animation
             await player.JumpIn(spawnPosition, GameConfig.Instance.JumpInTime);
+
             player.Shooter.SetBallFormActive(false);
 
             _camerasController.SetActiveCamera(player.BallCamera, 1f);
@@ -537,10 +536,11 @@ namespace Logic
             await DelayAndMakeTurn();
         }
 
-        private static UniTask OnMaxAngy(PlayerView player)
+        private UniTask OnMaxAngy(PlayerView player)
         {
             player.ChangeStateAndNotify(PlayerState.ShouldSpawnCanNotMove);
 
+            angyController.ResetAngyFor(_currentTurnPlayer);
             //TODO: Play explosion animation
             return player.ExplodeAndHide();
         }
@@ -617,9 +617,7 @@ namespace Logic
 
             if (Input.GetKeyDown(KeyCode.J))
             {
-                UnsubscribeFromPreShotEvents(_currentTurnPlayer);
-                EndTurnFor(_currentTurnPlayer);
-                MakeTurn();
+                _currentTurnPlayer.JumpIn(_spawnPoint.position, GameConfig.Instance.JumpInTime);
             }
         }
 #endif

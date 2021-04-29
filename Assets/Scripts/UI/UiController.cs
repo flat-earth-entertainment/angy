@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Abilities;
-using Abilities.Config;
 using Audio;
 using Config;
 using Logic;
@@ -68,18 +67,17 @@ namespace UI
             if (_abilityPlayerUis.ContainsKey(player))
             {
                 _abilityPlayerUis[player].Visible = true;
-                _abilityPlayerUis[player]
-                    .DoSlotMachine(3.2f, AbilityConfig.GetConfigSpriteFor(ability), player.PlayerPreset.PlayerColor);
+                _abilityPlayerUis[player].DoSlotMachine(3.2f, player, ability);
                 AudioManager.PlaySfx(SfxType.RandomActivate);
             }
         }
 
-        private void SetAbilityIconFor(PlayerView player, Sprite icon)
+        private void SetupAbilityUiFor(PlayerView player, Ability ability)
         {
             if (_abilityPlayerUis.ContainsKey(player))
 
             {
-                _abilityPlayerUis[player].SetAbilityIcon(icon, player.PlayerPreset.PlayerColor);
+                _abilityPlayerUis[player].SetAbilityUi(player, ability);
             }
             else
             {
@@ -93,11 +91,11 @@ namespace UI
             var previousPlayerAbility = abilityController.GetPreviousPlayerAbility(player);
             if (ability == null && previousPlayerAbility != null)
             {
-                SetAbilityIconFor(player, AbilityConfig.GetConfigSpriteFor(previousPlayerAbility));
+                SetupAbilityUiFor(player, previousPlayerAbility);
             }
             else
             {
-                SetAbilityIconFor(player, AbilityConfig.GetConfigSpriteFor(ability));
+                SetupAbilityUiFor(player, ability);
             }
 
             if (player.PlayerState == PlayerState.ActiveInMotion)

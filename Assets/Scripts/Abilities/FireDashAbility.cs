@@ -44,18 +44,19 @@ namespace Abilities
                     Quaternion.FromToRotation(Vector3.forward, flatVelocityVector))
                 .transform;
 
+            _originalBodyMaterial = _player.Materials[0];
+            _player.SetBodyMaterial(_player.PlayerPreset.FireMaterial);
+
             await DOTween.To(() => Time.timeScale, t => Time.timeScale = t, 0,
                 GameConfig.Instance.AbilityValues.FireDashAbilityConfig.EnterTime).SetUpdate(true);
 
             player.PlayerInputs.FireButtonPressed += OnLaunchPressed;
             player.PlayerInputs.AbilityButtonPressed += OnLaunchPressed;
             _photonEventListener =
-                PhotonEventListener.ListenTo(GameEvent.PlayerAbilityButtonPressed, data =>
+                PhotonEventListener.ListenTo(GameEvent.PlayerAbilityCancelled, data =>
                 {
-                    Debug.Log("received dash cancel from network");
                     if (CurrentGameSession.PlayerFromPlayerView(_player).Id == (int) data.CustomData)
                     {
-                        Debug.Log("found proper player");
                         OnLaunchPressed();
                     }
                 }, false);
@@ -101,9 +102,6 @@ namespace Abilities
 
             _trail = Object.Instantiate(_player.PlayerPreset.Trail, _player.Ball.transform);
 
-            _originalBodyMaterial = _player.Materials[0];
-            _player.SetBodyMaterial(_player.PlayerPreset.FireMaterial);
-
             _player.BecameStill += WrapInternal;
 
             _player.PlayerInputs.FireButtonPressed -= OnLaunchPressed;
@@ -132,11 +130,15 @@ namespace Abilities
         private void OnLaunchPressed()
         {
             _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
 
             _rotateTween.Kill();
             _rotateTween = null;
 
             _pressedLaunch = true;
+
+            PhotonShortcuts.ReliableRaiseEventToOthers(GameEvent.PlayerAbilityCancelled,
+                CurrentGameSession.PlayerFromPlayerView(_player).Id);
         }
     }
 }

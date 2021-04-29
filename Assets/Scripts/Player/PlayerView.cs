@@ -276,6 +276,7 @@ namespace Player
 
         public UniTask JumpIn(Vector3 endPosition, float jumpTime = 1f)
         {
+            SetBallPosition(endPosition + Vector3.up * 20f);
             endPosition.y += BallRigidbody.GetComponent<SphereCollider>().radius;
 
             return BallRigidbody.transform.DOMove(endPosition, jumpTime)
@@ -284,7 +285,7 @@ namespace Player
                     BallRigidbody.velocity = Vector3.zero;
                     BallRigidbody.angularVelocity = Vector3.zero;
                 })
-                .SetEase(Ease.OutBounce)
+                .SetEase(GameConfig.Instance.JumpInCurve)
                 .SetUpdate(true).ToUniTask();
         }
 
