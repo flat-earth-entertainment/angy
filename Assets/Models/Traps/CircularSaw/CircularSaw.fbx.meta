@@ -1,0 +1,244 @@
+fileFormatVersion: 2
+guid: 2c39edfe6a09cfa4badc6283ad5e2f96
+ModelImporter:
+  serializedVersion: 20200
+  internalIDToNameTable:
+  - first:
+      74: 1229679652842253394
+    second: CircularSaw_Blade|ArmatureAction.001
+  - first:
+      74: 1351571497245587072
+    second: CircularSaw_Blade|ArmatureAction.002
+  - first:
+      74: 3953683886699833593
+    second: CircularSaw_Blade|ArmatureAction.003
+  - first:
+      74: -4540868089586478494
+    second: CircularSaw_Blade|Cube.074Action
+  - first:
+      74: 8231596449268247216
+    second: CircularSaw_Blade|Cube.074Action.001
+  - first:
+      74: -7068649732992928040
+    second: CircularSaw_Blade|Cube.227Action
+  - first:
+      74: -553566632089364334
+    second: CircularSaw_Blade|Cylinder.004Action
+  - first:
+      74: -8907560816623661715
+    second: Saw_Malfuction
+  - first:
+      74: 2139295563379769819
+    second: Saw_Active
+  - first:
+      74: 1376285288329811508
+    second: CircularSaw_Blade|Gear.003Action.001
+  - first:
+      74: 8080036258420869807
+    second: CircularSaw_Blade|Gear.003Action.002
+  - first:
+      74: 5586386418692403518
+    second: CircularSaw_Blade|Gear.003Action.003
+  - first:
+      74: 2982889782993522568
+    second: CircularSaw_Blade|Gear.003Action.004
+  - first:
+      74: 5008316465777895750
+    second: CircularSaw_Blade|Gear.003Action.005
+  - first:
+      74: -472096980637051964
+    second: CircularSaw_Blade|Gear.003Action.006
+  - first:
+      74: -7958006355264984536
+    second: CircularSaw_Blade|Gear.003Action.007
+  - first:
+      74: -139812070058625224
+    second: CircularSaw_Blade|Gear.003Action.008
+  - first:
+      74: -7292904875511958677
+    second: CircularSaw_Blade|Gear.003Action.009
+  - first:
+      74: -6633466752231595924
+    second: CircularSaw_Blade|Gear.003Action.010
+  - first:
+      74: -1184230152010486991
+    second: CircularSaw_Blade|Gear.003Action.011
+  - first:
+      74: -7327842114045616366
+    second: CircularSaw_Blade|Icosphere.004Action
+  - first:
+      74: -5559242612954925185
+    second: CircularSaw_Blade|Icosphere.005Action
+  - first:
+      74: -8673022748069424397
+    second: CircularSaw_Blade|Icosphere.006Action
+  - first:
+      74: 8806756087077931538
+    second: CircularSaw_Blade|Sphere.003Action
+  - first:
+      74: 4644971944124811377
+    second: CircularSaw_Blade|Star.001Action
+  - first:
+      74: 6273552522950053236
+    second: CircularSaw_Blade|Star.001Action.001
+  - first:
+      74: 4968548220798646077
+    second: CircularSaw_Blade|Star.001Action.002
+  - first:
+      74: 7823256655339435615
+    second: CircularSaw_Blade|StarAction.001
+  externalObjects: {}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Saw_Malfuction
+      takeName: CircularSaw_Blade|Empty.006Action
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 80
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Saw_Active
+      takeName: CircularSaw_Blade|Gear.003Action
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 4
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
