@@ -48,6 +48,7 @@ namespace UI
 
         private void Awake()
         {
+            Cursor.visible = true;
             playmodeButton.onClick.AddListener(delegate { SceneManager.LoadScene(playmodeScene); });
 
             helpButton.onClick.AddListener(delegate

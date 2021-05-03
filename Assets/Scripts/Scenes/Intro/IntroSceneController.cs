@@ -23,6 +23,7 @@ namespace Scenes.Intro
 
         private async void Awake()
         {
+            Cursor.visible = false;
             videoPlayer.loopPointReached += OnVideoFinished;
 
             await UniTask.Delay(TimeSpan.FromSeconds(timeBeforeCanSkip), DelayType.Realtime);
