@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
@@ -16,29 +17,31 @@ namespace UI
         [SerializeField]
         private float jumpInTime;
 
-        [SerializeField]
-        private float waitAfterAnimationTime;
-
         [Scene]
         [SerializeField]
         private string nextScene;
 
-        private void Start()
+        private bool _canGoToNextScene;
+        private AsyncOperation _mainMenuLoad;
+
+        private async void Start()
         {
             var initialPosition = logoObject.position;
 
+            _mainMenuLoad = SceneManager.LoadSceneAsync(nextScene);
+            _mainMenuLoad.allowSceneActivation = false;
+
             logoObject.position += Vector3.up * startFromY;
-            DOTween.Sequence()
-                .Append(logoObject.DOMoveY(initialPosition.y, jumpInTime).SetEase(Ease.OutElastic))
-                .AppendInterval(waitAfterAnimationTime)
-                .AppendCallback(delegate { SceneManager.LoadScene(nextScene); });
+            await logoObject.DOMoveY(initialPosition.y, jumpInTime).SetEase(Ease.OutElastic);
+            _canGoToNextScene = true;
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (_canGoToNextScene && Input.anyKeyDown)
             {
-                Start();
+                SceneManager.LoadScene(nextScene);
+                _mainMenuLoad.allowSceneActivation = true;
             }
         }
     }
