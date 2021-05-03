@@ -44,6 +44,8 @@ namespace GameDebug
             });
         }
 
+        private bool _canvasesActive;
+
         private void Update()
         {
             SetButtonInteractable(_gameManager.CurrentTurnPlayer != null);
@@ -51,6 +53,16 @@ namespace GameDebug
             if (Input.GetKeyDown(KeyCode.F3))
             {
                 _debugCanvas.enabled = !_debugCanvas.enabled;
+            }
+
+            if (Input.GetKeyDown(KeyCode.F4))
+            {
+                foreach (var canvas in FindObjectsOfType<Canvas>())
+                {
+                    canvas.targetDisplay = _canvasesActive ? 0 : 1;
+                }
+
+                _canvasesActive = !_canvasesActive;
             }
         }
 
