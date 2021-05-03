@@ -88,6 +88,7 @@ namespace Audio
                 return;
             }
 
+            _instance = this;
             DontDestroyOnLoad(gameObject);
 
             _mixerBands.Add(GameSettings.Settings.MasterVolume, new MixerBand("MasterVolume", masterMixer));
@@ -153,7 +154,7 @@ namespace Audio
 
             musicSource.clip = chosenClip;
             musicSource.Play();
-            await UniTask.Delay(TimeSpan.FromSeconds(chosenClip.length), DelayType.UnscaledDeltaTime);
+            await UniTask.Delay(TimeSpan.FromSeconds(chosenClip.length), DelayType.Realtime);
 
             PlayNextMusic();
         }
