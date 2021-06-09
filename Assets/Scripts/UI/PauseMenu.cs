@@ -1,10 +1,12 @@
 using System;
 using Config;
 using GameSession;
+using Logic;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Utils;
 
 namespace UI
 {
@@ -99,7 +101,7 @@ namespace UI
 
             restartButton.onClick.AddListener(delegate
             {
-                SceneChanger.ChangeScene(SceneManager.GetActiveScene().name);
+                PhotonShortcuts.ReliableRaiseEventToAll(GameEvent.SceneChange, SceneManager.GetActiveScene().name);
             });
         }
 
