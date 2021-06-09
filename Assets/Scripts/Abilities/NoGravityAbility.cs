@@ -27,7 +27,7 @@ namespace Abilities
             _photonEventListener =
                 PhotonEventListener.ListenTo(GameEvent.PlayerAbilityCancelled, data =>
                 {
-                    if (CurrentGameSession.PlayerFromPlayerView(_playerView).Id == (int) data.CustomData)
+                    if (CurrentGameSession.PlayerFromPlayerView(_playerView).Id == (int)data.CustomData)
                     {
                         OnAbilityCancelled();
                     }
@@ -39,8 +39,8 @@ namespace Abilities
             player.SetBodyMaterial(GameConfig.Instance.AbilityValues.NoGravityAbility.Material);
             player.BallRigidbody.useGravity = false;
             AudioManager.Instance.DoLowPass(.5f);
-            await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.AbilityValues.NoGravityAbility.DurationTime),
-                DelayType.UnscaledDeltaTime,
+            await UniTask.Delay(TimeSpan.FromSeconds(GameConfig.Instance.AbilityValues.NoGravityAbility.DurationTime *
+                                                     GameConfig.Instance.TimeScale),
                 cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow();
 
             WrapInternal();
