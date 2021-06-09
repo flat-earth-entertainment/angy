@@ -41,6 +41,7 @@ namespace Audio
         //Used in the inspector
         // ReSharper disable once UnusedMember.Global
         HammerHitPlayer = 26,
-        TeleporterEngage = 27
+        TeleporterEngage = 27,
+        LevelComplete = 28
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using Audio;
 using Config;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -130,6 +131,7 @@ namespace UI
                             RotateMode.FastBeyond360)
                         .SetEase(Instance.easeType);
 
+                    AudioManager.PlaySfx(SfxType.LevelComplete);
 
                     await UniTask.Delay(TimeSpan.FromSeconds(Instance.levelCompleteTime));
                     break;

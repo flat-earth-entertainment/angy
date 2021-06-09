@@ -174,46 +174,48 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sfxPresets:
-  - <SfxType>k__BackingField: 5
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 5
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 3a24a9785d6bdec4a82cfba898ebe2e7, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 6
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 6
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 24072c4adf69ef94781b0f5c32b8a4d5, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 4
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 4
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: b63649c7e3995dd4189b6dbb1506c8a8, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 11
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 11
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 60da554b58ce622429f0e22fa890c856, type: 3}
     - {fileID: 8300000, guid: caf8e12cc60a94b4283571adb6a6a45b, type: 3}
     - {fileID: 8300000, guid: 35364cbfbe2da6e44ad531df949870c0, type: 3}
     - {fileID: 8300000, guid: 2a0e96be4c3215740b5bd995a8df53d6, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 7
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 7
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 5f17a8922a902e449956624387676844, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 8
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 8
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 733525b81712243448bcd86494daca86, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 2
+  - limitFrequency: 1
+    minimumInterval: 0.16
+    <SfxType>k__BackingField: 2
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 768a37fb817394549acea42ddfc57bc2, type: 3}
     - {fileID: 8300000, guid: 2de067b3f0d91c5469117fbf89408e02, type: 3}
@@ -225,16 +227,16 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 3f8c7dbf0b5490d48bb0345d5b3131cf, type: 3}
     - {fileID: 8300000, guid: 3e96c59c4f29fe44e8e8b1dd3678deed, type: 3}
     - {fileID: 8300000, guid: 30d4ab7964e922a49b1a0067c867a54a, type: 3}
-    limitFrequency: 1
-    minimumInterval: 0.16
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 9
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 9
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 616864e9c6c599e4dbad3a94023ffed3, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 0.429
-  - <SfxType>k__BackingField: 1
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 1
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 2f492428afc201946940e3d02146d493, type: 3}
     - {fileID: 8300000, guid: 5ba12435b82ad384383f2596ce28a98e, type: 3}
@@ -244,106 +246,110 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 2d5a04f6ea60ab141bfd12aec2aa6936, type: 3}
     - {fileID: 8300000, guid: d66cf840d40b4ba488b18dbf0ebcc5b1, type: 3}
     - {fileID: 8300000, guid: db1e3ed4f59f8db46b96c22809c19867, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 12
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 12
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: ee1d63b67167ad84bb175d5553deb4fa, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 13
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 13
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 8145197f71ba5464898d8340c3dc7031, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 14
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 14
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 7c8c50708c8acb242a9bb5a83e465a07, type: 3}
     - {fileID: 8300000, guid: 92d9a3f7c358894479eeab09836ee970, type: 3}
     - {fileID: 8300000, guid: 1ee2baa5b5f14394a8a03910bee5a53c, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 15
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 15
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 7a251055b9cb5a34da10c1decbc3328a, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 16
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 16
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 39afd91e1b03f994cb2d5d68e3388a87, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 17
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 17
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: e7ad13711e62513449403c554fe2571b, type: 3}
     - {fileID: 8300000, guid: 05814997be2922d41804fcd786a1bebc, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 18
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 18
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 5959e59847e835e468116fa827f47489, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 19
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 19
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 74141efcceca4114e9f8301dcdfd889e, type: 3}
     - {fileID: 8300000, guid: ba47567201b74504bbfa2f2a4ca564c5, type: 3}
     - {fileID: 8300000, guid: 73ba01ee9ba3255419f8e5ec893e510d, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 0.435
-  - <SfxType>k__BackingField: 20
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 20
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: b275464422206bf498b7c10e4322de8b, type: 3}
     - {fileID: 8300000, guid: 38e50770512952c4188091bf7ec37efa, type: 3}
     - {fileID: 8300000, guid: 30c9364f31f01b24ab5ea0e9dce80286, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 0.493
-  - <SfxType>k__BackingField: 21
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 21
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: d4d1694db125ba94d8b36e8120a5e105, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 25
+  - limitFrequency: 1
+    minimumInterval: 0.5
+    <SfxType>k__BackingField: 25
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: c3ed23e74213379449dc766f79419409, type: 3}
     - {fileID: 8300000, guid: c889de750ed5387428343d3fb0e0cf03, type: 3}
-    limitFrequency: 1
-    minimumInterval: 0.5
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 26
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 26
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 1087f846d6e9f55478f350b3addfa32b, type: 3}
-    limitFrequency: 0
-    minimumInterval: 0
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 22
+  - limitFrequency: 1
+    minimumInterval: 1
+    <SfxType>k__BackingField: 22
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 95dae881f039bbe4b904083fa118b61e, type: 3}
-    limitFrequency: 1
-    minimumInterval: 1
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 24
+  - limitFrequency: 1
+    minimumInterval: 1
+    <SfxType>k__BackingField: 24
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 07e68cd80c680c7409dbd4eec4bda6b3, type: 3}
-    limitFrequency: 1
-    minimumInterval: 1
     <Volume>k__BackingField: 1
-  - <SfxType>k__BackingField: 27
+  - limitFrequency: 0
+    minimumInterval: 0
+    <SfxType>k__BackingField: 27
     <Clips>k__BackingField:
     - {fileID: 8300000, guid: 48016ef67e056974c9f7579c324f45ab, type: 3}
-    limitFrequency: 0
+    <Volume>k__BackingField: 1
+  - limitFrequency: 0
     minimumInterval: 0
+    <SfxType>k__BackingField: 28
+    <Clips>k__BackingField:
+    - {fileID: 8300000, guid: da3e958ca1693f04f848cdc2fd01fa75, type: 3}
     <Volume>k__BackingField: 1
   music:
   - {fileID: 8300000, guid: bd37f9d289112dd468b9759390d4b3a4, type: 3}
