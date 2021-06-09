@@ -16,12 +16,12 @@ namespace UI
 
         private void Awake()
         {
-            var currentMapIndex = CurrentGameSession.MapCollection.Maps.ToList()
-                .IndexOf(SceneManager.GetActiveScene().name);
-
-            currentLevelText.text = (currentMapIndex + 1).ToString();
+            currentLevelText.text = (CurrentLevelNumber + 1).ToString();
 
             levelCountText.text = CurrentGameSession.MapCollection.Maps.Length.ToString();
         }
+
+        public static int? CurrentLevelNumber => CurrentGameSession.MapCollection.Maps.ToList()
+            .IndexOf(SceneManager.GetActiveScene().name);
     }
 }
