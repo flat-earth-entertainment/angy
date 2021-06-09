@@ -106,13 +106,13 @@ namespace Editor
                         switch (_normalOrient)
                         {
                             case NormalOrient.X:
-                                newObject.transform.right = hit.point;
+                                newObject.transform.right = hit.normal;
                                 break;
                             case NormalOrient.Y:
-                                newObject.transform.up = hit.point;
+                                newObject.transform.up = hit.normal;
                                 break;
                             case NormalOrient.Z:
-                                newObject.transform.forward = hit.point;
+                                newObject.transform.forward = hit.normal;
                                 break;
                         }
                     }
