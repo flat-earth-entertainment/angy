@@ -42,7 +42,7 @@ namespace Config
                     if (_instance == null || _instance.Equals(null))
                     {
                         _instance = Instantiate(GameConfig.Instance.OptionsController)
-                            .GetComponent<OptionsController>();
+                            .GetComponentInChildren<OptionsController>();
 
                         if (_instance == null || _instance.Equals(null))
                         {
